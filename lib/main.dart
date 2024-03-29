@@ -1,97 +1,168 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'core/routing/drag_route_cubit.dart';
+import 'presentation/bloc/main/bottom_navigation_bar_cubit.dart';
+import 'presentation/bloc/main/drag_route_cubit.dart';
+import 'presentation/bloc/main/navigator_key_cubit.dart';
+import 'core/routes/sub_navigator_routes.dart';
+import 'presentation/widgets/main/first_bottom_navi_bar.dart';
+import 'presentation/widgets/main/second_bottom_navi_bar.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  runApp(MyApp(navigatorKey: navigatorKey));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+  const MyApp({required this.navigatorKey, super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-          create: (_) => DragRouteCubit(), child: const HomePage()),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<DragRouteCubit>(create: (_) => DragRouteCubit()),
+          BlocProvider<BottomNavigationBarCubit>(
+              create: (_) => BottomNavigationBarCubit()),
+          BlocProvider<NavigatorKeyCubit>(
+              create: (_) => NavigatorKeyCubit(navigatorKey))
+        ],
+        child: const MainPage(),
+      ),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
+  AnimationController? _controller;
+  Animation<double>? _animation;
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation(double start, double end, bool isFirstScale) {
+    Duration duration =
+        Duration(milliseconds: ((end - start).abs() * 100).round());
+    _controller = AnimationController(
+      duration: duration,
+      vsync: this,
+    );
+    _animation = Tween<double>(
+      begin: start, // 시작점
+      end: end, // 종료점 (x축으로 1만큼 이동)
+    ).animate(_controller!)
+      ..addListener(() {
+        if (isFirstScale) {
+          context.read<DragRouteCubit>().updateFirstScale(_animation!.value);
+        } else {
+          context.read<DragRouteCubit>().updateSecondScale(_animation!.value);
+        }
+      });
+
+    _controller!.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
 
+    double firstBottombarHeight = 94;
     double secondBottomBarHeight = 80;
+    double secondBottomBarTopGap = 130;
 
     return Scaffold(
-      body:
-          BlocBuilder<DragRouteCubit, DragState>(builder: (context, dratState) {
+      body: BlocConsumer<DragRouteCubit, DragState>(
+          listener: (context, dragState) {
+        if (dragState.shouldAnimate) {
+          context.read<DragRouteCubit>().resetAnimationFlag();
+          _startAnimation(
+              dragState.isfirstScaleAnimated!
+                  ? dragState.firstScale
+                  : dragState.secondScale,
+              dragState.animateTargetScale!,
+              dragState.isfirstScaleAnimated!);
+        }
+      }, builder: (context, dragState) {
+        double? pipNeedBottom;
+        if (dragState.pageIndex == 0) {
+          pipNeedBottom = 0;
+        } else if (dragState.pageIndex == 1) {
+          if (dragState.firstScale == 1) {
+            pipNeedBottom = null;
+          } else {
+            pipNeedBottom = 0;
+          }
+        } else {
+          pipNeedBottom = null;
+        }
         return Stack(children: [
-          //가장 배경
           Container(
               color: Colors.white,
               height: screenSize.height,
-              child: const Center(child: Text('HomePage'))),
+              child: Navigator(
+                  key: context.read<NavigatorKeyCubit>().state,
+                  onGenerateRoute: SubNavigatorRoutes.onGenerateRoutes)),
+          Positioned(
+              bottom: pipNeedBottom,
+              child: GestureDetector(
+                onTap: (() => context.read<DragRouteCubit>().handlePipTap()),
+                onVerticalDragUpdate: ((details) => context
+                    .read<DragRouteCubit>()
+                    .handlePipDragUpdate(details.primaryDelta!)),
+                onVerticalDragEnd: ((details) =>
+                    context.read<DragRouteCubit>().handlePipDragEnd()),
+                child: Container(
+                  color: Colors.lime,
+                  height: 160 +
+                      (screenSize.height - secondBottomBarHeight) *
+                          dragState.firstScale -
+                      (screenSize.height - secondBottomBarTopGap) *
+                          dragState.secondScale,
+                  width: screenSize.width,
+                ),
+              )),
           Positioned(
               bottom: 0,
               child: GestureDetector(
                 onVerticalDragUpdate: ((details) => context
                     .read<DragRouteCubit>()
-                    .handleDragUpdate(details.primaryDelta!)),
+                    .handleSecondTabDragUpdate(details.primaryDelta!)),
                 onVerticalDragEnd: ((details) =>
-                    context.read<DragRouteCubit>().handleDragEnd()),
-                child: Container(
-                  color: Colors.amber,
-                  height: 160 + (screenSize.height - 160) * dratState.scale,
-                  width: screenSize.width,
-                ),
+                    context.read<DragRouteCubit>().handleSecondTabDragEnd()),
+                child: Opacity(
+                    opacity: dragState.firstScale,
+                    child: SecondBottomNaviBar(
+                        height: secondBottomBarHeight * dragState.firstScale +
+                            (screenSize.height -
+                                    secondBottomBarTopGap -
+                                    secondBottomBarHeight *
+                                        dragState.firstScale) *
+                                dragState.secondScale)),
               )),
-          //상세 페이지의 바텀바
           Positioned(
               bottom: 0,
               child: Opacity(
-                  opacity: dratState.scale,
-                  child: Container(
-                    color: Colors.green,
-                    height: secondBottomBarHeight * dratState.scale,
-                    width: screenSize.width,
-                  ))),
-          Positioned(
-              bottom: 0,
-              child: Opacity(
-                  opacity: 1 - dratState.scale,
-                  child:
-                      CustomBottomNaviBar(height: 80 * (1 - dratState.scale))))
+                  opacity: 1 - dragState.firstScale,
+                  child: FirstBottomNaviBar(
+                      height:
+                          firstBottombarHeight * (1 - dragState.firstScale))))
         ]);
       }),
     );
-  }
-}
-
-class CustomBottomNaviBar extends StatefulWidget {
-  const CustomBottomNaviBar({required this.height, super.key});
-  final double height;
-
-  @override
-  State<CustomBottomNaviBar> createState() => _CustomBottomNaviBarState();
-}
-
-class _CustomBottomNaviBarState extends State<CustomBottomNaviBar> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        color: Colors.red,
-        height: widget.height,
-        width: MediaQuery.of(context).size.width,
-        child: Image.asset('assets/images/user_profile_sample.jpg'));
   }
 }

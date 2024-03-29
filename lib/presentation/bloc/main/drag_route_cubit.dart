@@ -1,0 +1,155 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class DragState {
+  final double firstScale;
+  final double secondScale;
+  final double lastDragDelta;
+  final int pageIndex;
+  final bool shouldAnimate;
+  final double? animateTargetScale;
+  final bool? isfirstScaleAnimated;
+
+  DragState(
+      this.firstScale,
+      this.secondScale,
+      this.lastDragDelta,
+      this.pageIndex,
+      this.shouldAnimate,
+      this.animateTargetScale,
+      this.isfirstScaleAnimated);
+
+  DragState copyWith(
+      {double? firstScale,
+      double? secondScale,
+      double? lastDragDelta,
+      int? pageIndex,
+      bool? shouldAnimate,
+      double? animateTargetScale,
+      bool? isfirstScaleAnimated}) {
+    return DragState(
+        firstScale ?? this.firstScale,
+        secondScale ?? this.secondScale,
+        lastDragDelta ?? this.lastDragDelta,
+        pageIndex ?? this.pageIndex,
+        shouldAnimate ?? this.shouldAnimate,
+        animateTargetScale ?? this.animateTargetScale,
+        isfirstScaleAnimated ?? this.isfirstScaleAnimated);
+  }
+}
+
+class DragRouteCubit extends Cubit<DragState> {
+  DragRouteCubit() : super(DragState(0, 0, 0, 0, false, null, null));
+
+  void handlePipTap() {
+    _startFirstScaleAnimation(1);
+  }
+
+  void handlePipDragUpdate(double delta) {
+    double firstScale = state.firstScale - delta / 1000;
+    firstScale = firstScale.clamp(0.0, 1.0);
+    emit(state.copyWith(firstScale: firstScale, lastDragDelta: delta));
+  }
+
+  void handlePipDragEnd() {
+    if (state.firstScale == 0 && state.pageIndex == 0) {
+      return;
+    }
+    if (state.firstScale == 0 && state.pageIndex == 1) {
+      _setPageIndex(0);
+      return;
+    }
+
+    double lastDelta = state.lastDragDelta;
+
+    // drag fast
+    if (lastDelta.abs() > 15) {
+      _startFirstScaleAnimation(lastDelta < 0 ? 1 : 0);
+      return;
+    }
+    // drag slowly
+    else {
+      _startFirstScaleAnimation(state.firstScale > 0.5 ? 1 : 0);
+    }
+  }
+
+  void handleSecondTabDragUpdate(double delta) {
+    double secondScale = state.secondScale - delta / 1000;
+    secondScale = secondScale.clamp(0.0, 1.0);
+    emit(state.copyWith(secondScale: secondScale, lastDragDelta: delta));
+  }
+
+  void handleSecondTabDragEnd() {
+    if (state.secondScale == 0 && state.pageIndex == 1) {
+      return;
+    }
+    if (state.secondScale == 0 && state.secondScale == 2) {
+      _setPageIndex(0);
+      return;
+    }
+
+    double lastDelta = state.lastDragDelta;
+
+    // drag fast
+    if (lastDelta.abs() > 15) {
+      _startSecondScaleAnimation(lastDelta < 0 ? 2 : 1);
+      return;
+    }
+    // drag slowly
+    else {
+      _startSecondScaleAnimation(state.secondScale > 0.5 ? 2 : 1);
+    }
+  }
+
+  void updateFirstScale(double value) {
+    value = value.clamp(0.0, 1.0);
+    emit(state.copyWith(firstScale: value));
+  }
+
+  void updateSecondScale(double value) {
+    value = value.clamp(0.0, 1.0);
+    emit(state.copyWith(secondScale: value));
+  }
+
+  void _setPageIndex(int index) {
+    emit(state.copyWith(pageIndex: index));
+  }
+
+  void _startFirstScaleAnimation(int targetPageIndex) {
+    if (targetPageIndex == 0) {
+      emit(state.copyWith(
+          pageIndex: targetPageIndex,
+          shouldAnimate: true,
+          animateTargetScale: 0,
+          isfirstScaleAnimated: true));
+    } else if (targetPageIndex == 1) {
+      emit(state.copyWith(
+          pageIndex: targetPageIndex,
+          shouldAnimate: true,
+          animateTargetScale: 1,
+          isfirstScaleAnimated: true));
+    }
+  }
+
+  void _startSecondScaleAnimation(int targetPageIndex) {
+    if (targetPageIndex == 1) {
+      emit(state.copyWith(
+          pageIndex: targetPageIndex,
+          shouldAnimate: true,
+          animateTargetScale: 0,
+          isfirstScaleAnimated: false));
+    } else if (targetPageIndex == 2) {
+      emit(state.copyWith(
+          pageIndex: targetPageIndex,
+          shouldAnimate: true,
+          animateTargetScale: 1,
+          isfirstScaleAnimated: false));
+    }
+  }
+
+  void resetAnimationFlag() {
+    emit(state.copyWith(
+        shouldAnimate: false,
+        animateTargetScale: null,
+        isfirstScaleAnimated: null));
+  }
+}
