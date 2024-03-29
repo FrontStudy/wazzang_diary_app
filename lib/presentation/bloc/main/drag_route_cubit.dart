@@ -59,6 +59,15 @@ class DragRouteCubit extends Cubit<DragState> {
       return;
     }
 
+    if (state.firstScale == 1 && state.pageIndex == 1) {
+      return;
+    }
+
+    if (state.firstScale == 1 && state.pageIndex == 0) {
+      _setPageIndex(1);
+      return;
+    }
+
     double lastDelta = state.lastDragDelta;
 
     // drag fast
@@ -82,8 +91,16 @@ class DragRouteCubit extends Cubit<DragState> {
     if (state.secondScale == 0 && state.pageIndex == 1) {
       return;
     }
-    if (state.secondScale == 0 && state.secondScale == 2) {
-      _setPageIndex(0);
+    if (state.secondScale == 0 && state.pageIndex == 2) {
+      _setPageIndex(1);
+      return;
+    }
+    if (state.secondScale == 1 && state.pageIndex == 1) {
+      return;
+    }
+
+    if (state.secondScale == 1 && state.pageIndex == 2) {
+      _setPageIndex(2);
       return;
     }
 
