@@ -5,7 +5,9 @@ import 'presentation/bloc/main/bottom_navigation_bar_cubit.dart';
 import 'presentation/bloc/main/drag_route_cubit.dart';
 import 'presentation/bloc/main/navigator_key_cubit.dart';
 import 'core/routes/sub_navigator_routes.dart';
+import 'core/constants/constants.dart';
 import 'presentation/widgets/main/first_bottom_navi_bar.dart';
+import 'presentation/widgets/main/pip_page.dart';
 import 'presentation/widgets/main/second_bottom_navi_bar.dart';
 
 void main() {
@@ -77,13 +79,27 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     _controller!.forward();
   }
 
+  double? _getPipNeedBottom(DragState dragState) {
+    double? pipNeedBottom;
+    if (dragState.pageIndex == 0) {
+      pipNeedBottom = 0;
+    } else if (dragState.pageIndex == 1) {
+      if (dragState.firstScale == 1) {
+        pipNeedBottom = null;
+      } else {
+        pipNeedBottom = 0;
+      }
+    } else {
+      pipNeedBottom = null;
+    }
+
+    return pipNeedBottom;
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-
-    double firstBottombarHeight = 94;
-    double secondBottomBarHeight = 80;
-    double secondBottomBarTopGap = 130;
+    var paddingTop = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       body: BlocConsumer<DragRouteCubit, DragState>(
@@ -98,18 +114,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               dragState.isfirstScaleAnimated!);
         }
       }, builder: (context, dragState) {
-        double? pipNeedBottom;
-        if (dragState.pageIndex == 0) {
-          pipNeedBottom = 0;
-        } else if (dragState.pageIndex == 1) {
-          if (dragState.firstScale == 1) {
-            pipNeedBottom = null;
-          } else {
-            pipNeedBottom = 0;
-          }
-        } else {
-          pipNeedBottom = null;
-        }
+        double? pipNeedBottom = _getPipNeedBottom(dragState);
+
         return Stack(children: [
           Container(
               color: Colors.white,
@@ -121,27 +127,54 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               bottom: pipNeedBottom,
               child: GestureDetector(
                 onTap: (() => context.read<DragRouteCubit>().handlePipTap()),
-                onVerticalDragUpdate: ((details) => context
-                    .read<DragRouteCubit>()
-                    .handlePipDragUpdate(details.primaryDelta!)),
-                onVerticalDragEnd: ((details) =>
-                    context.read<DragRouteCubit>().handlePipDragEnd()),
+                onVerticalDragUpdate: ((details) {
+                  if (dragState.pageIndex == 2) {
+                    context
+                        .read<DragRouteCubit>()
+                        .handleSecondTabDragUpdate(details.primaryDelta!);
+                  } else {
+                    context
+                        .read<DragRouteCubit>()
+                        .handlePipDragUpdate(details.primaryDelta!);
+                  }
+                }),
+                onVerticalDragEnd: ((details) {
+                  if (dragState.pageIndex == 2) {
+                    context.read<DragRouteCubit>().handleSecondTabDragEnd();
+                  } else {
+                    context.read<DragRouteCubit>().handlePipDragEnd();
+                  }
+                }),
                 child: Container(
-                  color: Colors.lime,
-                  height: 160 +
-                      (screenSize.height - secondBottomBarHeight) *
-                          dragState.firstScale -
-                      (screenSize.height - secondBottomBarTopGap) *
-                          dragState.secondScale,
-                  width: screenSize.width,
-                ),
+                    color: Colors.red,
+                    padding:
+                        EdgeInsets.only(top: paddingTop * dragState.firstScale),
+                    height: pipHeight +
+                        firstBottombarHeight +
+                        (screenSize.height -
+                                (pipHeight + firstBottombarHeight)) *
+                            dragState.firstScale -
+                        (screenSize.height - pipHeight - paddingTop) *
+                            dragState.secondScale,
+                    width: screenSize.width,
+                    child: PipPage(
+                        width: screenSize.width,
+                        height: screenSize.height - paddingTop)),
               )),
           Positioned(
               bottom: 0,
               child: GestureDetector(
-                onVerticalDragUpdate: ((details) => context
-                    .read<DragRouteCubit>()
-                    .handleSecondTabDragUpdate(details.primaryDelta!)),
+                onVerticalDragUpdate: ((details) {
+                  if (dragState.pageIndex == 2) {
+                    context
+                        .read<DragRouteCubit>()
+                        .handleSecondTabDragUpdate(details.primaryDelta!);
+                  } else {
+                    context
+                        .read<DragRouteCubit>()
+                        .handleSecondTabDragUpdate(details.primaryDelta!);
+                  }
+                }),
                 onVerticalDragEnd: ((details) =>
                     context.read<DragRouteCubit>().handleSecondTabDragEnd()),
                 child: Opacity(

@@ -35,6 +35,16 @@ class DragState {
         animateTargetScale ?? this.animateTargetScale,
         isfirstScaleAnimated ?? this.isfirstScaleAnimated);
   }
+
+  int getDragingIndex() {
+    if (firstScale >= 0 && secondScale == 0) {
+      return 0;
+    } else if (firstScale == 1 && secondScale >= 0) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
 }
 
 class DragRouteCubit extends Cubit<DragState> {
