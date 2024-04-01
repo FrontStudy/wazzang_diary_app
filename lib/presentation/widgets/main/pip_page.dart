@@ -12,7 +12,7 @@ class PipPage extends StatelessWidget {
 
   const PipPage({required this.width, required this.height, super.key});
 
-  List<WidgetPosition> _getPipWidgetPositions(double imageFirstLeftRatio,
+  List<WidgetPosition> _getCoverImagePositions(double imageFirstLeftRatio,
       double imageSecondLeftRatio, double imageThirdTop, DragState state) {
     double imageFirstLeft = width * imageFirstLeftRatio;
     double imageFirstTop = imageFirstLeft;
@@ -60,7 +60,7 @@ class PipPage extends StatelessWidget {
       const double imageSecondLeftRatio = 0.1;
       const double imageThirdTop = 0;
 
-      List<WidgetPosition> positions = _getPipWidgetPositions(
+      List<WidgetPosition> positions = _getCoverImagePositions(
           imageFirstLeftRatio, imageSecondLeftRatio, imageThirdTop, state);
 
       return Stack(
