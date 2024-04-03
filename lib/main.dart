@@ -122,6 +122,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             Container(
                 color: Colors.white,
                 height: screenSize.height - firstBottombarHeight,
+                margin: EdgeInsets.only(top: paddingTop),
                 child: Navigator(
                     key: context.read<NavigatorKeyCubit>().state,
                     onGenerateRoute: SubNavigatorRoutes.onGenerateRoutes)),
