@@ -132,6 +132,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     context
                         .read<DragRouteCubit>()
                         .handleSecondTabDragUpdate(details.primaryDelta!);
+                  } else if (dragState.pageIndex == 1) {
+                    if (details.primaryDelta! < 0) {
+                      context
+                          .read<DragRouteCubit>()
+                          .handleSecondTabDragUpdate(details.primaryDelta!);
+                    } else {
+                      context
+                          .read<DragRouteCubit>()
+                          .handlePipDragUpdate(details.primaryDelta!);
+                    }
                   } else {
                     context
                         .read<DragRouteCubit>()
@@ -141,6 +151,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 onVerticalDragEnd: ((details) {
                   if (dragState.pageIndex == 2) {
                     context.read<DragRouteCubit>().handleSecondTabDragEnd();
+                  } else if (dragState.pageIndex == 1) {
+                    if (dragState.lastDragDelta < 0) {
+                      context.read<DragRouteCubit>().handleSecondTabDragEnd();
+                    } else {
+                      context.read<DragRouteCubit>().handlePipDragEnd();
+                    }
                   } else {
                     context.read<DragRouteCubit>().handlePipDragEnd();
                   }
