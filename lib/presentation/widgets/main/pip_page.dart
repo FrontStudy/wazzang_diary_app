@@ -60,8 +60,8 @@ class PipPage extends StatelessWidget {
         children: [
           _pipFirstHeaderWidget(
               opacity: state.secondScale > 0
-                  ? 1 - state.secondScale
-                  : state.firstScale,
+                  ? state.secondScale
+                  : 1 - state.firstScale,
               stackWidth: width,
               firstScale: state.firstScale,
               secondScale: state.secondScale,
@@ -86,10 +86,24 @@ class PipPage extends StatelessWidget {
       left: firstLeft + (stackWidth) * firstScale - stackWidth * secondScale,
       child: Opacity(
         opacity: opacity,
-        child: Container(
-          color: Colors.red,
+        child: SizedBox(
           height: pipHeaderHeight,
           width: width,
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Title',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+              Text('일기 내용입니닫아아아아아아아아아아아아아아아아아아아아아아아아아아아',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      overflow: TextOverflow.ellipsis))
+            ],
+          ),
         ),
       ),
     );
