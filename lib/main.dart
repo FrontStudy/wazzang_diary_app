@@ -116,101 +116,104 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       }, builder: (context, dragState) {
         double? pipNeedBottom = _getPipNeedBottom(dragState);
 
-        return Stack(children: [
-          Container(
-              color: Colors.white,
-              height: screenSize.height,
-              child: Navigator(
-                  key: context.read<NavigatorKeyCubit>().state,
-                  onGenerateRoute: SubNavigatorRoutes.onGenerateRoutes)),
-          Positioned(
-              bottom: pipNeedBottom,
-              child: GestureDetector(
-                onTap: (() => context.read<DragRouteCubit>().handlePipTap()),
-                onVerticalDragUpdate: ((details) {
-                  if (dragState.pageIndex == 2) {
-                    context
-                        .read<DragRouteCubit>()
-                        .handleSecondTabDragUpdate(details.primaryDelta!);
-                  } else if (dragState.pageIndex == 1) {
-                    if (details.primaryDelta! < 0) {
+        return SizedBox(
+          height: screenSize.height,
+          child: Stack(children: [
+            Container(
+                color: Colors.white,
+                height: screenSize.height - firstBottombarHeight,
+                child: Navigator(
+                    key: context.read<NavigatorKeyCubit>().state,
+                    onGenerateRoute: SubNavigatorRoutes.onGenerateRoutes)),
+            Positioned(
+                bottom: pipNeedBottom,
+                child: GestureDetector(
+                  onTap: (() => context.read<DragRouteCubit>().handlePipTap()),
+                  onVerticalDragUpdate: ((details) {
+                    if (dragState.pageIndex == 2) {
+                      context
+                          .read<DragRouteCubit>()
+                          .handleSecondTabDragUpdate(details.primaryDelta!);
+                    } else if (dragState.pageIndex == 1) {
+                      if (details.primaryDelta! < 0) {
+                        context
+                            .read<DragRouteCubit>()
+                            .handleSecondTabDragUpdate(details.primaryDelta!);
+                      } else {
+                        context
+                            .read<DragRouteCubit>()
+                            .handlePipDragUpdate(details.primaryDelta!);
+                      }
+                    } else {
+                      context
+                          .read<DragRouteCubit>()
+                          .handlePipDragUpdate(details.primaryDelta!);
+                    }
+                  }),
+                  onVerticalDragEnd: ((details) {
+                    if (dragState.pageIndex == 2) {
+                      context.read<DragRouteCubit>().handleSecondTabDragEnd();
+                    } else if (dragState.pageIndex == 1) {
+                      if (dragState.lastDragDelta < 0) {
+                        context.read<DragRouteCubit>().handleSecondTabDragEnd();
+                      } else {
+                        context.read<DragRouteCubit>().handlePipDragEnd();
+                      }
+                    } else {
+                      context.read<DragRouteCubit>().handlePipDragEnd();
+                    }
+                  }),
+                  child: Container(
+                      color: Colors.red,
+                      padding: EdgeInsets.only(
+                          top: paddingTop * dragState.firstScale),
+                      height: pipHeight +
+                          firstBottombarHeight +
+                          (screenSize.height -
+                                  (pipHeight + firstBottombarHeight)) *
+                              dragState.firstScale -
+                          (screenSize.height - pipHeight - paddingTop) *
+                              dragState.secondScale,
+                      width: screenSize.width,
+                      child: PipPage(
+                          width: screenSize.width,
+                          height: screenSize.height - paddingTop)),
+                )),
+            Positioned(
+                bottom: 0,
+                child: GestureDetector(
+                  onVerticalDragUpdate: ((details) {
+                    if (dragState.pageIndex == 2) {
                       context
                           .read<DragRouteCubit>()
                           .handleSecondTabDragUpdate(details.primaryDelta!);
                     } else {
                       context
                           .read<DragRouteCubit>()
-                          .handlePipDragUpdate(details.primaryDelta!);
+                          .handleSecondTabDragUpdate(details.primaryDelta!);
                     }
-                  } else {
-                    context
-                        .read<DragRouteCubit>()
-                        .handlePipDragUpdate(details.primaryDelta!);
-                  }
-                }),
-                onVerticalDragEnd: ((details) {
-                  if (dragState.pageIndex == 2) {
-                    context.read<DragRouteCubit>().handleSecondTabDragEnd();
-                  } else if (dragState.pageIndex == 1) {
-                    if (dragState.lastDragDelta < 0) {
-                      context.read<DragRouteCubit>().handleSecondTabDragEnd();
-                    } else {
-                      context.read<DragRouteCubit>().handlePipDragEnd();
-                    }
-                  } else {
-                    context.read<DragRouteCubit>().handlePipDragEnd();
-                  }
-                }),
-                child: Container(
-                    color: Colors.red,
-                    padding:
-                        EdgeInsets.only(top: paddingTop * dragState.firstScale),
-                    height: pipHeight +
-                        firstBottombarHeight +
-                        (screenSize.height -
-                                (pipHeight + firstBottombarHeight)) *
-                            dragState.firstScale -
-                        (screenSize.height - pipHeight - paddingTop) *
-                            dragState.secondScale,
-                    width: screenSize.width,
-                    child: PipPage(
-                        width: screenSize.width,
-                        height: screenSize.height - paddingTop)),
-              )),
-          Positioned(
-              bottom: 0,
-              child: GestureDetector(
-                onVerticalDragUpdate: ((details) {
-                  if (dragState.pageIndex == 2) {
-                    context
-                        .read<DragRouteCubit>()
-                        .handleSecondTabDragUpdate(details.primaryDelta!);
-                  } else {
-                    context
-                        .read<DragRouteCubit>()
-                        .handleSecondTabDragUpdate(details.primaryDelta!);
-                  }
-                }),
-                onVerticalDragEnd: ((details) =>
-                    context.read<DragRouteCubit>().handleSecondTabDragEnd()),
+                  }),
+                  onVerticalDragEnd: ((details) =>
+                      context.read<DragRouteCubit>().handleSecondTabDragEnd()),
+                  child: Opacity(
+                      opacity: dragState.firstScale,
+                      child: SecondBottomNaviBar(
+                          height: secondBottomBarHeight * dragState.firstScale +
+                              (screenSize.height -
+                                      secondBottomBarTopGap -
+                                      secondBottomBarHeight *
+                                          dragState.firstScale) *
+                                  dragState.secondScale)),
+                )),
+            Positioned(
+                bottom: 0,
                 child: Opacity(
-                    opacity: dragState.firstScale,
-                    child: SecondBottomNaviBar(
-                        height: secondBottomBarHeight * dragState.firstScale +
-                            (screenSize.height -
-                                    secondBottomBarTopGap -
-                                    secondBottomBarHeight *
-                                        dragState.firstScale) *
-                                dragState.secondScale)),
-              )),
-          Positioned(
-              bottom: 0,
-              child: Opacity(
-                  opacity: 1 - dragState.firstScale,
-                  child: FirstBottomNaviBar(
-                      height:
-                          firstBottombarHeight * (1 - dragState.firstScale))))
-        ]);
+                    opacity: 1 - dragState.firstScale,
+                    child: FirstBottomNaviBar(
+                        height:
+                            firstBottombarHeight * (1 - dragState.firstScale))))
+          ]),
+        );
       }),
     );
   }
