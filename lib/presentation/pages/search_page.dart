@@ -11,11 +11,11 @@ class SearchPage extends StatelessWidget {
         MediaQuery.of(context).size.height - firstBottombarHeight;
     var paddingTop = MediaQuery.of(context).padding.top;
     double screenWidth = MediaQuery.of(context).size.width;
-    double horizontalPadding = screenWidth * 0.025;
-    double itemHeight = (screenWidth - horizontalPadding * 2) / 3;
+    double horizontalMargin = screenWidth * 0.025;
+    double itemHeight = (screenWidth - horizontalMargin * 2) / 3;
     double contentPadding = 10;
     double contentWidth =
-        screenWidth - horizontalPadding * 2 - itemHeight - contentPadding * 2;
+        screenWidth - horizontalMargin * 2 - itemHeight - contentPadding * 2;
     return Container(
         color: Colors.white,
         child: Column(
@@ -27,9 +27,9 @@ class SearchPage extends StatelessWidget {
                   '돌아보기',
                   style: TextStyle(fontSize: 30),
                 )),
-            Container(
+            SizedBox(
               height: screenheight - paddingTop - 50,
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+              // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
@@ -37,6 +37,7 @@ class SearchPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return itemWidget(
                         height: itemHeight,
+                        horizontalMargin: horizontalMargin,
                         contentPadding: contentPadding,
                         contentWidth: contentWidth);
                   }),
@@ -47,10 +48,11 @@ class SearchPage extends StatelessWidget {
 
   Widget itemWidget(
       {required double height,
+      required double horizontalMargin,
       required double contentPadding,
       required double contentWidth}) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: horizontalMargin),
       height: height,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
