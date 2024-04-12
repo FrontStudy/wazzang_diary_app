@@ -6,8 +6,9 @@ import 'presentation/bloc/main/drag_route_cubit.dart';
 import 'presentation/bloc/main/navigator_key_cubit.dart';
 import 'core/routes/sub_navigator_routes.dart';
 import 'core/constants/constants.dart';
+import 'presentation/bloc/pip/segment_toggle/segment_toggle_cubit.dart';
 import 'presentation/widgets/main/first_bottom_navi_bar.dart';
-import 'presentation/widgets/main/pip_page.dart';
+import 'presentation/pages/pip/pip_page.dart';
 import 'presentation/widgets/main/second_bottom_navi_bar.dart';
 
 void main() {
@@ -32,7 +33,10 @@ class MyApp extends StatelessWidget {
           BlocProvider<BottomNavigationBarCubit>(
               create: (_) => BottomNavigationBarCubit()),
           BlocProvider<NavigatorKeyCubit>(
-              create: (_) => NavigatorKeyCubit(navigatorKey))
+              create: (_) => NavigatorKeyCubit(navigatorKey)),
+          BlocProvider(
+            create: (context) => SegmentToggleCubit(),
+          ),
         ],
         child: const MainPage(),
       ),
@@ -73,6 +77,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           context.read<DragRouteCubit>().updateFirstScale(_animation!.value);
         } else {
           context.read<DragRouteCubit>().updateSecondScale(_animation!.value);
+        }
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.forward) {
+          context.read<DragRouteCubit>().setIsAnimating(true);
+        }
+        if (status == AnimationStatus.completed) {
+          context.read<DragRouteCubit>().setIsAnimating(false);
         }
       });
 
@@ -131,11 +143,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 child: GestureDetector(
                   onTap: (() => context.read<DragRouteCubit>().handlePipTap()),
                   onVerticalDragUpdate: ((details) {
-                    if (dragState.pageIndex == 2) {
+                    if (dragState.firstScale < 1 && dragState.firstScale >= 0) {
+                      context
+                          .read<DragRouteCubit>()
+                          .handlePipDragUpdate(details.primaryDelta!);
+                    } else if (dragState.firstScale == 1 &&
+                        dragState.secondScale > 0) {
                       context
                           .read<DragRouteCubit>()
                           .handleSecondTabDragUpdate(details.primaryDelta!);
-                    } else if (dragState.pageIndex == 1) {
+                    } else if (dragState.firstScale == 1 &&
+                        dragState.secondScale == 0) {
                       if (details.primaryDelta! < 0) {
                         context
                             .read<DragRouteCubit>()

@@ -8,6 +8,7 @@ class DragState {
   final bool shouldAnimate;
   final double? animateTargetScale;
   final bool? isfirstScaleAnimated;
+  final bool isAnimating;
 
   DragState(
       this.firstScale,
@@ -16,7 +17,8 @@ class DragState {
       this.pageIndex,
       this.shouldAnimate,
       this.animateTargetScale,
-      this.isfirstScaleAnimated);
+      this.isfirstScaleAnimated,
+      this.isAnimating);
 
   DragState copyWith(
       {double? firstScale,
@@ -25,7 +27,8 @@ class DragState {
       int? pageIndex,
       bool? shouldAnimate,
       double? animateTargetScale,
-      bool? isfirstScaleAnimated}) {
+      bool? isfirstScaleAnimated,
+      bool? isAnimating}) {
     return DragState(
         firstScale ?? this.firstScale,
         secondScale ?? this.secondScale,
@@ -33,7 +36,8 @@ class DragState {
         pageIndex ?? this.pageIndex,
         shouldAnimate ?? this.shouldAnimate,
         animateTargetScale ?? this.animateTargetScale,
-        isfirstScaleAnimated ?? this.isfirstScaleAnimated);
+        isfirstScaleAnimated ?? this.isfirstScaleAnimated,
+        isAnimating ?? this.isAnimating);
   }
 
   int getDragingIndex() {
@@ -42,25 +46,36 @@ class DragState {
     } else if (firstScale == 1 && secondScale >= 0) {
       return 1;
     } else {
+      print('firstScale : $firstScale, secondScale : $secondScale');
       return -1;
     }
   }
 }
 
 class DragRouteCubit extends Cubit<DragState> {
-  DragRouteCubit() : super(DragState(0, 0, 0, 0, false, null, null));
+  DragRouteCubit() : super(DragState(0, 0, 0, 0, false, null, null, false));
 
   void handlePipTap() {
+    if (state.shouldAnimate) return;
     _startFirstScaleAnimation(1);
   }
 
+  void handlePipDownAction() {
+    if (state.shouldAnimate) return;
+    if (state.pageIndex == 1) {
+      _startFirstScaleAnimation(0);
+    }
+  }
+
   void handlePipDragUpdate(double delta) {
+    if (state.shouldAnimate) return;
     double firstScale = state.firstScale - delta / 1000;
     firstScale = firstScale.clamp(0.0, 1.0);
     emit(state.copyWith(firstScale: firstScale, lastDragDelta: delta));
   }
 
   void handlePipDragEnd() {
+    if (state.shouldAnimate) return;
     if (state.firstScale == 0 && state.pageIndex == 0) {
       return;
     }
@@ -92,12 +107,14 @@ class DragRouteCubit extends Cubit<DragState> {
   }
 
   void handleSecondTabDragUpdate(double delta) {
+    if (state.shouldAnimate) return;
     double secondScale = state.secondScale - delta / 1000;
     secondScale = secondScale.clamp(0.0, 1.0);
     emit(state.copyWith(secondScale: secondScale, lastDragDelta: delta));
   }
 
   void handleSecondTabDragEnd() {
+    if (state.shouldAnimate) return;
     if (state.secondScale == 0 && state.pageIndex == 1) {
       return;
     }
@@ -138,6 +155,7 @@ class DragRouteCubit extends Cubit<DragState> {
   }
 
   void _setPageIndex(int index) {
+    print("setPage $index");
     emit(state.copyWith(pageIndex: index));
   }
 
@@ -178,5 +196,9 @@ class DragRouteCubit extends Cubit<DragState> {
         shouldAnimate: false,
         animateTargetScale: null,
         isfirstScaleAnimated: null));
+  }
+
+  void setIsAnimating(bool isAnimating) {
+    emit(state.copyWith(isAnimating: isAnimating));
   }
 }
