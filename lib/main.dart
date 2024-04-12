@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'core/themes/theme.dart';
 import 'presentation/bloc/main/bottom_navigation_bar_cubit.dart';
 import 'presentation/bloc/main/drag_route_cubit.dart';
 import 'presentation/bloc/main/navigator_key_cubit.dart';
-import 'core/routes/sub_navigator_routes.dart';
 import 'core/constants/constants.dart';
 import 'presentation/bloc/pip/segment_toggle/segment_toggle_cubit.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/search_page.dart';
 import 'presentation/widgets/main/first_bottom_navi_bar.dart';
 import 'presentation/pages/pip/pip_page.dart';
 import 'presentation/widgets/main/second_bottom_navi_bar.dart';
@@ -54,6 +56,12 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   AnimationController? _controller;
   Animation<double>? _animation;
+  final List<Widget> _pages = [
+    const HomePage(),
+    const SearchPage(),
+    const SearchPage(),
+    const SearchPage()
+  ];
 
   @override
   void dispose() {
@@ -114,6 +122,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     var paddingTop = MediaQuery.of(context).padding.top;
 
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       body: BlocConsumer<DragRouteCubit, DragState>(
           listener: (context, dragState) {
         if (dragState.shouldAnimate) {
@@ -131,13 +140,17 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         return SizedBox(
           height: screenSize.height,
           child: Stack(children: [
-            Container(
-                color: Colors.white,
-                height: screenSize.height - firstBottombarHeight,
-                margin: EdgeInsets.only(top: paddingTop),
-                child: Navigator(
-                    key: context.read<NavigatorKeyCubit>().state,
-                    onGenerateRoute: SubNavigatorRoutes.onGenerateRoutes)),
+            BlocBuilder<BottomNavigationBarCubit, int>(
+                builder: (context, state) {
+              return SizedBox(
+                  height: screenSize.height - firstBottombarHeight,
+                  child: PageView(
+                    controller:
+                        context.read<BottomNavigationBarCubit>().controller,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: _pages,
+                  ));
+            }),
             Positioned(
                 bottom: pipNeedBottom,
                 child: GestureDetector(
@@ -183,7 +196,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     }
                   }),
                   child: Container(
-                      color: Colors.red,
+                      color: darkblueColor,
                       padding: EdgeInsets.only(
                           top: paddingTop * dragState.firstScale),
                       height: pipHeight +

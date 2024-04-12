@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/constants.dart';
+import '../widgets/main/custom_app_bar.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -16,34 +17,31 @@ class SearchPage extends StatelessWidget {
     double contentPadding = 10;
     double contentWidth =
         screenWidth - horizontalMargin * 2 - itemHeight - contentPadding * 2;
-    return Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Container(
-                alignment: Alignment.center,
-                height: 100,
-                child: const Text(
-                  '돌아보기',
-                  style: TextStyle(fontSize: 30),
-                )),
-            SizedBox(
-              height: screenheight - paddingTop - 50,
-              // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return itemWidget(
-                        height: itemHeight,
-                        horizontalMargin: horizontalMargin,
-                        contentPadding: contentPadding,
-                        contentWidth: contentWidth);
-                  }),
-            ),
-          ],
-        ));
+
+    return Scaffold(
+      appBar: const CustomAppBar(),
+      body: Container(
+          color: Colors.grey[50],
+          child: Column(
+            children: [
+              SizedBox(
+                height: screenheight - paddingTop - 50,
+                // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return itemWidget(
+                          height: itemHeight,
+                          horizontalMargin: horizontalMargin,
+                          contentPadding: contentPadding,
+                          contentWidth: contentWidth);
+                    }),
+              ),
+            ],
+          )),
+    );
   }
 
   Widget itemWidget(

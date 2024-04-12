@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wazzang_diary/presentation/bloc/main/bottom_navigation_bar_cubit.dart';
 
-import '../../bloc/main/navigator_key_cubit.dart';
+import '../../../core/themes/theme.dart';
 
 class FirstBottomNaviBar extends StatelessWidget {
   const FirstBottomNaviBar({required this.height, super.key});
@@ -12,13 +12,13 @@ class FirstBottomNaviBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(top: 8.0),
-      color: Colors.red,
+      color: lightBlueColor,
       height: height,
       width: MediaQuery.of(context).size.width,
       child:
           BlocBuilder<BottomNavigationBarCubit, int>(builder: (context, state) {
         Color iconColor = Colors.white;
-        Color activeIconColor = Colors.yellow;
+        Color activeIconColor = lightYellowColor;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -72,7 +72,7 @@ class FirstBottomNaviBar extends StatelessWidget {
       height: height,
       child: GestureDetector(
         onTap: () {
-          context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
+          // context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
           context.read<BottomNavigationBarCubit>().changeIndex(index);
         },
         child: Column(

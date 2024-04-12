@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/themes/theme.dart';
+
 class SecondBottomNaviBar extends StatelessWidget {
   final double height;
 
@@ -8,13 +10,13 @@ class SecondBottomNaviBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: Colors.red,
+      color: darkblueColor,
       child: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0)),
-            color: Colors.green,
+            color: ivoryColor,
           ),
           height: height,
           width: MediaQuery.of(context).size.width,
