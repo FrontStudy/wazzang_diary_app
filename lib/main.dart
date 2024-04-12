@@ -201,9 +201,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       child: SecondBottomNaviBar(
                           height: secondBottomBarHeight * dragState.firstScale +
                               (screenSize.height -
-                                      secondBottomBarTopGap -
-                                      secondBottomBarHeight *
-                                          dragState.firstScale) *
+                                      pipHeight -
+                                      paddingTop -
+                                      secondBottomBarHeight) *
                                   dragState.secondScale)),
                 )),
             Positioned(
