@@ -7,6 +7,7 @@ import '../../bloc/main/drag_route_cubit.dart';
 import '../../../core/constants/constants.dart';
 import '../../bloc/pip/segment_toggle/segment_toggle_cubit.dart';
 import '../../widgets/pip/cover_image_widget.dart';
+import '../../widgets/pip/description_widget.dart';
 
 class PipPage extends StatelessWidget {
   final double width;
@@ -58,6 +59,9 @@ class PipPage extends StatelessWidget {
                 (imageThirdHeight - imageSecondHeight) * state.secondScale),
       ];
 
+      double gapBtwImageAndDescript = 24;
+      double descriptionTop = imageSecondTop + gapBtwImageAndDescript;
+
       return Stack(
         children: [
           _pipFirstWidget(
@@ -78,6 +82,14 @@ class PipPage extends StatelessWidget {
               context: context,
               firstScale: state.firstScale,
               secondScale: state.secondScale),
+          DescriptionWidget(
+              top: descriptionTop + imageSecondHeight,
+              leftPadding: imageSecondLeft,
+              height: height -
+                  pipHeaderHeight -
+                  imageSecondHeight -
+                  secondBottomBarHeight -
+                  gapBtwImageAndDescript),
           CoverImageWidget(positions: imagePositions),
           // PipDiaryText(positions: textPostions)
         ],
@@ -154,24 +166,29 @@ class PipPage extends StatelessWidget {
                         style: ButtonStyle(
                             visualDensity: const VisualDensity(
                                 horizontal: -4, vertical: -4),
-                            backgroundColor: MaterialStateColor.resolveWith(
-                                (states) => lightYellowColor),
+                            backgroundColor:
+                                MaterialStateColor.resolveWith((states) {
+                              if (states.contains(MaterialState.selected)) {
+                                return ivoryColor;
+                              } else {
+                                return darkIvoryColor;
+                              }
+                            }),
                             foregroundColor: MaterialStateColor.resolveWith(
-                                (states) => Colors.black),
+                                (states) => Colors.black87),
                             alignment: Alignment.center),
                         segments: const [
                           ButtonSegment<SegmentToggle>(
                             value: SegmentToggle.image,
-                            label: Text('사진'),
+                            label: Text('  사진'),
                           ),
                           ButtonSegment<SegmentToggle>(
                             value: SegmentToggle.text,
-                            label: Text('일기'),
+                            label: Text('일기  '),
                           ),
                         ],
-                        showSelectedIcon: true,
+                        showSelectedIcon: false,
                         selected: context.read<SegmentToggleCubit>().state,
-                        selectedIcon: null,
                         onSelectionChanged: (p0) {
                           context.read<SegmentToggleCubit>().update(p0);
                         },

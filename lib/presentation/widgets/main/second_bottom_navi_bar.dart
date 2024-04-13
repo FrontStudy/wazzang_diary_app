@@ -16,7 +16,7 @@ class SecondBottomNaviBar extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 topRight: Radius.circular(10.0)),
-            color: ivoryColor,
+            color: lightYellowColor,
           ),
           height: height,
           width: MediaQuery.of(context).size.width,
@@ -31,10 +31,10 @@ class SecondBottomNaviBar extends StatelessWidget {
               Flexible(
                 child: Container(
                   width: 40,
-                  height: 5,
+                  height: 4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
-                    color: Colors.white,
+                    color: ivoryColor,
                   ),
                 ),
               )
