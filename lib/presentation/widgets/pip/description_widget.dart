@@ -42,26 +42,61 @@ class DescriptionWidget extends StatelessWidget {
               width: screenWidth,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '제목입니다',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w600),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 15, bottom: 8),
+                    child: Text(
+                      '제목입니다',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.w600,
                       ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          SizedBox(
+                            height: 45,
+                            width: 45,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(1000),
+                                child: Image.asset(
+                                    'assets/images/user_profile_sample.jpg')),
+                          ),
+                          const SizedBox(width: 10),
                       Text(
                         '육성민',
                         style: TextStyle(color: Colors.grey[500], fontSize: 16),
                       ),
-                      const SizedBox(height: 30),
+                          const SizedBox(width: 15),
+                          SizedBox(
+                            height: 35,
+                            child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: lightBlueColor,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14.0),
+                                  // 원하는 여백 값을 EdgeInsets.symmetric을 사용하여 설정합니다.
+                                ),
+                                child: const Text(
+                                  '구독',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white,
+                                  ),
+                                )),
+                          ),
+                        ],
+                      ),
                       SizedBox(
-                        height: 36,
+                        height: 35,
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             ElevatedButton(
                                 onPressed: () {},
@@ -117,15 +152,42 @@ class DescriptionWidget extends StatelessWidget {
                                       ),
                                     )
                                   ],
-                                ))
+                                )),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
                     ],
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 30),
+                  const SizedBox(height: 15),
+                  SizedBox(
+                    height: 90,
+                    width: screenWidth,
+                    child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          alignment: Alignment.topLeft,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          backgroundColor: lightBlueColor,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14.0, vertical: 15.0),
+                        ),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '댓글',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                  const SizedBox(height: 15),
+                  SizedBox(
                     height: 90,
                     child: ElevatedButton(
                         onPressed: () {},
