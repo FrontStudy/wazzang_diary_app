@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../core/constants/constants.dart';
-import '../widgets/main/custom_app_bar.dart';
+import '../../../core/constants/constants.dart';
+import '../../widgets/main/custom_app_bar.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});

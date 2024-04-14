@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../presentation/pages/home_page.dart';
-import '../../presentation/pages/search_page.dart';
+import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/search/search_page.dart';
 
 class SubNavigatorRoutes {
   static Route onGenerateRoutes(RouteSettings settings) {
