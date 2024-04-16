@@ -41,38 +41,55 @@ class DescriptionWidget extends StatelessWidget {
               height: height,
               width: screenWidth,
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 15, bottom: 8),
-                    child: Text(
-                      '제목입니다',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 28,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            height: 45,
-                            width: 45,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(1000),
-                                child: Image.asset(
-                                    'assets/images/user_profile_sample.jpg')),
+                      const Padding(
+                        padding: EdgeInsets.only(top: 15, bottom: 8),
+                        child: Text(
+                          '제목입니다',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
                           ),
-                          const SizedBox(width: 10),
-                      Text(
-                        '육성민',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 16),
+                        ),
                       ),
-                          const SizedBox(width: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(1000),
+                                    child: Image.asset(
+                                        'assets/images/user_profile_sample.jpg')),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                '육성민',
+                                style: TextStyle(
+                                    color: Colors.grey[100],
+                                    fontSize: 18,
+                                    height: 1.3),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                '144만',
+                                style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: 16,
+                                    height: 0.8),
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 35,
                             child: ElevatedButton(
@@ -93,6 +110,7 @@ class DescriptionWidget extends StatelessWidget {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 15),
                       SizedBox(
                         height: 35,
                         child: Row(
@@ -139,7 +157,7 @@ class DescriptionWidget extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(
-                                      Icons.library_add_outlined,
+                                      Icons.bookmark_outline,
                                       color: Colors.white,
                                       size: 16,
                                     ),
@@ -158,35 +176,7 @@ class DescriptionWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15),
-                  SizedBox(
-                    height: 90,
-                    width: screenWidth,
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          alignment: Alignment.topLeft,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14.0),
-                          ),
-                          backgroundColor: lightBlueColor,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14.0, vertical: 15.0),
-                        ),
-                        child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '댓글',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        )),
-                  ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                   SizedBox(
                     height: 90,
                     child: ElevatedButton(
@@ -203,12 +193,27 @@ class DescriptionWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              '댓글',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
+                            const Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '댓글',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      height: 0.8
+                                  ),
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  '12',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                      height: 1.8
+                                  ),
+                                ),
+                              ],
                             ),
                             const SizedBox(height: 10),
                             Row(

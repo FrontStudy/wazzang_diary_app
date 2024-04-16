@@ -6,6 +6,7 @@ import 'presentation/bloc/main/bottom_navigation_bar_cubit.dart';
 import 'presentation/bloc/main/drag_route_cubit.dart';
 import 'presentation/bloc/main/navigator_key_cubit.dart';
 import 'core/constants/constants.dart';
+import 'presentation/bloc/main/second_navigation_bar_cubit.dart';
 import 'presentation/bloc/pip/segment_toggle/segment_toggle_cubit.dart';
 import 'presentation/pages/home/home_page.dart';
 import 'presentation/pages/search/search_page.dart';
@@ -36,9 +37,8 @@ class MyApp extends StatelessWidget {
               create: (_) => BottomNavigationBarCubit()),
           BlocProvider<NavigatorKeyCubit>(
               create: (_) => NavigatorKeyCubit(navigatorKey)),
-          BlocProvider(
-            create: (context) => SegmentToggleCubit(),
-          ),
+          BlocProvider(create: (_) => SegmentToggleCubit()),
+          BlocProvider(create: (_) => SecondNavigationBarCubit())
         ],
         child: const MainPage(),
       ),
@@ -212,7 +212,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           height: screenSize.height - paddingTop)),
                 )),
             Positioned(
-                bottom: 0,
+                top: screenSize.height -
+                    ((secondBottomBarHeight - 2) * dragState.firstScale +
+                        (screenSize.height -
+                                pipHeight -
+                                paddingTop -
+                                secondBottomBarHeight) *
+                            dragState.secondScale),
                 child: GestureDetector(
                   onVerticalDragUpdate: ((details) {
                     if (dragState.pageIndex == 2) {
@@ -230,12 +236,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   child: Opacity(
                       opacity: dragState.firstScale,
                       child: SecondBottomNaviBar(
-                          height: secondBottomBarHeight * dragState.firstScale +
-                              (screenSize.height -
-                                      pipHeight -
-                                      paddingTop -
-                                      secondBottomBarHeight) *
-                                  dragState.secondScale)),
+                          height: screenSize.height - pipHeight - paddingTop)),
                 )),
             Positioned(
                 bottom: 0,

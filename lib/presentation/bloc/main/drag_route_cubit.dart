@@ -135,12 +135,12 @@ class DragRouteCubit extends Cubit<DragState> {
 
     // drag fast
     if (lastDelta.abs() > 15) {
-      _startSecondScaleAnimation(lastDelta < 0 ? 2 : 1);
+      startSecondScaleAnimation(lastDelta < 0 ? 2 : 1);
       return;
     }
     // drag slowly
     else {
-      _startSecondScaleAnimation(state.secondScale > 0.5 ? 2 : 1);
+      startSecondScaleAnimation(state.secondScale > 0.5 ? 2 : 1);
     }
   }
 
@@ -175,7 +175,7 @@ class DragRouteCubit extends Cubit<DragState> {
     }
   }
 
-  void _startSecondScaleAnimation(int targetPageIndex) {
+  void startSecondScaleAnimation(int targetPageIndex) {
     if (targetPageIndex == 1) {
       emit(state.copyWith(
           pageIndex: targetPageIndex,
