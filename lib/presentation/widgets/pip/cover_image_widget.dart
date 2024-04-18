@@ -38,7 +38,7 @@ class CoverImageWidget extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    'assets/images/user_profile_sample.jpg',
+                    'assets/images/article_profile_sample.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),

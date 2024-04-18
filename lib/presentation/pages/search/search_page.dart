@@ -71,7 +71,11 @@ class SearchPage extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(20.0),
                     bottomLeft: Radius.circular(20.0)),
-                child: Image.asset('assets/images/user_profile_sample.jpg')),
+                child: Image.asset(
+                  'assets/images/article_profile_sample.jpg',
+                  fit: BoxFit.cover,
+                  height: height,
+                )),
           ),
           Padding(
             padding: EdgeInsets.all(contentPadding),
