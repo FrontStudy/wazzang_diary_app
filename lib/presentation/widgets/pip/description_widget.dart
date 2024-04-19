@@ -98,10 +98,9 @@ class DescriptionWidget extends StatelessWidget {
                                   backgroundColor: lightBlueColor,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 14.0),
-                                  // 원하는 여백 값을 EdgeInsets.symmetric을 사용하여 설정합니다.
                                 ),
                                 child: const Text(
-                                  '구독',
+                                  '팔로우',
                                   style: TextStyle(
                                     fontSize: 15,
                                     color: Colors.white,
@@ -122,14 +121,13 @@ class DescriptionWidget extends StatelessWidget {
                                   backgroundColor: lightBlueColor,
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 14.0, vertical: 0.0),
-                                  // 원하는 여백 값을 EdgeInsets.symmetric을 사용하여 설정합니다.
                                 ),
                                 child: const Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Icon(
-                                      Icons.thumb_up_off_alt_outlined,
+                                      Icons.favorite,
                                       color: Colors.white,
                                       size: 16,
                                     ),
