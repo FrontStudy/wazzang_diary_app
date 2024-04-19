@@ -8,38 +8,44 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenheight =
-        MediaQuery.of(context).size.height - firstBottombarHeight;
-    var paddingTop = MediaQuery.of(context).padding.top;
+    double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    double safeTopMargin = MediaQuery.of(context).padding.top;
     double horizontalMargin = screenWidth * 0.025;
     double itemHeight = (screenWidth - horizontalMargin * 2) / 3;
     double contentPadding = 10;
     double contentWidth =
         screenWidth - horizontalMargin * 2 - itemHeight - contentPadding * 2;
+    double filterBtnHeight = 40;
+    double filterBtnMarin = 24;
 
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Container(
           color: Colors.grey[50],
-          child: Column(
-            children: [
-              SizedBox(
-                height: screenheight - paddingTop - 50,
-                // padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: 5,
-                    itemBuilder: (context, index) {
-                      return itemWidget(
-                          height: itemHeight,
-                          horizontalMargin: horizontalMargin,
-                          contentPadding: contentPadding,
-                          contentWidth: contentWidth);
-                    }),
-              ),
-            ],
+          child: SizedBox(
+            height: screenHeight -
+                safeTopMargin -
+                firstBottombarHeight -
+                pipHeight -
+                appBarHeight,
+            child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return _filterBtnRow(
+                        filterBtnMarin: filterBtnMarin,
+                        filterBtnHeight: filterBtnHeight,
+                        screenWidth: screenWidth);
+                  }
+                  return itemWidget(
+                      height: itemHeight,
+                      horizontalMargin: horizontalMargin,
+                      contentPadding: contentPadding,
+                      contentWidth: contentWidth);
+                }),
           )),
     );
   }
@@ -105,6 +111,46 @@ class SearchPage extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _filterBtnRow(
+      {required double filterBtnMarin,
+      required double filterBtnHeight,
+      required double screenWidth}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: filterBtnMarin / 2),
+      height: filterBtnHeight,
+      width: screenWidth,
+      child: ListView.builder(
+        itemCount: 10,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return const SizedBox(width: 10);
+          }
+          return Container(
+            width: 80,
+            margin: const EdgeInsets.only(right: 5),
+            child: OutlinedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.zero),
+                side: MaterialStateProperty.all(
+                    const BorderSide(color: Colors.grey)),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                ),
+              ),
+              child: const Text(
+                '최신순',
+                style: TextStyle(color: Colors.black87),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
