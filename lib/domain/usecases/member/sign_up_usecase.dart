@@ -16,14 +16,18 @@ class SignUpUseCase implements UseCase<Member, SignUpParams> {
 }
 
 class SignUpParams {
-  final String firstName;
-  final String lastName;
   final String email;
-  final String password;
+  final String passwd;
+  final String nickname;
+  final String name;
+  final String gender;
+  final String birthDate;
   const SignUpParams({
-    required this.firstName,
-    required this.lastName,
     required this.email,
-    required this.password,
+    required this.passwd,
+    required this.nickname,
+    required this.name,
+    required this.gender,
+    required this.birthDate,
   });
 }
