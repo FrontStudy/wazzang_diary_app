@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 
+import 'data/repositories/mock_member_repository_impl.dart';
+import 'domain/repositories/member/member_repository.dart';
 import 'domain/usecases/member/get_cached_member_usecase.dart';
 import 'domain/usecases/member/sign_in_usecase.dart';
 import 'domain/usecases/member/sign_out_usecase.dart';
@@ -19,4 +21,6 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => SignUpUseCase(sl()));
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
   sl.registerLazySingleton(() => GetCachedMemberUseCase(sl()));
+  //Repositories
+  sl.registerLazySingleton<MemberRepository>(() => MockMemberRepositoryImpl());
 }
