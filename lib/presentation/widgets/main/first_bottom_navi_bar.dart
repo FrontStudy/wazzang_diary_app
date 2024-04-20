@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wazzang_diary/presentation/bloc/main/bottom_navigation_bar_cubit.dart';
+import 'package:wazzang_diary/presentation/blocs/main/bottom_navigation_bar_cubit.dart';
 
 import '../../../core/themes/theme.dart';
 

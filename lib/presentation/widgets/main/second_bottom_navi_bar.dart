@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/themes/theme.dart';
-import '../../bloc/main/drag_route_cubit.dart';
-import '../../bloc/main/second_navigation_bar_cubit.dart';
+import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/main/second_navigation_bar_cubit.dart';
 
 class SecondBottomNaviBar extends StatefulWidget {
   final double height;

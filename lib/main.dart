@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/themes/theme.dart';
-import 'presentation/bloc/main/bottom_navigation_bar_cubit.dart';
-import 'presentation/bloc/main/drag_route_cubit.dart';
-import 'presentation/bloc/main/navigator_key_cubit.dart';
+import 'presentation/blocs/main/bottom_navigation_bar_cubit.dart';
+import 'presentation/blocs/main/drag_route_cubit.dart';
+import 'presentation/blocs/main/navigator_key_cubit.dart';
 import 'core/constants/constants.dart';
-import 'presentation/bloc/main/second_navigation_bar_cubit.dart';
-import 'presentation/bloc/pip/segment_toggle/segment_toggle_cubit.dart';
+import 'presentation/blocs/main/second_navigation_bar_cubit.dart';
+import 'presentation/blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 import 'presentation/pages/home/home_page.dart';
 import 'presentation/pages/search/search_page.dart';
 import 'presentation/widgets/main/first_bottom_navi_bar.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/utils/widget_position.dart';
-import '../../bloc/main/drag_route_cubit.dart';
-import '../../bloc/pip/segment_toggle/segment_toggle_cubit.dart';
+import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 
 class CoverImageWidget extends StatelessWidget {
   final List<WidgetPosition> positions;
