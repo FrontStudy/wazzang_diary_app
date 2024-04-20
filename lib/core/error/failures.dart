@@ -10,3 +10,5 @@ class ServerFailure extends Failure {}
 class NetworkFailure extends Failure {}
 
 class AuthenticationFailure extends Failure {}
+
+class ExceptionFailure extends Failure {}
