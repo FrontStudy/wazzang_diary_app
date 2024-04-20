@@ -3,12 +3,15 @@ import 'package:dartz/dartz.dart';
 import '../../../../../core/error/failures.dart';
 import '../../../../../core/usecases/usecase.dart';
 import '../../entities/member/member.dart';
+import '../../repositories/member/member_repository.dart';
 
 class SignUpUseCase implements UseCase<Member, SignUpParams> {
+  final MemberRepository repository;
+  SignUpUseCase(this.repository);
+
   @override
-  Future<Either<Failure, Member>> call(SignUpParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, Member>> call(SignUpParams params) async {
+    return await repository.signUp(params);
   }
 }
 
