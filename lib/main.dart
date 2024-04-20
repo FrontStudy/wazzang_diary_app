@@ -9,9 +9,12 @@ import 'presentation/blocs/main/second_navigation_bar_cubit.dart';
 import 'locator.dart' as di;
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/pip/segment_toggle/segment_toggle_cubit.dart';
+import 'presentation/pages/authentication/signin_page.dart';
+import 'presentation/pages/main_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.initializeDependencies();
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -25,22 +28,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider<DragRouteCubit>(create: (_) => DragRouteCubit()),
-          BlocProvider<BottomNavigationBarCubit>(
-              create: (_) => BottomNavigationBarCubit()),
-          BlocProvider<NavigatorKeyCubit>(
-              create: (_) => NavigatorKeyCubit(navigatorKey)),
-          BlocProvider(create: (_) => SegmentToggleCubit()),
-          BlocProvider(create: (_) => SecondNavigationBarCubit()),
-          BlocProvider(create: (_) => di.sl<MemberBloc>()),
-        ],
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppRouter.main,
-        onGenerateRoute: AppRouter.onGenerateRoute,
-      ),
+      providers: [
+        BlocProvider<DragRouteCubit>(create: (_) => DragRouteCubit()),
+        BlocProvider<BottomNavigationBarCubit>(
+            create: (_) => BottomNavigationBarCubit()),
+        BlocProvider<NavigatorKeyCubit>(
+            create: (_) => NavigatorKeyCubit(navigatorKey)),
+        BlocProvider(create: (_) => SegmentToggleCubit()),
+        BlocProvider(create: (_) => SecondNavigationBarCubit()),
+        BlocProvider(create: (_) => di.sl<MemberBloc>()..add(CheckMember())),
+      ],
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: AppRouter.onGenerateRoute,
+          home: BlocBuilder<MemberBloc, MemberState>(
+              builder: (context, state) => state is MemberLogged
+                  ? const MainPage()
+                  : const SignInPage())),
     );
-    
   }
 }
