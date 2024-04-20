@@ -10,4 +10,5 @@ abstract class MemberRepository {
   Future<Either<Failure, Member>> signUp(SignUpParams params);
   Future<Either<Failure, Member>> signIn(SignInParams params);
   Future<Either<Failure, NoParams>> signOut();
+  Future<Either<Failure, Member>> getCachedMembers();
 }

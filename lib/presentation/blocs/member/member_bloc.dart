@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/usecases/usecase.dart';
 import '../../../domain/entities/member/member.dart';
+import '../../../domain/usecases/member/get_cached_member_usecase.dart';
 import '../../../domain/usecases/member/sign_in_usecase.dart';
 import '../../../domain/usecases/member/sign_out_usecase.dart';
 import '../../../domain/usecases/member/sign_up_usecase.dart';
@@ -16,15 +17,18 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
   final SignInUseCase _signInUseCase;
   final SignUpUseCase _signUpUseCase;
   final SignOutUseCase _signOutUseCase;
+  final GetCachedMemberUseCase _getCachedMemberUseCase;
 
   MemberBloc(
     this._signInUseCase,
     this._signUpUseCase,
     this._signOutUseCase,
+    this._getCachedMemberUseCase,
   ) : super(MemberInitial()) {
     on<SignInMember>(_onSignIn);
     on<SignUpMember>(_onSignUp);
     on<SignOutMember>(_onSignOut);
+    on<CheckMember>(_onCheckMember);
   }
 
   void _onSignIn(SignInMember event, Emitter<MemberState> emit) async {
@@ -58,6 +62,19 @@ class MemberBloc extends Bloc<MemberEvent, MemberState> {
       emit(MemberLoading());
       await _signOutUseCase(NoParams());
       emit(MemberLoggedOut());
+    } catch (e) {
+      emit(MemberLoggedFail(ExceptionFailure()));
+    }
+  }
+
+  void _onCheckMember(CheckMember event, Emitter<MemberState> emit) async {
+    try {
+      emit(MemberLoading());
+      final result = await _getCachedMemberUseCase(NoParams());
+      result.fold(
+        (failure) => emit(MemberLoggedFail(failure)),
+        (user) => emit(MemberLogged(user)),
+      );
     } catch (e) {
       emit(MemberLoggedFail(ExceptionFailure()));
     }

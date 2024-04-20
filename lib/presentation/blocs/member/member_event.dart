@@ -13,3 +13,5 @@ class SignUpMember extends MemberEvent {
 }
 
 class SignOutMember extends MemberEvent {}
+
+class CheckMember extends MemberEvent {}
