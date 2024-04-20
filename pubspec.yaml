@@ -12,11 +12,14 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
+  
   flutter_bloc: ^8.1.5
 
   equatable: ^2.0.5
   freezed_annotation: ^2.4.1
   json_annotation: ^4.8.1
+
+  dartz: ^0.10.1
 
 dev_dependencies:
   flutter_test:
