@@ -1,3 +1,5 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wazzang_diary/data/models/member/member_model.dart';
 
 abstract class MemberLocalDataSource {
@@ -10,7 +12,16 @@ abstract class MemberLocalDataSource {
   Future<MemberModel> getUser();
 }
 
-class MemberLocalDataSourcempl implements MemberLocalDataSource {
+const cachedToken = 'TOKEN';
+const cachedUser = 'USER';
+
+class MemberLocalDataSourceImpl implements MemberLocalDataSource {
+  final FlutterSecureStorage secureStorage;
+  final SharedPreferences sharedPreferences;
+
+  MemberLocalDataSourceImpl(
+      {required this.secureStorage, required this.sharedPreferences});
+      
   @override
   Future<void> clearCache() {
     // TODO: implement clearCache

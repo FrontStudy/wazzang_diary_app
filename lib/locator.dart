@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
-import 'data/repositories/mock_member_repository_impl.dart';
+import 'data/datasources/local/member_local_data_source.dart';
+import 'data/datasources/remote/member_remote_data_source.dart';
+import 'data/repositories/member_repository_impl.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/usecases/member/get_cached_member_usecase.dart';
 import 'domain/usecases/member/sign_in_usecase.dart';
@@ -27,7 +29,13 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => SignOutUseCase(sl()));
   sl.registerLazySingleton(() => GetCachedMemberUseCase(sl()));
   //Repositories
-  sl.registerLazySingleton<MemberRepository>(() => MockMemberRepositoryImpl());
+  sl.registerLazySingleton<MemberRepository>(() => MemberRepositoryImpl(
+      remoteDataSoure: sl(), localDataSource: sl(), networkInfo: sl()));
+  // Data sources
+  sl.registerLazySingleton<MemberLocalDataSource>(() =>
+      MemberLocalDataSourceImpl(sharedPreferences: sl(), secureStorage: sl()));
+  sl.registerLazySingleton<MemberRemoteDataSource>(
+      () => MemberRemoteDataSourceImpl(client: sl()));
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
