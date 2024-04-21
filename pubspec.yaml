@@ -23,6 +23,13 @@ dependencies:
 
   get_it: ^7.7.0
 
+  internet_connection_checker: ^1.0.0+1
+
+  shared_preferences: ^2.2.3
+  flutter_secure_storage: ^9.0.0
+
+  http: ^1.2.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
