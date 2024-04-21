@@ -13,6 +13,7 @@ _$MemberImpl _$$MemberImplFromJson(Map<String, dynamic> json) => _$MemberImpl(
       nickname: json['nickname'] as String,
       birthDate: json['birthDate'] as String?,
       gender: json['gender'] as String?,
+      profilePicture: json['profilePicture'] as String?,
     );
 
 Map<String, dynamic> _$$MemberImplToJson(_$MemberImpl instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$$MemberImplToJson(_$MemberImpl instance) =>
       'nickname': instance.nickname,
       'birthDate': instance.birthDate,
       'gender': instance.gender,
+      'profilePicture': instance.profilePicture,
     };

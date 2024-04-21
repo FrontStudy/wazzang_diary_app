@@ -26,6 +26,7 @@ mixin _$Member {
   String get nickname => throw _privateConstructorUsedError;
   String? get birthDate => throw _privateConstructorUsedError;
   String? get gender => throw _privateConstructorUsedError;
+  String? get profilePicture => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $MemberCopyWith<$Res> {
       String name,
       String nickname,
       String? birthDate,
-      String? gender});
+      String? gender,
+      String? profilePicture});
 }
 
 /// @nodoc
@@ -65,6 +67,7 @@ class _$MemberCopyWithImpl<$Res, $Val extends Member>
     Object? nickname = null,
     Object? birthDate = freezed,
     Object? gender = freezed,
+    Object? profilePicture = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -91,6 +94,10 @@ class _$MemberCopyWithImpl<$Res, $Val extends Member>
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as String?,
+      profilePicture: freezed == profilePicture
+          ? _value.profilePicture
+          : profilePicture // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -108,7 +115,8 @@ abstract class _$$MemberImplCopyWith<$Res> implements $MemberCopyWith<$Res> {
       String name,
       String nickname,
       String? birthDate,
-      String? gender});
+      String? gender,
+      String? profilePicture});
 }
 
 /// @nodoc
@@ -128,6 +136,7 @@ class __$$MemberImplCopyWithImpl<$Res>
     Object? nickname = null,
     Object? birthDate = freezed,
     Object? gender = freezed,
+    Object? profilePicture = freezed,
   }) {
     return _then(_$MemberImpl(
       id: null == id
@@ -154,6 +163,10 @@ class __$$MemberImplCopyWithImpl<$Res>
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as String?,
+      profilePicture: freezed == profilePicture
+          ? _value.profilePicture
+          : profilePicture // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -167,7 +180,8 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
       required this.name,
       required this.nickname,
       this.birthDate,
-      this.gender});
+      this.gender,
+      this.profilePicture});
 
   factory _$MemberImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberImplFromJson(json);
@@ -184,10 +198,12 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
   final String? birthDate;
   @override
   final String? gender;
+  @override
+  final String? profilePicture;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Member(id: $id, email: $email, name: $name, nickname: $nickname, birthDate: $birthDate, gender: $gender)';
+    return 'Member(id: $id, email: $email, name: $name, nickname: $nickname, birthDate: $birthDate, gender: $gender, profilePicture: $profilePicture)';
   }
 
   @override
@@ -200,7 +216,8 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('nickname', nickname))
       ..add(DiagnosticsProperty('birthDate', birthDate))
-      ..add(DiagnosticsProperty('gender', gender));
+      ..add(DiagnosticsProperty('gender', gender))
+      ..add(DiagnosticsProperty('profilePicture', profilePicture));
   }
 
   @override
@@ -215,13 +232,15 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
                 other.nickname == nickname) &&
             (identical(other.birthDate, birthDate) ||
                 other.birthDate == birthDate) &&
-            (identical(other.gender, gender) || other.gender == gender));
+            (identical(other.gender, gender) || other.gender == gender) &&
+            (identical(other.profilePicture, profilePicture) ||
+                other.profilePicture == profilePicture));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, email, name, nickname, birthDate, gender);
+  int get hashCode => Object.hash(runtimeType, id, email, name, nickname,
+      birthDate, gender, profilePicture);
 
   @JsonKey(ignore: true)
   @override
@@ -244,7 +263,8 @@ abstract class _Member implements Member {
       required final String name,
       required final String nickname,
       final String? birthDate,
-      final String? gender}) = _$MemberImpl;
+      final String? gender,
+      final String? profilePicture}) = _$MemberImpl;
 
   factory _Member.fromJson(Map<String, dynamic> json) = _$MemberImpl.fromJson;
 
@@ -260,6 +280,8 @@ abstract class _Member implements Member {
   String? get birthDate;
   @override
   String? get gender;
+  @override
+  String? get profilePicture;
   @override
   @JsonKey(ignore: true)
   _$$MemberImplCopyWith<_$MemberImpl> get copyWith =>

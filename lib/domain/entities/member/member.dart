@@ -13,6 +13,7 @@ abstract class Member with _$Member {
     required String nickname,
     String? birthDate,
     String? gender,
+    String? profilePicture,
   }) = _Member;
 
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);

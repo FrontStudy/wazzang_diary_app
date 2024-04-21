@@ -21,6 +21,7 @@ MemberModel _$MemberModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MemberModel {
   Member get member => throw _privateConstructorUsedError;
+  String get jtoken => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,7 @@ abstract class $MemberModelCopyWith<$Res> {
           MemberModel value, $Res Function(MemberModel) then) =
       _$MemberModelCopyWithImpl<$Res, MemberModel>;
   @useResult
-  $Res call({Member member});
+  $Res call({Member member, String jtoken});
 
   $MemberCopyWith<$Res> get member;
 }
@@ -53,12 +54,17 @@ class _$MemberModelCopyWithImpl<$Res, $Val extends MemberModel>
   @override
   $Res call({
     Object? member = null,
+    Object? jtoken = null,
   }) {
     return _then(_value.copyWith(
       member: null == member
           ? _value.member
           : member // ignore: cast_nullable_to_non_nullable
               as Member,
+      jtoken: null == jtoken
+          ? _value.jtoken
+          : jtoken // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -79,7 +85,7 @@ abstract class _$$MemberModelImplCopyWith<$Res>
       __$$MemberModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Member member});
+  $Res call({Member member, String jtoken});
 
   @override
   $MemberCopyWith<$Res> get member;
@@ -97,12 +103,17 @@ class __$$MemberModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? member = null,
+    Object? jtoken = null,
   }) {
     return _then(_$MemberModelImpl(
       member: null == member
           ? _value.member
           : member // ignore: cast_nullable_to_non_nullable
               as Member,
+      jtoken: null == jtoken
+          ? _value.jtoken
+          : jtoken // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -110,17 +121,19 @@ class __$$MemberModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MemberModelImpl implements _MemberModel {
-  const _$MemberModelImpl({required this.member});
+  const _$MemberModelImpl({required this.member, required this.jtoken});
 
   factory _$MemberModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberModelImplFromJson(json);
 
   @override
   final Member member;
+  @override
+  final String jtoken;
 
   @override
   String toString() {
-    return 'MemberModel(member: $member)';
+    return 'MemberModel(member: $member, jtoken: $jtoken)';
   }
 
   @override
@@ -128,12 +141,13 @@ class _$MemberModelImpl implements _MemberModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MemberModelImpl &&
-            (identical(other.member, member) || other.member == member));
+            (identical(other.member, member) || other.member == member) &&
+            (identical(other.jtoken, jtoken) || other.jtoken == jtoken));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, member);
+  int get hashCode => Object.hash(runtimeType, member, jtoken);
 
   @JsonKey(ignore: true)
   @override
@@ -150,14 +164,17 @@ class _$MemberModelImpl implements _MemberModel {
 }
 
 abstract class _MemberModel implements MemberModel {
-  const factory _MemberModel({required final Member member}) =
-      _$MemberModelImpl;
+  const factory _MemberModel(
+      {required final Member member,
+      required final String jtoken}) = _$MemberModelImpl;
 
   factory _MemberModel.fromJson(Map<String, dynamic> json) =
       _$MemberModelImpl.fromJson;
 
   @override
   Member get member;
+  @override
+  String get jtoken;
   @override
   @JsonKey(ignore: true)
   _$$MemberModelImplCopyWith<_$MemberModelImpl> get copyWith =>
