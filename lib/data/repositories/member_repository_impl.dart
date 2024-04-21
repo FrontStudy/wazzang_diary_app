@@ -8,6 +8,9 @@ import '../../core/network/network_info.dart';
 import '../../domain/repositories/member/member_repository.dart';
 import '../datasources/local/member_local_data_source.dart';
 import '../datasources/remote/member_remote_data_source.dart';
+import '../models/member/authentication_response_model.dart';
+
+typedef _DataSourceChooser = Future<AuthenticationResponseModel> Function();
 
 class MemberRepositoryImpl implements MemberRepository {
   final MemberRemoteDataSource remoteDataSoure;
@@ -21,26 +24,49 @@ class MemberRepositoryImpl implements MemberRepository {
   });
 
   @override
-  Future<Either<Failure, Member>> getCachedMembers() {
-    // TODO: implement getCachedMembers
-    throw UnimplementedError();
+  Future<Either<Failure, Member>> getCachedMembers() async {
+    try {
+      final memberModel = await localDataSource.getUser();
+      return Right(memberModel.member);
+    } on CacheFailure {
+      return Left(CacheFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, Member>> signIn(SignInParams params) {
-    // TODO: implement signIn
-    throw UnimplementedError();
+  Future<Either<Failure, Member>> signIn(SignInParams params) async {
+    return await _authenticate(() => remoteDataSoure.signIn(params));
   }
 
   @override
-  Future<Either<Failure, NoParams>> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<Either<Failure, NoParams>> signOut() async {
+    try {
+      await localDataSource.clearCache();
+      return Right(NoParams());
+    } on CacheFailure {
+      return Left(CacheFailure());
+    }
   }
 
   @override
-  Future<Either<Failure, Member>> signUp(SignUpParams params) {
-    // TODO: implement signUp
-    throw UnimplementedError();
+  Future<Either<Failure, Member>> signUp(SignUpParams params) async {
+    return await _authenticate(() => remoteDataSoure.signUp(params));
+  }
+
+  Future<Either<Failure, Member>> _authenticate(
+    _DataSourceChooser getDataSource,
+  ) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final remoteResponse = await getDataSource();
+        localDataSource.saveToken(remoteResponse.token);
+        localDataSource.saveUser(remoteResponse.memberModel);
+        return Right(remoteResponse.memberModel.member);
+      } on Failure catch (failure) {
+        return Left(failure);
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
   }
 }
