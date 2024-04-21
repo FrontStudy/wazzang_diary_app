@@ -10,12 +10,13 @@ _$AuthenticationResponseModelImpl _$$AuthenticationResponseModelImplFromJson(
         Map<String, dynamic> json) =>
     _$AuthenticationResponseModelImpl(
       token: json['token'] as String,
-      member: MemberModel.fromJson(json['member'] as Map<String, dynamic>),
+      memberModel:
+          MemberModel.fromJson(json['memberModel'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$AuthenticationResponseModelImplToJson(
         _$AuthenticationResponseModelImpl instance) =>
     <String, dynamic>{
       'token': instance.token,
-      'member': instance.member,
+      'memberModel': instance.memberModel,
     };

@@ -20,12 +20,7 @@ MemberModel _$MemberModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MemberModel {
-  String get id => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
-  String get nickname => throw _privateConstructorUsedError;
-  String? get birthDate => throw _privateConstructorUsedError;
-  String? get gender => throw _privateConstructorUsedError;
+  Member get member => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,13 +34,9 @@ abstract class $MemberModelCopyWith<$Res> {
           MemberModel value, $Res Function(MemberModel) then) =
       _$MemberModelCopyWithImpl<$Res, MemberModel>;
   @useResult
-  $Res call(
-      {String id,
-      String email,
-      String name,
-      String nickname,
-      String? birthDate,
-      String? gender});
+  $Res call({Member member});
+
+  $MemberCopyWith<$Res> get member;
 }
 
 /// @nodoc
@@ -61,39 +52,22 @@ class _$MemberModelCopyWithImpl<$Res, $Val extends MemberModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? email = null,
-    Object? name = null,
-    Object? nickname = null,
-    Object? birthDate = freezed,
-    Object? gender = freezed,
+    Object? member = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickname: null == nickname
-          ? _value.nickname
-          : nickname // ignore: cast_nullable_to_non_nullable
-              as String,
-      birthDate: freezed == birthDate
-          ? _value.birthDate
-          : birthDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      gender: freezed == gender
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as String?,
+      member: null == member
+          ? _value.member
+          : member // ignore: cast_nullable_to_non_nullable
+              as Member,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $MemberCopyWith<$Res> get member {
+    return $MemberCopyWith<$Res>(_value.member, (value) {
+      return _then(_value.copyWith(member: value) as $Val);
+    });
   }
 }
 
@@ -105,13 +79,10 @@ abstract class _$$MemberModelImplCopyWith<$Res>
       __$$MemberModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String email,
-      String name,
-      String nickname,
-      String? birthDate,
-      String? gender});
+  $Res call({Member member});
+
+  @override
+  $MemberCopyWith<$Res> get member;
 }
 
 /// @nodoc
@@ -125,38 +96,13 @@ class __$$MemberModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
-    Object? email = null,
-    Object? name = null,
-    Object? nickname = null,
-    Object? birthDate = freezed,
-    Object? gender = freezed,
+    Object? member = null,
   }) {
     return _then(_$MemberModelImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickname: null == nickname
-          ? _value.nickname
-          : nickname // ignore: cast_nullable_to_non_nullable
-              as String,
-      birthDate: freezed == birthDate
-          ? _value.birthDate
-          : birthDate // ignore: cast_nullable_to_non_nullable
-              as String?,
-      gender: freezed == gender
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as String?,
+      member: null == member
+          ? _value.member
+          : member // ignore: cast_nullable_to_non_nullable
+              as Member,
     ));
   }
 }
@@ -164,33 +110,17 @@ class __$$MemberModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$MemberModelImpl implements _MemberModel {
-  const _$MemberModelImpl(
-      {required this.id,
-      required this.email,
-      required this.name,
-      required this.nickname,
-      this.birthDate,
-      this.gender});
+  const _$MemberModelImpl({required this.member});
 
   factory _$MemberModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$MemberModelImplFromJson(json);
 
   @override
-  final String id;
-  @override
-  final String email;
-  @override
-  final String name;
-  @override
-  final String nickname;
-  @override
-  final String? birthDate;
-  @override
-  final String? gender;
+  final Member member;
 
   @override
   String toString() {
-    return 'MemberModel(id: $id, email: $email, name: $name, nickname: $nickname, birthDate: $birthDate, gender: $gender)';
+    return 'MemberModel(member: $member)';
   }
 
   @override
@@ -198,20 +128,12 @@ class _$MemberModelImpl implements _MemberModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$MemberModelImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.nickname, nickname) ||
-                other.nickname == nickname) &&
-            (identical(other.birthDate, birthDate) ||
-                other.birthDate == birthDate) &&
-            (identical(other.gender, gender) || other.gender == gender));
+            (identical(other.member, member) || other.member == member));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, email, name, nickname, birthDate, gender);
+  int get hashCode => Object.hash(runtimeType, member);
 
   @JsonKey(ignore: true)
   @override
@@ -228,29 +150,14 @@ class _$MemberModelImpl implements _MemberModel {
 }
 
 abstract class _MemberModel implements MemberModel {
-  const factory _MemberModel(
-      {required final String id,
-      required final String email,
-      required final String name,
-      required final String nickname,
-      final String? birthDate,
-      final String? gender}) = _$MemberModelImpl;
+  const factory _MemberModel({required final Member member}) =
+      _$MemberModelImpl;
 
   factory _MemberModel.fromJson(Map<String, dynamic> json) =
       _$MemberModelImpl.fromJson;
 
   @override
-  String get id;
-  @override
-  String get email;
-  @override
-  String get name;
-  @override
-  String get nickname;
-  @override
-  String? get birthDate;
-  @override
-  String? get gender;
+  Member get member;
   @override
   @JsonKey(ignore: true)
   _$$MemberModelImplCopyWith<_$MemberModelImpl> get copyWith =>

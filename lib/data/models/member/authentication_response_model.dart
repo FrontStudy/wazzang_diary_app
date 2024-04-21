@@ -9,7 +9,7 @@ part 'authentication_response_model.g.dart';
 class AuthenticationResponseModel with _$AuthenticationResponseModel {
   const factory AuthenticationResponseModel({
     required String token,
-    required MemberModel member,
+    required MemberModel memberModel,
   }) = _AuthenticationResponseModel;
 
   factory AuthenticationResponseModel.fromJson(Map<String, dynamic> json) =>

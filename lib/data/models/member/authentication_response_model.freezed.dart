@@ -22,7 +22,7 @@ AuthenticationResponseModel _$AuthenticationResponseModelFromJson(
 /// @nodoc
 mixin _$AuthenticationResponseModel {
   String get token => throw _privateConstructorUsedError;
-  MemberModel get member => throw _privateConstructorUsedError;
+  MemberModel get memberModel => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -38,9 +38,9 @@ abstract class $AuthenticationResponseModelCopyWith<$Res> {
       _$AuthenticationResponseModelCopyWithImpl<$Res,
           AuthenticationResponseModel>;
   @useResult
-  $Res call({String token, MemberModel member});
+  $Res call({String token, MemberModel memberModel});
 
-  $MemberModelCopyWith<$Res> get member;
+  $MemberModelCopyWith<$Res> get memberModel;
 }
 
 /// @nodoc
@@ -58,25 +58,25 @@ class _$AuthenticationResponseModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? token = null,
-    Object? member = null,
+    Object? memberModel = null,
   }) {
     return _then(_value.copyWith(
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      member: null == member
-          ? _value.member
-          : member // ignore: cast_nullable_to_non_nullable
+      memberModel: null == memberModel
+          ? _value.memberModel
+          : memberModel // ignore: cast_nullable_to_non_nullable
               as MemberModel,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $MemberModelCopyWith<$Res> get member {
-    return $MemberModelCopyWith<$Res>(_value.member, (value) {
-      return _then(_value.copyWith(member: value) as $Val);
+  $MemberModelCopyWith<$Res> get memberModel {
+    return $MemberModelCopyWith<$Res>(_value.memberModel, (value) {
+      return _then(_value.copyWith(memberModel: value) as $Val);
     });
   }
 }
@@ -90,10 +90,10 @@ abstract class _$$AuthenticationResponseModelImplCopyWith<$Res>
       __$$AuthenticationResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String token, MemberModel member});
+  $Res call({String token, MemberModel memberModel});
 
   @override
-  $MemberModelCopyWith<$Res> get member;
+  $MemberModelCopyWith<$Res> get memberModel;
 }
 
 /// @nodoc
@@ -110,16 +110,16 @@ class __$$AuthenticationResponseModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? token = null,
-    Object? member = null,
+    Object? memberModel = null,
   }) {
     return _then(_$AuthenticationResponseModelImpl(
       token: null == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
               as String,
-      member: null == member
-          ? _value.member
-          : member // ignore: cast_nullable_to_non_nullable
+      memberModel: null == memberModel
+          ? _value.memberModel
+          : memberModel // ignore: cast_nullable_to_non_nullable
               as MemberModel,
     ));
   }
@@ -130,7 +130,7 @@ class __$$AuthenticationResponseModelImplCopyWithImpl<$Res>
 class _$AuthenticationResponseModelImpl
     implements _AuthenticationResponseModel {
   const _$AuthenticationResponseModelImpl(
-      {required this.token, required this.member});
+      {required this.token, required this.memberModel});
 
   factory _$AuthenticationResponseModelImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -139,11 +139,11 @@ class _$AuthenticationResponseModelImpl
   @override
   final String token;
   @override
-  final MemberModel member;
+  final MemberModel memberModel;
 
   @override
   String toString() {
-    return 'AuthenticationResponseModel(token: $token, member: $member)';
+    return 'AuthenticationResponseModel(token: $token, memberModel: $memberModel)';
   }
 
   @override
@@ -152,12 +152,13 @@ class _$AuthenticationResponseModelImpl
         (other.runtimeType == runtimeType &&
             other is _$AuthenticationResponseModelImpl &&
             (identical(other.token, token) || other.token == token) &&
-            (identical(other.member, member) || other.member == member));
+            (identical(other.memberModel, memberModel) ||
+                other.memberModel == memberModel));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, token, member);
+  int get hashCode => Object.hash(runtimeType, token, memberModel);
 
   @JsonKey(ignore: true)
   @override
@@ -177,8 +178,9 @@ class _$AuthenticationResponseModelImpl
 abstract class _AuthenticationResponseModel
     implements AuthenticationResponseModel {
   const factory _AuthenticationResponseModel(
-      {required final String token,
-      required final MemberModel member}) = _$AuthenticationResponseModelImpl;
+          {required final String token,
+          required final MemberModel memberModel}) =
+      _$AuthenticationResponseModelImpl;
 
   factory _AuthenticationResponseModel.fromJson(Map<String, dynamic> json) =
       _$AuthenticationResponseModelImpl.fromJson;
@@ -186,7 +188,7 @@ abstract class _AuthenticationResponseModel
   @override
   String get token;
   @override
-  MemberModel get member;
+  MemberModel get memberModel;
   @override
   @JsonKey(ignore: true)
   _$$AuthenticationResponseModelImplCopyWith<_$AuthenticationResponseModelImpl>
