@@ -108,7 +108,11 @@ class _SignInPageState extends State<SignInPage> {
                   flex: 3,
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(
+                        AppRouter.signUp,
+                      );
+                    },
                     style: ButtonStyle(
                         backgroundColor: MaterialStateColor.resolveWith(
                             (states) => Colors.white),
