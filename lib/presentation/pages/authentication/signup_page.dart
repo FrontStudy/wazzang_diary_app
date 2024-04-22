@@ -72,6 +72,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (val == null || val.isEmpty) {
                             return '이메일을 입력해주세요';
                           }
+                          final RegExp emailRegex = RegExp(
+                            r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
+                          );
+                          if (!emailRegex.hasMatch(val)) {
+                            return '이메일 양식을 맞춰주세요.';
+                          }
                           return null;
                         },
                         onChanged: (value) {
