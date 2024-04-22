@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../presentation/blocs/signup/check_email_bloc.dart';
 import '../../presentation/pages/authentication/signin_page.dart';
 import '../../presentation/pages/authentication/signup_birth_page.dart';
 import '../../presentation/pages/authentication/signup_name_page.dart';
@@ -9,6 +11,8 @@ import '../../presentation/pages/authentication/signup_pw_page.dart';
 import '../../presentation/pages/authentication/signup_terms_page.dart';
 import '../../presentation/pages/main_page.dart';
 import '../error/exceptions.dart';
+
+import '../../locator.dart' as di;
 
 class AppRouter {
   static const String main = '/';
@@ -28,7 +32,10 @@ class AppRouter {
       case signIn:
         return MaterialPageRoute(builder: (_) => const SignInPage());
       case signUp:
-        return MaterialPageRoute(builder: (_) => const SignUpPage());
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                create: (_) => CheckEmailBloc(di.sl()),
+                child: const SignUpPage()));
       case signUpPw:
         final Map<String, dynamic> memberInfo =
             routeSettings.arguments as Map<String, dynamic>;

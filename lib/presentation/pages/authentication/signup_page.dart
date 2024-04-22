@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
+import '../../../domain/usecases/signup/check_email_usecase.dart';
+import '../../blocs/signup/check_email_bloc.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -44,25 +48,45 @@ class _SignUpPageState extends State<SignUpPage> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      controller: emailController,
-                      textInputAction: TextInputAction.go,
-                      decoration: const InputDecoration(
-                        label: Text('이메일 주소'),
-                      ),
-                      validator: (String? val) {
-                        if (val == null || val.isEmpty) {
-                          return '이메일을 입력해주세요';
-                        }
-                        return null;
-                      },
-                      onFieldSubmitted: (input) {
-                        if (_formKey.currentState!.validate()) {
-                          Navigator.of(context)
-                              .pushNamed(AppRouter.signUpPw, arguments: input);
-                        }
-                      },
-                    ),
+                    BlocBuilder<CheckEmailBloc, CheckEmailState>(
+                        builder: (context, state) {
+                      Widget suffixIcon = const Icon(Icons.error);
+                      if (state is EmailCheckInitial ||
+                          state is EmailCheckFail) {
+                        suffixIcon = const Icon(Icons.error);
+                      } else if (state is EmailCheckLoading) {
+                        suffixIcon = Lottie.asset("assets/lotties/loading.json",
+                            height: 20, width: 20);
+                      } else {
+                        suffixIcon = const Icon(Icons.check);
+                      }
+
+                      return TextFormField(
+                        controller: emailController,
+                        textInputAction: TextInputAction.go,
+                        decoration: InputDecoration(
+                          suffixIcon: suffixIcon,
+                          label: const Text('이메일 주소'),
+                        ),
+                        validator: (String? val) {
+                          if (val == null || val.isEmpty) {
+                            return '이메일을 입력해주세요';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          context
+                              .read<CheckEmailBloc>()
+                              .add(CheckEmail(CheckEmailParams(email: value)));
+                        },
+                        onFieldSubmitted: (input) {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.of(context).pushNamed(AppRouter.signUpPw,
+                                arguments: input);
+                          }
+                        },
+                      );
+                    }),
                     const SizedBox(height: 20),
                     ElevatedButton(
                         onPressed: () {

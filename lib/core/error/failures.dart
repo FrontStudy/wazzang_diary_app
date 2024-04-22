@@ -16,3 +16,7 @@ class ExceptionFailure extends Failure {}
 class CacheFailure extends Failure {}
 
 class CredentialFailure extends Failure {}
+
+class DuplicateFailure extends Failure {}
+
+class ValidationFailure extends Failure {}

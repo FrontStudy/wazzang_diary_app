@@ -40,7 +40,17 @@ class _SignUpTermsPageState extends State<SignUpTermsPage> {
                   children: [
                     const Text("이용 약관",
                         style: TextStyle(fontWeight: FontWeight.w600)),
-                    TextButton(onPressed: () {}, child: const Text('모두 선택'))
+                    TextButton(
+                        onPressed: () {
+                          if (mounted) {
+                            setState(() {
+                              _useTerm = !_useTerm;
+                              _privacyTerm = !_privacyTerm;
+                              _locateTerm = !_locateTerm;
+                            });
+                          }
+                        },
+                        child: const Text('모두 선택'))
                   ],
                 ),
               ),

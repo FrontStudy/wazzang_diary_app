@@ -30,7 +30,6 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
         }));
 
     final responseData = json.decode(response.body);
-    print(responseData);
     if (response.statusCode == 200 &&
         json.decode(response.body)["status"] == "success") {
       return AuthenticationResponseModel.fromJson(responseData["data"]);
