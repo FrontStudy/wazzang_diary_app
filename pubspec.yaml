@@ -32,6 +32,8 @@ dependencies:
   
   intl: ^0.19.0
 
+  lottie: ^3.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -45,8 +47,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/user_profile_sample.jpg
-    - assets/images/article_profile_sample.jpg
+    - assets/images/
+    - assets/lotties/
 
   # fonts:
   #   - family: Schyler
