@@ -1,17 +1,42 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
-
 import '../../../domain/entities/member/member.dart';
 
-part 'member_model.freezed.dart';
-part 'member_model.g.dart';
+class MemberModel {
+  final Member member;
 
-@freezed
-class MemberModel with _$MemberModel {
-  const factory MemberModel({
-    required Member member,
-    required String jtoken,
-  }) = _MemberModel;
+  MemberModel({
+    required int id,
+    required String name,
+    required String email,
+    required String nickname,
+    String? proflePicture,
+    String? gender,
+    String? birthDate,
+  }) : member = Member(
+            id: id,
+            name: name,
+            email: email,
+            nickname: nickname,
+            profilePicture: proflePicture,
+            gender: gender,
+            birthDate: birthDate);
 
-  factory MemberModel.fromJson(Map<String, dynamic> json) =>
-      _$MemberModelFromJson(json);
+  factory MemberModel.fromJson(Map<String, dynamic> json) => MemberModel(
+        id: json["id"] as int,
+        name: json["name"] as String,
+        email: json["email"] as String,
+        nickname: json["nickname"] as String,
+        proflePicture: json["profilePicture"] as String?,
+        gender: json["gender"] as String?,
+        birthDate: json["birthDate"] as String?,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": member.id,
+        "name": member.name,
+        "email": member.email,
+        "nickname": member.nickname,
+        "profilePicture": member.profilePicture,
+        "gender": member.gender,
+        "birthDate": member.birthDate,
+      };
 }

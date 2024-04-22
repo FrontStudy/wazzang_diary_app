@@ -14,13 +14,9 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Member _$MemberFromJson(Map<String, dynamic> json) {
-  return _Member.fromJson(json);
-}
-
 /// @nodoc
 mixin _$Member {
-  String get id => throw _privateConstructorUsedError;
+  int get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get nickname => throw _privateConstructorUsedError;
@@ -28,7 +24,6 @@ mixin _$Member {
   String? get gender => throw _privateConstructorUsedError;
   String? get profilePicture => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $MemberCopyWith<Member> get copyWith => throw _privateConstructorUsedError;
 }
@@ -39,7 +34,7 @@ abstract class $MemberCopyWith<$Res> {
       _$MemberCopyWithImpl<$Res, Member>;
   @useResult
   $Res call(
-      {String id,
+      {int id,
       String email,
       String name,
       String nickname,
@@ -73,7 +68,7 @@ class _$MemberCopyWithImpl<$Res, $Val extends Member>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -110,7 +105,7 @@ abstract class _$$MemberImplCopyWith<$Res> implements $MemberCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String id,
+      {int id,
       String email,
       String name,
       String nickname,
@@ -142,7 +137,7 @@ class __$$MemberImplCopyWithImpl<$Res>
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -172,7 +167,7 @@ class __$$MemberImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
   _$MemberImpl(
       {required this.id,
@@ -183,11 +178,8 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
       this.gender,
       this.profilePicture});
 
-  factory _$MemberImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MemberImplFromJson(json);
-
   @override
-  final String id;
+  final int id;
   @override
   final String email;
   @override
@@ -237,7 +229,6 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
                 other.profilePicture == profilePicture));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, email, name, nickname,
       birthDate, gender, profilePicture);
@@ -247,18 +238,11 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
   @pragma('vm:prefer-inline')
   _$$MemberImplCopyWith<_$MemberImpl> get copyWith =>
       __$$MemberImplCopyWithImpl<_$MemberImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MemberImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _Member implements Member {
   factory _Member(
-      {required final String id,
+      {required final int id,
       required final String email,
       required final String name,
       required final String nickname,
@@ -266,10 +250,8 @@ abstract class _Member implements Member {
       final String? gender,
       final String? profilePicture}) = _$MemberImpl;
 
-  factory _Member.fromJson(Map<String, dynamic> json) = _$MemberImpl.fromJson;
-
   @override
-  String get id;
+  int get id;
   @override
   String get email;
   @override
