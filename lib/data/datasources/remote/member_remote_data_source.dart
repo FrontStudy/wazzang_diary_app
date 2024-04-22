@@ -20,16 +20,17 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
 
   @override
   Future<AuthenticationResponseModel> signIn(SignInParams params) async {
-    final response = await client.get(
-        Uri.parse('$baseUrl/pub/login').replace(queryParameters: {
-          'email': params.email,
-          'passwd': params.passwd,
-        }),
+    final response = await client.post(Uri.parse('$baseUrl/pub/login'),
         headers: {
           'Content-Type': 'application/json',
-        });
+        },
+        body: json.encode({
+          'email': params.email,
+          'passwd': params.passwd,
+        }));
 
     final responseData = json.decode(response.body);
+    print(responseData);
     if (response.statusCode == 200 &&
         json.decode(response.body)["status"] == "success") {
       return AuthenticationResponseModel.fromJson(responseData["data"]);

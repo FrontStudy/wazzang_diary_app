@@ -26,7 +26,7 @@ class MemberRepositoryImpl implements MemberRepository {
   @override
   Future<Either<Failure, Member>> getCachedMembers() async {
     try {
-      final memberModel = await localDataSource.getUser();
+      final memberModel = await localDataSource.getMember();
       return Right(memberModel.member);
     } on CacheFailure {
       return Left(CacheFailure());
@@ -59,8 +59,8 @@ class MemberRepositoryImpl implements MemberRepository {
     if (await networkInfo.isConnected) {
       try {
         final remoteResponse = await getDataSource();
-        localDataSource.saveToken(remoteResponse.token);
-        localDataSource.saveUser(remoteResponse.memberModel);
+        localDataSource.saveToken(remoteResponse.jtoken);
+        localDataSource.saveMember(remoteResponse.memberModel);
         return Right(remoteResponse.memberModel.member);
       } on Failure catch (failure) {
         return Left(failure);

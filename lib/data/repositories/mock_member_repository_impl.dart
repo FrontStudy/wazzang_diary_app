@@ -11,7 +11,7 @@ class MockMemberRepositoryImpl implements MemberRepository {
   @override
   Future<Either<Failure, Member>> signUp(SignUpParams params) async {
     return Right(Member(
-        id: '1',
+        id: 1,
         email: 'test@test.com',
         name: 'Test User',
         nickname: 'Test Nickname'));
@@ -20,7 +20,7 @@ class MockMemberRepositoryImpl implements MemberRepository {
   @override
   Future<Either<Failure, Member>> signIn(SignInParams params) async {
     return Right(Member(
-        id: '1',
+        id: 1,
         email: 'test@test.com',
         name: 'Test User',
         nickname: 'Test Nickname'));
