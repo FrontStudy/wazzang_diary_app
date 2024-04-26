@@ -56,6 +56,9 @@ class _SignUpPwPageState extends State<SignUpPwPage> {
                         if (val == null || val.isEmpty) {
                           return '비밀번호를 입력해주세요';
                         }
+                        if (val.length < 6) {
+                          return '6글자 이상의 비밀번호를 입력해주세요.';
+                        }
                         return null;
                       },
                       onFieldSubmitted: (input) {

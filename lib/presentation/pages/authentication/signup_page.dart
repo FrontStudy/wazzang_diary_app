@@ -78,6 +78,9 @@ class _SignUpPageState extends State<SignUpPage> {
                           if (!emailRegex.hasMatch(val)) {
                             return '이메일 양식을 맞춰주세요.';
                           }
+                          if (state is! EmailCheckSuccess) {
+                            return '중복된 이메일이 있습니다.';
+                          }
                           return null;
                         },
                         onChanged: (value) {
