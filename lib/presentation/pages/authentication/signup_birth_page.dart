@@ -19,16 +19,18 @@ class _SignUpBirthPageState extends State<SignUpBirthPage> {
   final TextEditingController genderController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   late String _formattedDate;
+  DateTime? _selectedDate;
   Gender _selectedGender = Gender.male;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    if (picked != null) {
+    if (picked != null && mounted) {
+      _selectedDate = picked;
       _formattedDate = DateFormat('yyMMdd').format(picked);
       setState(() {
         birthController.text =
