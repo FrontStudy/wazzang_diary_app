@@ -38,13 +38,18 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SecondNavigationBarCubit()),
         BlocProvider(create: (_) => di.sl<MemberBloc>()..add(CheckMember())),
       ],
-      child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          onGenerateRoute: AppRouter.onGenerateRoute,
-          home: BlocBuilder<MemberBloc, MemberState>(
-              builder: (context, state) => state is MemberLogged
-                  ? const MainPage()
-                  : const SignInPage())),
+      child: GestureDetector(
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
+        },
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: AppRouter.onGenerateRoute,
+            home: BlocBuilder<MemberBloc, MemberState>(
+                builder: (context, state) => state is MemberLogged
+                    ? const MainPage()
+                    : const SignInPage())),
+      ),
     );
   }
 }
