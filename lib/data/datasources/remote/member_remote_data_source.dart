@@ -53,6 +53,7 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
           'name': params.name,
           'gender': params.gender,
           'birthDate': params.birthDate,
+          'profilePicture': params.profilePicture
         }));
     final responseData = json.decode(response.body);
     if (response.statusCode == 200 &&
@@ -60,6 +61,8 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
       return AuthenticationResponseModel.fromJson(responseData["data"]);
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       throw CredentialFailure();
+    } else if (response.statusCode == 409) {
+      throw DuplicateFailure();
     } else {
       throw ServerException();
     }

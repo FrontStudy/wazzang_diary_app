@@ -35,9 +35,7 @@ class ImageRemoteDataSourceImpl extends ImageRemoteDataSource {
       var responseData = await response.stream.bytesToString();
       var jsonData = jsonDecode(responseData);
       if (jsonData.containsKey("data")) {
-        print(jsonData["data"]);
         List<dynamic> val = jsonData["data"];
-        print(val.toString());
         return ImageListResponseModel.fromJson(val);
       } else {
         throw ServerException();

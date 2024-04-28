@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'core/routes/main_router.dart';
 import 'presentation/blocs/main/bottom_navigation_bar_cubit.dart';
@@ -19,6 +20,7 @@ void main() async {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   runApp(MyApp(navigatorKey: navigatorKey));
+  configLoading();
 }
 
 class MyApp extends StatelessWidget {
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             onGenerateRoute: AppRouter.onGenerateRoute,
+            builder: EasyLoading.init(),
             home: BlocBuilder<MemberBloc, MemberState>(
                 builder: (context, state) => state is MemberLogged
                     ? const MainPage()
@@ -52,4 +55,20 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.white
+    ..backgroundColor = Colors.black
+    ..indicatorColor = Colors.white
+    ..textColor = Colors.white
+    ..userInteractions = false
+    ..maskType = EasyLoadingMaskType.black
+    ..dismissOnTap = true;
 }

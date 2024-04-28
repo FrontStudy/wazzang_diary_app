@@ -22,6 +22,7 @@ class SignUpParams {
   final String name;
   final String gender;
   final String birthDate;
+  final int? profilePicture;
   const SignUpParams({
     required this.email,
     required this.passwd,
@@ -29,5 +30,6 @@ class SignUpParams {
     required this.name,
     required this.gender,
     required this.birthDate,
+    this.profilePicture,
   });
 }
