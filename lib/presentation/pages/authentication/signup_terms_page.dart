@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
 
 class SignUpTermsPage extends StatefulWidget {
@@ -184,7 +185,10 @@ class _SignUpTermsPageState extends State<SignUpTermsPage> {
               ElevatedButton(
                   onPressed: () {
                     if (_useTerm && _privacyTerm && _locateTerm) {
-                      //다음 페이지
+                      Navigator.of(context)
+                          .pushNamed(AppRouter.signUpProfile, arguments: {
+                        ...widget.info,
+                      });
                     }
                   },
                   style: ButtonStyle(

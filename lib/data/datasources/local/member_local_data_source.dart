@@ -13,6 +13,10 @@ abstract class MemberLocalDataSource {
   Future<void> clearCache();
 
   Future<MemberModel> getMember();
+
+  Future<String> getToken();
+
+  Future<bool> isTokenAvailable();
 }
 
 const cachedToken = 'TOKEN';
@@ -24,7 +28,7 @@ class MemberLocalDataSourceImpl implements MemberLocalDataSource {
 
   MemberLocalDataSourceImpl(
       {required this.secureStorage, required this.sharedPreferences});
-      
+
   @override
   Future<void> clearCache() async {
     await secureStorage.deleteAll();
@@ -58,4 +62,19 @@ class MemberLocalDataSourceImpl implements MemberLocalDataSource {
     );
   }
 
+  @override
+  Future<String> getToken() async {
+    String? token = await secureStorage.read(key: cachedToken);
+    if (token != null) {
+      return token;
+    } else {
+      throw CacheException();
+    }
+  }
+
+  @override
+  Future<bool> isTokenAvailable() async {
+    String? token = await secureStorage.read(key: cachedToken);
+    return Future.value((token != null));
+  }
 }

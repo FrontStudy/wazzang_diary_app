@@ -6,10 +6,13 @@ import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
 import 'data/datasources/local/member_local_data_source.dart';
+import 'data/datasources/remote/image_remote_data_source.dart';
 import 'data/datasources/remote/member_remote_data_source.dart';
 import 'data/datasources/remote/signup_check_remote_data_source.dart';
+import 'data/repositories/image_repository_impl.dart';
 import 'data/repositories/member_repository_impl.dart';
 import 'data/repositories/signup_check_repository_impl.dart';
+import 'domain/repositories/image/image_repository.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/repositories/signup/signup_check_repository.dart';
 import 'domain/usecases/member/get_cached_member_usecase.dart';
@@ -17,8 +20,10 @@ import 'domain/usecases/member/sign_in_usecase.dart';
 import 'domain/usecases/member/sign_out_usecase.dart';
 import 'domain/usecases/member/sign_up_usecase.dart';
 import 'domain/usecases/signup/check_email_usecase.dart';
+import 'domain/usecases/signup/set_profile_image_usecase.dart';
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/signup/check_email_bloc.dart';
+import 'presentation/blocs/signup/profile_image_bloc.dart';
 
 final sl = GetIt.instance;
 
@@ -53,6 +58,18 @@ Future<void> initializeDependencies() async {
   //Data sources
   sl.registerLazySingleton<SignUpCheckRemoteDataSource>(
       () => SignUpCheckRemoteDataSourceImpl(client: sl()));
+
+  //Features - Image
+  //Bloc
+  sl.registerFactory(() => ProfileImageBloc(sl()));
+  // Use cases
+  sl.registerLazySingleton(() => SetProfileImageUseCase(sl()));
+  //Repositories
+  sl.registerLazySingleton<ImageRepository>(() => ImageRepositoryImpl(
+      memberLocalDataSource: sl(), networkInfo: sl(), remoteDataSource: sl()));
+  //Data sources
+  sl.registerLazySingleton<ImageRemoteDataSource>(
+      () => ImageRemoteDataSourceImpl(client: sl()));
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 

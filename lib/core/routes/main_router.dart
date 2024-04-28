@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../presentation/blocs/signup/check_email_bloc.dart';
+import '../../presentation/blocs/signup/profile_image_bloc.dart';
 import '../../presentation/pages/authentication/signin_page.dart';
 import '../../presentation/pages/authentication/signup_birth_page.dart';
 import '../../presentation/pages/authentication/signup_name_page.dart';
 import '../../presentation/pages/authentication/signup_nickname_page.dart';
 import '../../presentation/pages/authentication/signup_page.dart';
+import '../../presentation/pages/authentication/signup_profile_page.dart';
 import '../../presentation/pages/authentication/signup_pw_page.dart';
 import '../../presentation/pages/authentication/signup_terms_page.dart';
 import '../../presentation/pages/main_page.dart';
@@ -24,6 +26,7 @@ class AppRouter {
   static const String signUpName = '/sign-up-name';
   static const String signUpNickName = '/sign-up-nickname';
   static const String signUpTerms = '/sign-up-terms';
+  static const String signUpProfile = '/sign-up-profile';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -61,6 +64,13 @@ class AppRouter {
             routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
             builder: (_) => SignUpTermsPage(info: memberInfo));
+      case signUpProfile:
+        final Map<String, dynamic> memberInfo =
+            routeSettings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                create: (context) => ProfileImageBloc(di.sl()),
+                child: SignUpProfilePage(info: memberInfo)));
 
       default:
         throw const RouteException('Route not found!');
