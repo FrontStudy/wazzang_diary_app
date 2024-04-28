@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../core/error/failures.dart';
-import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
 import '../../../domain/usecases/member/sign_up_usecase.dart';
 import '../../../domain/usecases/signup/set_profile_image_usecase.dart';

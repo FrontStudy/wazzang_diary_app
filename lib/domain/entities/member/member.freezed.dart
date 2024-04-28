@@ -22,7 +22,7 @@ mixin _$Member {
   String get nickname => throw _privateConstructorUsedError;
   String? get birthDate => throw _privateConstructorUsedError;
   String? get gender => throw _privateConstructorUsedError;
-  String? get profilePicture => throw _privateConstructorUsedError;
+  int? get profilePicture => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MemberCopyWith<Member> get copyWith => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $MemberCopyWith<$Res> {
       String nickname,
       String? birthDate,
       String? gender,
-      String? profilePicture});
+      int? profilePicture});
 }
 
 /// @nodoc
@@ -92,7 +92,7 @@ class _$MemberCopyWithImpl<$Res, $Val extends Member>
       profilePicture: freezed == profilePicture
           ? _value.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
     ) as $Val);
   }
 }
@@ -111,7 +111,7 @@ abstract class _$$MemberImplCopyWith<$Res> implements $MemberCopyWith<$Res> {
       String nickname,
       String? birthDate,
       String? gender,
-      String? profilePicture});
+      int? profilePicture});
 }
 
 /// @nodoc
@@ -161,7 +161,7 @@ class __$$MemberImplCopyWithImpl<$Res>
       profilePicture: freezed == profilePicture
           ? _value.profilePicture
           : profilePicture // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as int?,
     ));
   }
 }
@@ -191,7 +191,7 @@ class _$MemberImpl with DiagnosticableTreeMixin implements _Member {
   @override
   final String? gender;
   @override
-  final String? profilePicture;
+  final int? profilePicture;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -248,7 +248,7 @@ abstract class _Member implements Member {
       required final String nickname,
       final String? birthDate,
       final String? gender,
-      final String? profilePicture}) = _$MemberImpl;
+      final int? profilePicture}) = _$MemberImpl;
 
   @override
   int get id;
@@ -263,7 +263,7 @@ abstract class _Member implements Member {
   @override
   String? get gender;
   @override
-  String? get profilePicture;
+  int? get profilePicture;
   @override
   @JsonKey(ignore: true)
   _$$MemberImplCopyWith<_$MemberImpl> get copyWith =>
