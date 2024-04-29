@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../blocs/member/member_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
@@ -30,14 +32,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           borderRadius: BorderRadius.circular(1000),
           child: ClipOval(
             child: Container(
-              width: 30, // 이미지의 너비
-              height: 30, // 이미지의 높이
-              color: Colors.blue, // 원의 배경색
-              child: Image.asset(
-                'assets/images/user_profile_sample.jpg',
-                fit: BoxFit.cover,
-              ),
-            ),
+                width: 30, // 이미지의 너비
+                height: 30, // 이미지의 높이
+                color: Colors.blue, // 원의 배경색
+                child: BlocBuilder<MemberBloc, MemberState>(
+                    builder: (context, state) {
+                  if (state is MemberLogged &&
+                      state.member.profilePicture != null) {
+                    return Image.network(
+                      state.member.profilePicture!,
+                      fit: BoxFit.cover,
+                    );
+                  } else {
+                    return Image.asset(
+                      'assets/images/person_placeholder.png',
+                      fit: BoxFit.cover,
+                    );
+                  }
+                })),
           ),
         ),
         const SizedBox(width: 10),

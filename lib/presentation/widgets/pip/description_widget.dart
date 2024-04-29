@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/themes/theme.dart';
 import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/member/member_bloc.dart';
 import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 
 class DescriptionWidget extends StatelessWidget {
@@ -221,11 +222,21 @@ class DescriptionWidget extends StatelessWidget {
                                     width: 26,
                                     height: 26,
                                     color: Colors.blue,
-                                    child: Image.asset(
-                                      'assets/images/user_profile_sample.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+                                      child:
+                                          BlocBuilder<MemberBloc, MemberState>(
+                                        builder: (context, state) => state
+                                                    is MemberLogged &&
+                                                state.member.profilePicture !=
+                                                    null
+                                            ? Image.network(
+                                                state.member.profilePicture!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Image.asset(
+                                                'assets/images/user_profile_sample.jpg',
+                                                fit: BoxFit.cover,
+                                              ),
+                                      )),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(

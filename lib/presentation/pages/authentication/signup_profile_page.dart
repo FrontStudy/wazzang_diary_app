@@ -38,9 +38,9 @@ class _SignUpProfilePageState extends State<SignUpProfilePage> {
 
   void _signUpSummit() async {
     final profileState = context.read<ProfileImageBloc>().state;
-    int? profileId;
+    String? profileUrl;
     if (profileState is ProfileImageAdded) {
-      profileId = profileState.image.id;
+      profileUrl = profileState.image.storagePath;
     }
 
     context.read<MemberBloc>().add(SignUpMember(SignUpParams(
@@ -50,7 +50,7 @@ class _SignUpProfilePageState extends State<SignUpProfilePage> {
         gender: widget.info['gender'],
         name: widget.info['name'],
         nickname: widget.info['nickname'],
-        profilePicture: profileId)));
+        profilePicture: profileUrl)));
   }
 
   @override
