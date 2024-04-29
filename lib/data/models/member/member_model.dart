@@ -8,7 +8,7 @@ class MemberModel {
     required String name,
     required String email,
     required String nickname,
-    int? proflePicture,
+    String? profilePicture,
     String? gender,
     String? birthDate,
   }) : member = Member(
@@ -16,7 +16,7 @@ class MemberModel {
             name: name,
             email: email,
             nickname: nickname,
-            profilePicture: proflePicture,
+            profilePicture: profilePicture,
             gender: gender,
             birthDate: birthDate);
 
@@ -25,7 +25,7 @@ class MemberModel {
         name: json["name"] as String,
         email: json["email"] as String,
         nickname: json["nickname"] as String,
-        proflePicture: json["profilePicture"] as int?,
+        profilePicture: json["profilePicture"] as String?,
         gender: json["gender"] as String?,
         birthDate: json["birthDate"] as String?,
       );

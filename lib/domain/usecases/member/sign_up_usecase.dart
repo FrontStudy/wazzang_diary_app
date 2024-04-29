@@ -22,7 +22,7 @@ class SignUpParams {
   final String name;
   final String gender;
   final String birthDate;
-  final int? profilePicture;
+  final String? profilePicture;
   const SignUpParams({
     required this.email,
     required this.passwd,

@@ -12,6 +12,6 @@ abstract class Member with _$Member {
     required String nickname,
     String? birthDate,
     String? gender,
-    int? profilePicture,
+    String? profilePicture,
   }) = _Member;
 }
