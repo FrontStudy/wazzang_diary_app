@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-
 import '../member/member.dart';
 import 'diary.dart';
 
 class DiaryWithMember {
   final Diary diary;
-  final Member? author;
+  final Member author;
 
   DiaryWithMember({required this.diary, required this.author});
 
@@ -13,14 +11,11 @@ class DiaryWithMember {
       List<Diary> diaries, List<Member> members) {
     List<DiaryWithMember> diaryWithMembers = [];
     for (Diary diary in diaries) {
-      Member? author;
+      Member author;
       try {
-        members.firstWhere((member) => member.id == diary.memberId);
-      } catch (e) {
-        debugPrint("diary : ${diaries.length}, member : ${members.length}");
-        debugPrint(e.toString());
-      }
-      diaryWithMembers.add(DiaryWithMember(diary: diary, author: author));
+        author = members.firstWhere((member) => member.id == diary.memberId);
+        diaryWithMembers.add(DiaryWithMember(diary: diary, author: author));
+      } catch (e) {}
     }
 
     return diaryWithMembers;
