@@ -11,4 +11,5 @@ abstract class MemberRepository {
   Future<Either<Failure, Member>> signIn(SignInParams params);
   Future<Either<Failure, NoParams>> signOut();
   Future<Either<Failure, Member>> getCachedMembers();
+  Future<Either<Failure, List<Member>>> fetchMembersByIds(Set<int> autorIds);
 }

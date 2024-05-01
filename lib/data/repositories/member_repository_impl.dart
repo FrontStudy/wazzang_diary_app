@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:wazzang_diary/core/error/failures.dart';
 import 'package:wazzang_diary/core/usecases/usecase.dart';
 import 'package:wazzang_diary/domain/entities/member/member.dart';
@@ -9,6 +10,7 @@ import '../../domain/repositories/member/member_repository.dart';
 import '../datasources/local/member_local_data_source.dart';
 import '../datasources/remote/member_remote_data_source.dart';
 import '../models/member/authentication_response_model.dart';
+import '../models/member/member_model.dart';
 
 typedef _DataSourceChooser = Future<AuthenticationResponseModel> Function();
 
@@ -67,6 +69,36 @@ class MemberRepositoryImpl implements MemberRepository {
       }
     } else {
       return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Member>>> fetchMembersByIds(
+      Set<int> authorIds) async {
+    if (await networkInfo.isConnected) {
+      List<Future<MemberModel?>> tasks = [];
+
+      for (var id in authorIds) {
+        tasks.add(_fetchMemberById(id));
+      }
+      debugPrint("repo - impl : authorIds length :${authorIds.length}");
+      List<MemberModel?> models = await Future.wait(tasks);
+      debugPrint("repo - impl : models length :${models.length}");
+      return Right(models
+          .where((model) => model != null)
+          .map((model) => model!.member)
+          .toList());
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  Future<MemberModel?> _fetchMemberById(int id) async {
+    try {
+      final responseModel = await remoteDataSoure.getMemberByid(id);
+      return responseModel.data;
+    } catch (_) {
+      return null;
     }
   }
 }
