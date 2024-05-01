@@ -17,9 +17,9 @@ import '../error/exceptions.dart';
 import '../../locator.dart' as di;
 
 class AppRouter {
-  static const String main = '/';
+  static const String main = '/main';
 
-  static const String signIn = '/sign-in';
+  static const String signIn = '/';
   static const String signUp = '/sign-up';
   static const String signUpPw = '/sign-up-pw';
   static const String signUpBirth = '/sign-up-birth';

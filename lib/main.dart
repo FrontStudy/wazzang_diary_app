@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'core/routes/main_router.dart';
+import 'presentation/blocs/diary/pub_diary_bloc.dart';
 import 'presentation/blocs/main/bottom_navigation_bar_cubit.dart';
 import 'presentation/blocs/main/drag_route_cubit.dart';
 import 'presentation/blocs/main/navigator_key_cubit.dart';
@@ -10,8 +11,6 @@ import 'presentation/blocs/main/second_navigation_bar_cubit.dart';
 import 'locator.dart' as di;
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/pip/segment_toggle/segment_toggle_cubit.dart';
-import 'presentation/pages/authentication/signin_page.dart';
-import 'presentation/pages/main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => SegmentToggleCubit()),
         BlocProvider(create: (_) => SecondNavigationBarCubit()),
         BlocProvider(create: (_) => di.sl<MemberBloc>()..add(CheckMember())),
+        BlocProvider(create: (_) => di.sl<PubDiaryBloc>()),
       ],
       child: GestureDetector(
         onTap: () {
@@ -48,10 +48,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             onGenerateRoute: AppRouter.onGenerateRoute,
             builder: EasyLoading.init(),
-            home: BlocBuilder<MemberBloc, MemberState>(
-                builder: (context, state) => state is MemberLogged
-                    ? const MainPage()
-                    : const SignInPage())),
+          // initialRoute: AppRouter.signIn,
+        ),
       ),
     );
   }
