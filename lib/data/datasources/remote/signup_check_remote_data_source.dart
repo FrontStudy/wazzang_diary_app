@@ -24,9 +24,9 @@ class SignUpCheckRemoteDataSourceImpl implements SignUpCheckRemoteDataSource {
           'Content-Type': 'application/json',
         });
 
-    final responseData = json.decode(response.body);
+    final responseData = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200 &&
-        json.decode(response.body)["status"] == "success") {
+        responseData["status"] == "success") {
       return responseData["data"];
     } else {
       throw ServerException();
