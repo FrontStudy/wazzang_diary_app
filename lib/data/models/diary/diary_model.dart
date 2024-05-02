@@ -17,6 +17,7 @@ class DiaryModel {
             memberId: memberId,
             title: title,
             content: content,
+            imgUrl: imgUrl,
             accessLevel: accessLevel,
             active: active,
             readCount: readCount);

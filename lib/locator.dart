@@ -18,7 +18,10 @@ import 'domain/repositories/diary/diary_repository.dart';
 import 'domain/repositories/image/image_repository.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/repositories/signup/signup_check_repository.dart';
+import 'domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_list_use_case.dart';
+import 'domain/usecases/diary/like_diary_use_case.dart';
+import 'domain/usecases/diary/unlike_diary_use_case.dart';
 import 'domain/usecases/member/get_cached_member_usecase.dart';
 import 'domain/usecases/member/sign_in_usecase.dart';
 import 'domain/usecases/member/sign_out_usecase.dart';
@@ -78,16 +81,18 @@ Future<void> initializeDependencies() async {
 
   //Features - Diary
   // Bloc
-  sl.registerFactory(() => PubDiaryBloc(sl()));
+  sl.registerFactory(() => PubDiaryBloc(sl(), sl(), sl()));
   // Use cases
   sl.registerLazySingleton(() => FetchPublicDiaryListUseCase(sl(), sl()));
+  sl.registerLazySingleton(() => FetchPublicDiaryDetailListUseCase(sl()));
+  sl.registerLazySingleton(() => LikeDiaryUseCase(sl()));
+  sl.registerLazySingleton(() => UnlikeDiaryUseCase(sl()));
   //Repositories
-  sl.registerLazySingleton<DiaryRepository>(
-      () => DiaryRepositoryImpl(networkInfo: sl(), remoteDataSource: sl()));
+  sl.registerLazySingleton<DiaryRepository>(() => DiaryRepositoryImpl(
+      networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));
   //Data sources
   sl.registerLazySingleton<DiaryRemoteDataSource>(
       () => DiaryRemoteDataSourceImpl(client: sl()));
-
 
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 

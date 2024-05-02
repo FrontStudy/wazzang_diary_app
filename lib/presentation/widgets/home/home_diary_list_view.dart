@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:wazzang_diary/domain/entities/diary/diary_with_member.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/entities/diary/diary_details.dart';
+import '../../../domain/usecases/diary/like_diary_use_case.dart';
+import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
+import '../../blocs/diary/pub_diary_bloc.dart';
 import '../../pages/common/gradient_widget.dart';
 
 class HomeDiaryListView extends StatelessWidget {
-  final List<DiaryWithMember> data;
+  final List<DiaryDetails> data;
   const HomeDiaryListView({required this.data, super.key});
+
+  String formatTimeAgo(String dateString) {
+    DateTime now = DateTime.now();
+    DateTime date = DateTime.parse(dateString);
+    Duration difference = now.difference(date);
+
+    if (difference.inSeconds < 60) {
+      return "${difference.inSeconds}초 전";
+    } else if (difference.inMinutes < 60) {
+      return "${difference.inMinutes}분 전";
+    } else if (difference.inHours < 24) {
+      return "${difference.inHours}시간 전";
+    } else if (difference.inDays < 30) {
+      return "${difference.inDays}일 전";
+    } else if (difference.inDays < 365) {
+      int months = difference.inDays ~/ 30;
+      return "$months달 전";
+    } else {
+      int years = difference.inDays ~/ 365;
+      return "$years년 전";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,13 +41,17 @@ class HomeDiaryListView extends StatelessWidget {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return _diaryItemWidget(
-            screenWidth: screenWidth, diaryWithMember: data[index]);
+            context: context,
+            screenWidth: screenWidth,
+            diaryDetails: data[index]);
       },
     );
   }
 
   Widget _diaryItemWidget(
-      {required double screenWidth, required DiaryWithMember diaryWithMember}) {
+      {required BuildContext context,
+      required double screenWidth,
+      required DiaryDetails diaryDetails}) {
     return SizedBox(
       width: screenWidth,
       height: screenWidth + 110,
@@ -29,8 +59,13 @@ class HomeDiaryListView extends StatelessWidget {
         children: [
           Stack(
             children: [
-              diaryWithMember.diary.imgUrl != null
-                  ? Image.network(diaryWithMember.diary.imgUrl!)
+              diaryDetails.imgUrl != null
+                  ? Image.network(
+                      diaryDetails.imgUrl!,
+                      fit: BoxFit.cover,
+                      height: screenWidth,
+                      width: screenWidth,
+                    )
                   : Image.asset(
                       'assets/images/article_image_placeholder.jpg',
                       fit: BoxFit.cover,
@@ -66,7 +101,7 @@ class HomeDiaryListView extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      diaryWithMember.diary.title,
+                      diaryDetails.title,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
@@ -91,10 +126,9 @@ class HomeDiaryListView extends StatelessWidget {
                           width: 35,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(1000),
-                              child: diaryWithMember.author.profilePicture !=
-                                      null
+                              child: diaryDetails.authorProfileUrl != null
                                   ? Image.network(
-                                      diaryWithMember.author.profilePicture!)
+                                      diaryDetails.authorProfileUrl!)
                                   : Image.asset(
                                       'assets/images/person_placeholder.png')),
                         ),
@@ -104,7 +138,7 @@ class HomeDiaryListView extends StatelessWidget {
                             SizedBox(
                               height: 18,
                               child: Text(
-                                diaryWithMember.author.name,
+                                diaryDetails.authorNickname,
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
@@ -165,7 +199,17 @@ class HomeDiaryListView extends StatelessWidget {
                               height: 30,
                               width: 30,
                               child: GestureDetector(
-                                child: const Icon(Icons.favorite_border),
+                                onTap: () {
+                                  context.read<PubDiaryBloc>().add(
+                                      diaryDetails.isLiked
+                                          ? UnlikeDiary(UnlikeDiaryParams(
+                                              diaryId: diaryDetails.id))
+                                          : LikeDiary(LikeDiaryParams(
+                                              diaryId: diaryDetails.id)));
+                                },
+                                child: diaryDetails.isLiked
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(Icons.favorite_border),
                               )),
                           Container(
                               margin: const EdgeInsets.all(5),
@@ -181,7 +225,9 @@ class HomeDiaryListView extends StatelessWidget {
                           height: 30,
                           width: 30,
                           child: GestureDetector(
-                            child: const Icon(Icons.bookmark_outline),
+                            child: diaryDetails.isBookmarked
+                                ? const Icon(Icons.bookmark)
+                                : const Icon(Icons.bookmark_outline),
                           )),
                     ],
                   ),
@@ -191,12 +237,12 @@ class HomeDiaryListView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
+                      SizedBox(
                         height: 20,
                         child: FittedBox(
                             child: Text(
-                          '좋아요 268,457개',
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          '좋아요 ${diaryDetails.likeCount}',
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         )),
                       ),
                       Row(
@@ -204,18 +250,18 @@ class HomeDiaryListView extends StatelessWidget {
                           SizedBox(
                             height: 18,
                             child: FittedBox(
-                              child: Text(diaryWithMember.author.nickname,
+                              child: Text(diaryDetails.authorNickname,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w600)),
                             ),
                           ),
                           const SizedBox(width: 5),
-                          const SizedBox(
+                          SizedBox(
                             height: 18,
                             child: FittedBox(
                               child: Text(
-                                '2주 ・ ',
-                                style: TextStyle(color: Colors.black54),
+                                '${formatTimeAgo(diaryDetails.createdDate)} ・ ',
+                                style: const TextStyle(color: Colors.black54),
                               ),
                             ),
                           ),
@@ -231,14 +277,13 @@ class HomeDiaryListView extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      const SizedBox(
-                        height: 20,
-                        child: FittedBox(
-                            child: Text(
-                          '댓글 828개 모두 보기',
-                          style: TextStyle(color: Colors.black54),
-                        )),
-                      ),
+                      SizedBox(
+                          height: 20,
+                          child: Text(
+                            '댓글 ${diaryDetails.commentCount}개 모두 보기',
+                            style: const TextStyle(
+                                color: Colors.black54, fontSize: 13.0),
+                          )),
                     ],
                   ),
                 )

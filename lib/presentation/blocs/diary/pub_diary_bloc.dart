@@ -1,10 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/error/failures.dart';
-import '../../../domain/entities/diary/diary_with_member.dart';
-import '../../../domain/usecases/diary/fetch_diary_list_use_case.dart';
+import '../../../domain/entities/diary/diary_details.dart';
+import '../../../domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
+import '../../../domain/usecases/diary/like_diary_use_case.dart';
+import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
 
 abstract class PubDiaryState extends Equatable {}
 
@@ -19,13 +22,13 @@ class PubDiaryLoading extends PubDiaryState {
 }
 
 class PubDiaryLoaded extends PubDiaryState {
-  final List<DiaryWithMember> diariesWithMembers;
+  final List<DiaryDetails> diaryDetails;
   final bool hasReachedMax;
 
-  PubDiaryLoaded(this.diariesWithMembers, {this.hasReachedMax = false});
+  PubDiaryLoaded(this.diaryDetails, {this.hasReachedMax = false});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [diaryDetails];
 }
 
 class PubDiaryFailed extends PubDiaryState {
@@ -47,19 +50,35 @@ class FetchMoreDiaries extends PubDiaryEvent {
   FetchMoreDiaries();
 }
 
+class LikeDiary extends PubDiaryEvent {
+  final LikeDiaryParams params;
+  LikeDiary(this.params);
+}
+
+class UnlikeDiary extends PubDiaryEvent {
+  final UnlikeDiaryParams params;
+  UnlikeDiary(this.params);
+}
+
 class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
-  final FetchPublicDiaryListUseCase _fetchPublicDiaryListUseCase;
-  PubDiaryBloc(this._fetchPublicDiaryListUseCase) : super(PubDiaryInitial()) {
+  final FetchPublicDiaryDetailListUseCase _fetchPublicDiaryDetailListUseCase;
+  final LikeDiaryUseCase _likeDiaryUseCase;
+  final UnlikeDiaryUseCase _unlikeDiaryUseCase;
+  PubDiaryBloc(this._fetchPublicDiaryDetailListUseCase, this._likeDiaryUseCase,
+      this._unlikeDiaryUseCase)
+      : super(PubDiaryInitial()) {
     on<FetchFirstDiaries>(_onFetchFirstDiaries);
     on<FetchMoreDiaries>(_onFetchMoreDiaries);
+    on<LikeDiary>(_onLikeDiary);
+    on<UnlikeDiary>(_onUnlikeDiary);
   }
 
   void _onFetchFirstDiaries(
       FetchFirstDiaries event, Emitter<PubDiaryState> emit) async {
     try {
       emit(PubDiaryLoading());
-      final result = await _fetchPublicDiaryListUseCase(
-          const FetchPublicDiaryListParams(
+      final result = await _fetchPublicDiaryDetailListUseCase(
+          const FetchPublicDiaryDetailsListParams(
               offset: 0, size: homeDiaryInitinalLoadSize));
       result.fold((failure) => emit(PubDiaryFailed(failure)),
           (diaries) => emit(PubDiaryLoaded(diaries)));
@@ -73,14 +92,14 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
     try {
       final currentState = state;
       if (currentState is PubDiaryLoaded) {
-        final newParams = FetchPublicDiaryListParams(
-            offset: currentState.diariesWithMembers.length,
+        final newParams = FetchPublicDiaryDetailsListParams(
+            offset: currentState.diaryDetails.length,
             size: homeDiaryScrollLoadSize);
-        final result = await _fetchPublicDiaryListUseCase(newParams);
+        final result = await _fetchPublicDiaryDetailListUseCase(newParams);
         result.fold(
           (failure) => emit(PubDiaryFailed(failure)),
           (diaries) {
-            final allDiaries = currentState.diariesWithMembers + diaries;
+            final allDiaries = currentState.diaryDetails + diaries;
             final hasReachedMax = diaries.isEmpty;
             emit(PubDiaryLoaded(allDiaries, hasReachedMax: hasReachedMax));
           },
@@ -89,5 +108,51 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
     } catch (e) {
       emit(PubDiaryFailed(ExceptionFailure()));
     }
+  }
+
+  void _onLikeDiary(LikeDiary event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _likeDiaryUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.id == event.params.diaryId) {
+                return diary.copyWith(
+                    isLiked: true, likeCount: diary.likeCount + 1);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
+  }
+
+  void _onUnlikeDiary(UnlikeDiary event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _unlikeDiaryUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.id == event.params.diaryId) {
+                return diary.copyWith(
+                    isLiked: false, likeCount: diary.likeCount - 1);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
   }
 }
