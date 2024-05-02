@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +10,8 @@ import '../../../domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
 import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
+import '../../../domain/usecases/follow/follow_use_case.dart';
+import '../../../domain/usecases/follow/unfollow_use_case.dart';
 
 abstract class PubDiaryState extends Equatable {}
 
@@ -74,18 +74,32 @@ class RemoveBookmark extends PubDiaryEvent {
   RemoveBookmark(this.params);
 }
 
+class Follow extends PubDiaryEvent {
+  final FollowParams params;
+  Follow(this.params);
+}
+
+class Unfollow extends PubDiaryEvent {
+  final UnfollowParams params;
+  Unfollow(this.params);
+}
+
 class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
   final FetchPublicDiaryDetailListUseCase _fetchPublicDiaryDetailListUseCase;
   final LikeDiaryUseCase _likeDiaryUseCase;
   final UnlikeDiaryUseCase _unlikeDiaryUseCase;
   final AddBookmarkUseCase _addBookmarkUseCase;
   final RemoveBookmarkUseCase _removeBookmarkUseCase;
+  final FollowUseCase _followUseCase;
+  final UnfollowUseCase _unfollowUseCase;
   PubDiaryBloc(
       this._fetchPublicDiaryDetailListUseCase,
       this._likeDiaryUseCase,
       this._unlikeDiaryUseCase,
       this._addBookmarkUseCase,
-      this._removeBookmarkUseCase)
+      this._removeBookmarkUseCase,
+      this._followUseCase,
+      this._unfollowUseCase)
       : super(PubDiaryInitial()) {
     on<FetchFirstDiaries>(_onFetchFirstDiaries);
     on<FetchMoreDiaries>(_onFetchMoreDiaries);
@@ -93,6 +107,8 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
     on<UnlikeDiary>(_onUnlikeDiary);
     on<AddBookmark>(_onAddBookmark);
     on<RemoveBookmark>(_onRemoveBookmark);
+    on<Follow>(_onFollow);
+    on<Unfollow>(_onUnfollow);
   }
 
   void _onFetchFirstDiaries(
@@ -212,6 +228,50 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
             final updatedDiaries = currentState.diaryDetails.map((diary) {
               if (diary.id == event.params.diaryId) {
                 return diary.copyWith(isBookmarked: false);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
+  }
+
+  void _onFollow(Follow event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _followUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.authorId == event.params.followedId) {
+                return diary.copyWith(isFollowing: true);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
+  }
+
+  void _onUnfollow(Unfollow event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _unfollowUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.authorId == event.params.followedId) {
+                return diary.copyWith(isFollowing: false);
               } else {
                 return diary;
               }

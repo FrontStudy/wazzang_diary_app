@@ -30,6 +30,7 @@ mixin _$DiaryDetails {
   int get commentCount => throw _privateConstructorUsedError;
   bool get isLiked => throw _privateConstructorUsedError;
   bool get isBookmarked => throw _privateConstructorUsedError;
+  bool get isFollowing => throw _privateConstructorUsedError;
   int get authorId => throw _privateConstructorUsedError;
   String get authorEmail => throw _privateConstructorUsedError;
   String get authorName => throw _privateConstructorUsedError;
@@ -62,6 +63,7 @@ abstract class $DiaryDetailsCopyWith<$Res> {
       int commentCount,
       bool isLiked,
       bool isBookmarked,
+      bool isFollowing,
       int authorId,
       String authorEmail,
       String authorName,
@@ -96,6 +98,7 @@ class _$DiaryDetailsCopyWithImpl<$Res, $Val extends DiaryDetails>
     Object? commentCount = null,
     Object? isLiked = null,
     Object? isBookmarked = null,
+    Object? isFollowing = null,
     Object? authorId = null,
     Object? authorEmail = null,
     Object? authorName = null,
@@ -159,6 +162,10 @@ class _$DiaryDetailsCopyWithImpl<$Res, $Val extends DiaryDetails>
           ? _value.isBookmarked
           : isBookmarked // ignore: cast_nullable_to_non_nullable
               as bool,
+      isFollowing: null == isFollowing
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
+              as bool,
       authorId: null == authorId
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
@@ -206,6 +213,7 @@ abstract class _$$DiaryDetailsImplCopyWith<$Res>
       int commentCount,
       bool isLiked,
       bool isBookmarked,
+      bool isFollowing,
       int authorId,
       String authorEmail,
       String authorName,
@@ -238,6 +246,7 @@ class __$$DiaryDetailsImplCopyWithImpl<$Res>
     Object? commentCount = null,
     Object? isLiked = null,
     Object? isBookmarked = null,
+    Object? isFollowing = null,
     Object? authorId = null,
     Object? authorEmail = null,
     Object? authorName = null,
@@ -301,6 +310,10 @@ class __$$DiaryDetailsImplCopyWithImpl<$Res>
           ? _value.isBookmarked
           : isBookmarked // ignore: cast_nullable_to_non_nullable
               as bool,
+      isFollowing: null == isFollowing
+          ? _value.isFollowing
+          : isFollowing // ignore: cast_nullable_to_non_nullable
+              as bool,
       authorId: null == authorId
           ? _value.authorId
           : authorId // ignore: cast_nullable_to_non_nullable
@@ -343,6 +356,7 @@ class _$DiaryDetailsImpl implements _DiaryDetails {
       required this.commentCount,
       required this.isLiked,
       required this.isBookmarked,
+      required this.isFollowing,
       required this.authorId,
       required this.authorEmail,
       required this.authorName,
@@ -378,6 +392,8 @@ class _$DiaryDetailsImpl implements _DiaryDetails {
   @override
   final bool isBookmarked;
   @override
+  final bool isFollowing;
+  @override
   final int authorId;
   @override
   final String authorEmail;
@@ -390,7 +406,7 @@ class _$DiaryDetailsImpl implements _DiaryDetails {
 
   @override
   String toString() {
-    return 'DiaryDetails(createdDate: $createdDate, modifiedDate: $modifiedDate, id: $id, memberId: $memberId, title: $title, content: $content, imgUrl: $imgUrl, accessLevel: $accessLevel, active: $active, readCount: $readCount, likeCount: $likeCount, commentCount: $commentCount, isLiked: $isLiked, isBookmarked: $isBookmarked, authorId: $authorId, authorEmail: $authorEmail, authorName: $authorName, authorNickname: $authorNickname, authorProfileUrl: $authorProfileUrl)';
+    return 'DiaryDetails(createdDate: $createdDate, modifiedDate: $modifiedDate, id: $id, memberId: $memberId, title: $title, content: $content, imgUrl: $imgUrl, accessLevel: $accessLevel, active: $active, readCount: $readCount, likeCount: $likeCount, commentCount: $commentCount, isLiked: $isLiked, isBookmarked: $isBookmarked, isFollowing: $isFollowing, authorId: $authorId, authorEmail: $authorEmail, authorName: $authorName, authorNickname: $authorNickname, authorProfileUrl: $authorProfileUrl)';
   }
 
   @override
@@ -420,6 +436,8 @@ class _$DiaryDetailsImpl implements _DiaryDetails {
             (identical(other.isLiked, isLiked) || other.isLiked == isLiked) &&
             (identical(other.isBookmarked, isBookmarked) ||
                 other.isBookmarked == isBookmarked) &&
+            (identical(other.isFollowing, isFollowing) ||
+                other.isFollowing == isFollowing) &&
             (identical(other.authorId, authorId) ||
                 other.authorId == authorId) &&
             (identical(other.authorEmail, authorEmail) ||
@@ -449,6 +467,7 @@ class _$DiaryDetailsImpl implements _DiaryDetails {
         commentCount,
         isLiked,
         isBookmarked,
+        isFollowing,
         authorId,
         authorEmail,
         authorName,
@@ -479,6 +498,7 @@ abstract class _DiaryDetails implements DiaryDetails {
       required final int commentCount,
       required final bool isLiked,
       required final bool isBookmarked,
+      required final bool isFollowing,
       required final int authorId,
       required final String authorEmail,
       required final String authorName,
@@ -513,6 +533,8 @@ abstract class _DiaryDetails implements DiaryDetails {
   bool get isLiked;
   @override
   bool get isBookmarked;
+  @override
+  bool get isFollowing;
   @override
   int get authorId;
   @override

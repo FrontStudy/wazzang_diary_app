@@ -7,14 +7,17 @@ import 'package:http/http.dart' as http;
 import 'core/network/network_info.dart';
 import 'data/datasources/local/member_local_data_source.dart';
 import 'data/datasources/remote/diary_remote_data_source.dart';
+import 'data/datasources/remote/follow_remote_data_source.dart';
 import 'data/datasources/remote/image_remote_data_source.dart';
 import 'data/datasources/remote/member_remote_data_source.dart';
 import 'data/datasources/remote/signup_check_remote_data_source.dart';
 import 'data/repositories/diary_repository_impl.dart';
+import 'data/repositories/follow_repository_impl.dart';
 import 'data/repositories/image_repository_impl.dart';
 import 'data/repositories/member_repository_impl.dart';
 import 'data/repositories/signup_check_repository_impl.dart';
 import 'domain/repositories/diary/diary_repository.dart';
+import 'domain/repositories/follow/follow_repository.dart';
 import 'domain/repositories/image/image_repository.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/repositories/signup/signup_check_repository.dart';
@@ -24,6 +27,8 @@ import 'domain/usecases/diary/fetch_diary_list_use_case.dart';
 import 'domain/usecases/diary/like_diary_use_case.dart';
 import 'domain/usecases/diary/remove_bookmark_use_case.dart';
 import 'domain/usecases/diary/unlike_diary_use_case.dart';
+import 'domain/usecases/follow/follow_use_case.dart';
+import 'domain/usecases/follow/unfollow_use_case.dart';
 import 'domain/usecases/member/get_cached_member_usecase.dart';
 import 'domain/usecases/member/sign_in_usecase.dart';
 import 'domain/usecases/member/sign_out_usecase.dart';
@@ -83,7 +88,8 @@ Future<void> initializeDependencies() async {
 
   //Features - Diary
   // Bloc
-  sl.registerFactory(() => PubDiaryBloc(sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory(
+      () => PubDiaryBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
   // Use cases
   sl.registerLazySingleton(() => FetchPublicDiaryListUseCase(sl(), sl()));
   sl.registerLazySingleton(() => FetchPublicDiaryDetailListUseCase(sl()));
@@ -91,6 +97,8 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => UnlikeDiaryUseCase(sl()));
   sl.registerLazySingleton(() => AddBookmarkUseCase(sl()));
   sl.registerLazySingleton(() => RemoveBookmarkUseCase(sl()));
+  sl.registerLazySingleton(() => FollowUseCase(sl()));
+  sl.registerLazySingleton(() => UnfollowUseCase(sl()));
   //Repositories
   sl.registerLazySingleton<DiaryRepository>(() => DiaryRepositoryImpl(
       networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));
@@ -98,6 +106,15 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<DiaryRemoteDataSource>(
       () => DiaryRemoteDataSourceImpl(client: sl()));
 
+  //Feature - Follow
+  // Repositories
+  sl.registerLazySingleton<FollowRepository>(() => FollowRepositoryImpl(
+      networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));
+  //Data sources
+  sl.registerLazySingleton<FollowRemoteDataSource>(
+      () => FollowRemoteDataSourceImpl(client: sl()));
+
+  // etc.
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
 
   final sharedPreferences = await SharedPreferences.getInstance();

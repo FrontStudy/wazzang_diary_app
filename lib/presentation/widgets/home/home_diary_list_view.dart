@@ -6,6 +6,8 @@ import '../../../domain/usecases/diary/add_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
 import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
+import '../../../domain/usecases/follow/follow_use_case.dart';
+import '../../../domain/usecases/follow/unfollow_use_case.dart';
 import '../../blocs/diary/pub_diary_bloc.dart';
 import '../../pages/common/gradient_widget.dart';
 
@@ -169,10 +171,17 @@ class HomeDiaryListView extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(6)),
                             ),
                           ),
-                          onPressed: () {},
-                          child: const Text(
-                            '팔로우',
-                            style: TextStyle(
+                          onPressed: () {
+                            context.read<PubDiaryBloc>().add(
+                                diaryDetails.isFollowing
+                                    ? Unfollow(UnfollowParams(
+                                        followedId: diaryDetails.authorId))
+                                    : Follow(FollowParams(
+                                        followedId: diaryDetails.authorId)));
+                          },
+                          child: Text(
+                            diaryDetails.isFollowing ? '팔로잉' : '팔로우',
+                            style: const TextStyle(
                                 color: Colors.white, fontSize: 12, height: 1),
                           )),
                     )
