@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/diary/diary_details.dart';
+import '../../../domain/usecases/diary/add_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
+import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
 import '../../blocs/diary/pub_diary_bloc.dart';
 import '../../pages/common/gradient_widget.dart';
@@ -208,7 +210,10 @@ class HomeDiaryListView extends StatelessWidget {
                                               diaryId: diaryDetails.id)));
                                 },
                                 child: diaryDetails.isLiked
-                                    ? const Icon(Icons.favorite)
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                      )
                                     : const Icon(Icons.favorite_border),
                               )),
                           Container(
@@ -225,6 +230,14 @@ class HomeDiaryListView extends StatelessWidget {
                           height: 30,
                           width: 30,
                           child: GestureDetector(
+                            onTap: () {
+                              context.read<PubDiaryBloc>().add(
+                                  !diaryDetails.isBookmarked
+                                      ? AddBookmark(AddBookmarkParams(
+                                          diaryId: diaryDetails.id))
+                                      : RemoveBookmark(RemoveBookmarkParams(
+                                          diaryId: diaryDetails.id)));
+                            },
                             child: diaryDetails.isBookmarked
                                 ? const Icon(Icons.bookmark)
                                 : const Icon(Icons.bookmark_outline),
@@ -260,20 +273,11 @@ class HomeDiaryListView extends StatelessWidget {
                             height: 18,
                             child: FittedBox(
                               child: Text(
-                                '${formatTimeAgo(diaryDetails.createdDate)} ・ ',
+                                formatTimeAgo(diaryDetails.createdDate),
                                 style: const TextStyle(color: Colors.black54),
                               ),
                             ),
                           ),
-                          const SizedBox(width: 3),
-                          const SizedBox(
-                            height: 18,
-                            child: FittedBox(
-                              child: Text(
-                                '와우우우',
-                              ),
-                            ),
-                          )
                         ],
                       ),
                       const SizedBox(height: 2),

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:wazzang_diary/domain/usecases/diary/add_bookmark_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_list_use_case.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:wazzang_diary/domain/usecases/diary/like_diary_use_case.dart';
+import 'package:wazzang_diary/domain/usecases/diary/remove_bookmark_use_case.dart';
 
 import '../../../core/constants/strings.dart';
 import '../../../core/error/exceptions.dart';
@@ -25,6 +27,10 @@ abstract class DiaryRemoteDataSource {
   Future<void> likeDiary(LikeDiaryParams params, String token);
 
   Future<void> unlikeDiary(UnlikeDiaryParams params, String token);
+
+  Future<void> addBookmark(AddBookmarkParams params, String token);
+
+  Future<void> removeBookmark(RemoveBookmarkParams params, String token);
 }
 
 class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
@@ -129,6 +135,55 @@ class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
         throw ServerException();
       }
     } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      throw AuthenticationFailure();
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> addBookmark(AddBookmarkParams params, String token) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/svc/diary/${params.diaryId}/bookmark'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+      if (responseData['data'] == true) {
+        return;
+      } else {
+        throw ServerException();
+      }
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      throw AuthenticationFailure();
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> removeBookmark(RemoveBookmarkParams params, String token) async {
+    final response = await client.delete(
+      Uri.parse('$baseUrl/svc/diary/${params.diaryId}/bookmark'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+      if (responseData['data'] == false) {
+        return;
+      } else {
+        throw ServerException();
+      }
+    } else if (response.statusCode >= 400 && response.statusCode < 500) {
+      debugPrint(response.statusCode.toString());
       throw AuthenticationFailure();
     } else {
       throw ServerException();

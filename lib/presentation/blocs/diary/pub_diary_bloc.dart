@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,8 +7,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/diary/diary_details.dart';
+import '../../../domain/usecases/diary/add_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
+import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
 
 abstract class PubDiaryState extends Equatable {}
@@ -60,17 +64,35 @@ class UnlikeDiary extends PubDiaryEvent {
   UnlikeDiary(this.params);
 }
 
+class AddBookmark extends PubDiaryEvent {
+  final AddBookmarkParams params;
+  AddBookmark(this.params);
+}
+
+class RemoveBookmark extends PubDiaryEvent {
+  final RemoveBookmarkParams params;
+  RemoveBookmark(this.params);
+}
+
 class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
   final FetchPublicDiaryDetailListUseCase _fetchPublicDiaryDetailListUseCase;
   final LikeDiaryUseCase _likeDiaryUseCase;
   final UnlikeDiaryUseCase _unlikeDiaryUseCase;
-  PubDiaryBloc(this._fetchPublicDiaryDetailListUseCase, this._likeDiaryUseCase,
-      this._unlikeDiaryUseCase)
+  final AddBookmarkUseCase _addBookmarkUseCase;
+  final RemoveBookmarkUseCase _removeBookmarkUseCase;
+  PubDiaryBloc(
+      this._fetchPublicDiaryDetailListUseCase,
+      this._likeDiaryUseCase,
+      this._unlikeDiaryUseCase,
+      this._addBookmarkUseCase,
+      this._removeBookmarkUseCase)
       : super(PubDiaryInitial()) {
     on<FetchFirstDiaries>(_onFetchFirstDiaries);
     on<FetchMoreDiaries>(_onFetchMoreDiaries);
     on<LikeDiary>(_onLikeDiary);
     on<UnlikeDiary>(_onUnlikeDiary);
+    on<AddBookmark>(_onAddBookmark);
+    on<RemoveBookmark>(_onRemoveBookmark);
   }
 
   void _onFetchFirstDiaries(
@@ -145,6 +167,51 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
               if (diary.id == event.params.diaryId) {
                 return diary.copyWith(
                     isLiked: false, likeCount: diary.likeCount - 1);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
+  }
+
+  void _onAddBookmark(AddBookmark event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _addBookmarkUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.id == event.params.diaryId) {
+                return diary.copyWith(isBookmarked: true);
+              } else {
+                return diary;
+              }
+            }).toList();
+            emit(PubDiaryLoaded(updatedDiaries));
+          },
+        );
+      }
+    } catch (e) {}
+  }
+
+  void _onRemoveBookmark(
+      RemoveBookmark event, Emitter<PubDiaryState> emit) async {
+    try {
+      final currentState = state;
+      if (currentState is PubDiaryLoaded) {
+        final result = await _removeBookmarkUseCase(event.params);
+        result.fold(
+          (failure) => debugPrint(failure.toString()),
+          (noParams) {
+            final updatedDiaries = currentState.diaryDetails.map((diary) {
+              if (diary.id == event.params.diaryId) {
+                return diary.copyWith(isBookmarked: false);
               } else {
                 return diary;
               }
