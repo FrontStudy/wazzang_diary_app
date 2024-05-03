@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/constants.dart';
+import '../../../core/routes/main_router.dart';
 import '../../blocs/member/member_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -28,7 +29,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushNamed(AppRouter.account);
+          },
           borderRadius: BorderRadius.circular(1000),
           child: ClipOval(
             child: Container(
