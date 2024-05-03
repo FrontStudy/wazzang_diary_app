@@ -34,11 +34,12 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
         }));
 
     final responseData = json.decode(utf8.decode(response.bodyBytes));
-    if (response.statusCode == 200 &&
-        responseData["status"] == "success") {
+    if (response.statusCode == 200 && responseData["status"] == "success") {
       return AuthenticationResponseModel.fromJson(responseData["data"]);
-    } else if (response.statusCode == 400 || response.statusCode == 401) {
-      throw CredentialFailure();
+    } else if (response.statusCode == 404) {
+      throw MemberNotFoundFailure();
+    } else if (response.statusCode == 401) {
+      throw InvalidCredentialsFailure();
     } else {
       throw ServerException();
     }
@@ -60,8 +61,7 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
           'profilePicture': params.profilePicture
         }));
     final responseData = json.decode(utf8.decode(response.bodyBytes));
-    if (response.statusCode == 200 &&
-        responseData["status"] == "success") {
+    if (response.statusCode == 200 && responseData["status"] == "success") {
       return AuthenticationResponseModel.fromJson(responseData["data"]);
     } else if (response.statusCode == 400 || response.statusCode == 401) {
       throw CredentialFailure();

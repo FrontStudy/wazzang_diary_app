@@ -22,3 +22,7 @@ class DuplicateFailure extends Failure {}
 class ValidationFailure extends Failure {}
 
 class TokenFailure extends Failure {}
+
+class MemberNotFoundFailure extends Failure {}
+
+class InvalidCredentialsFailure extends Failure {}

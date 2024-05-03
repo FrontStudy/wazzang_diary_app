@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../core/error/failures.dart';
 import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
 import '../../../domain/usecases/member/sign_in_usecase.dart';
@@ -27,6 +29,20 @@ class _SignInPageState extends State<SignInPage> {
             AppRouter.main,
             ModalRoute.withName(''),
           );
+          EasyLoading.dismiss();
+        } else if (state is MemberLoading) {
+          EasyLoading.show(status: 'Loading...');
+        } else if (state is MemberLoggedFail) {
+          if (state.failure is InvalidCredentialsFailure) {
+            EasyLoading.showToast("잘못된 비밀번호입니다.",
+                duration: const Duration(seconds: 1));
+          } else if (state.failure is MemberNotFoundFailure) {
+            EasyLoading.showToast("잘못된 아이디입니다.",
+                duration: const Duration(seconds: 1));
+          } else {
+            EasyLoading.showToast("로그인에 실패했습니다.",
+                duration: const Duration(seconds: 1));
+          }
         }
       },
       child: Scaffold(
