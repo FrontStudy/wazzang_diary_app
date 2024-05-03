@@ -5,6 +5,7 @@ import 'package:wazzang_diary/core/error/failures.dart';
 
 import 'package:wazzang_diary/domain/entities/diary/diary.dart';
 import 'package:wazzang_diary/domain/usecases/diary/add_bookmark_use_case.dart';
+import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_detail_use_case.dart';
 
 import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_list_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/remove_bookmark_use_case.dart';
@@ -141,6 +142,31 @@ class DiaryRepositoryImpl extends DiaryRepository {
         }
       } else {
         return Left(TokenFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, DiaryDetails>> fetchDiaryDetail(
+      FetchDiaryDetailParams params) async {
+    if (await networkInfo.isConnected) {
+      if (await memberLocalDataSource.isTokenAvailable()) {
+        String token = await memberLocalDataSource.getToken();
+        try {
+          final response =
+              await remoteDataSource.fetchDiaryDetails(params, token);
+          if (response.data != null) {
+            return Right(response.data!.diaryDetails);
+          } else {
+            return Left(ServerFailure());
+          }
+        } on Failure catch (failure) {
+          return Left(failure);
+        }
+      } else {
+        return Left(NetworkFailure());
       }
     } else {
       return Left(NetworkFailure());

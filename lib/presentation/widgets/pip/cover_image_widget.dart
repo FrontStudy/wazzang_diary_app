@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wazzang_diary/domain/entities/diary/diary_details.dart';
 
 import '../../../core/utils/widget_position.dart';
+import '../../blocs/diary/current_diary_bloc.dart';
 import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 
@@ -17,6 +19,12 @@ class CoverImageWidget extends StatelessWidget {
         var dragState = context.select((DragRouteCubit cubit) => cubit.state);
         var toggleState =
             context.select((SegmentToggleCubit cubit) => cubit.state);
+        final currentDiaryState =
+            context.select((CurrentDiaryBloc bloc) => bloc.state);
+        DiaryDetails? data;
+        if (currentDiaryState is CurrentDiaryLoaded) {
+          data = currentDiaryState.diaryDetails;
+        }
         int index = dragState.getDragingIndex();
         bool visible = toggleState.first == SegmentToggle.image ||
             (dragState.firstScale != 1 || dragState.secondScale != 0);
@@ -37,7 +45,12 @@ class CoverImageWidget extends StatelessWidget {
                 height: positions[index].height,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
+                  child: data?.imgUrl != null
+                      ? Image.network(
+                          data!.imgUrl!,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
                     'assets/images/article_profile_sample.jpg',
                     fit: BoxFit.cover,
                   ),
