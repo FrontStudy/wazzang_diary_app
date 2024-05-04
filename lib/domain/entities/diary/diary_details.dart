@@ -20,6 +20,7 @@ abstract class DiaryDetails with _$DiaryDetails {
       required bool isLiked,
       required bool isBookmarked,
       required bool isFollowing,
+      required int authorFollowerCount,
       required int authorId,
       required String authorEmail,
       required String authorName,

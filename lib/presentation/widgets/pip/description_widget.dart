@@ -105,7 +105,9 @@ class DescriptionWidget extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               Text(
-                                '144만',
+                                data?.authorFollowerCount != null
+                                    ? parseToKorean(data!.authorFollowerCount)
+                                    : ' ',
                                 style: TextStyle(
                                     color: Colors.grey[500],
                                     fontSize: 16,
@@ -198,7 +200,7 @@ class DescriptionWidget extends StatelessWidget {
                                     const SizedBox(width: 6),
                                     Text(
                                       data?.likeCount != null
-                                          ? "${data!.likeCount}"
+                                          ? parseToKorean(data!.likeCount)
                                           : ' ',
                                       style: const TextStyle(
                                         fontSize: 15,
