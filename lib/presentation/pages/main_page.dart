@@ -151,10 +151,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     if (dragState.pageIndex == 2) {
                       context.read<DragRouteCubit>().handleSecondTabDragEnd();
                     } else if (dragState.pageIndex == 1) {
-                      if (dragState.lastDragDelta < 0) {
-                        context.read<DragRouteCubit>().handleSecondTabDragEnd();
-                      } else {
+                      if (dragState.firstScale < 1) {
                         context.read<DragRouteCubit>().handlePipDragEnd();
+                      } else {
+                        context.read<DragRouteCubit>().handleSecondTabDragEnd();
                       }
                     } else {
                       context.read<DragRouteCubit>().handlePipDragEnd();
@@ -178,7 +178,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 )),
             Positioned(
                 top: screenSize.height -
-                    ((secondBottomBarHeight - 2) * dragState.firstScale +
+                    ((secondBottomBarHeight) * dragState.firstScale +
                         (screenSize.height -
                                 pipHeight -
                                 paddingTop -
