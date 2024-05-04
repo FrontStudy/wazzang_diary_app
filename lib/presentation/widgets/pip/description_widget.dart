@@ -118,9 +118,10 @@ class DescriptionWidget extends StatelessWidget {
                                   height: 35,
                                   child: ElevatedButton(
                                       onPressed: () {
+                                        if (data == null) return;
                                         context.read<CurrentDiaryBloc>().add(
                                             Unfollow(UnfollowParams(
-                                                followedId: data!.authorId)));
+                                                followedId: data.authorId)));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: lightBlueColor,
@@ -139,9 +140,10 @@ class DescriptionWidget extends StatelessWidget {
                                   height: 35,
                                   child: ElevatedButton(
                                       onPressed: () {
+                                        if (data == null) return;
                                         context.read<CurrentDiaryBloc>().add(
                                             Follow(FollowParams(
-                                                followedId: data!.authorId)));
+                                                followedId: data.authorId)));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: ivoryColor,
@@ -166,14 +168,15 @@ class DescriptionWidget extends StatelessWidget {
                           children: [
                             ElevatedButton(
                                 onPressed: () {
-                                  if (data?.isLiked == true) {
+                                  if (data == null) return;
+                                  if (data.isLiked == true) {
                                     context.read<CurrentDiaryBloc>().add(
                                         UnlikeDiary(UnlikeDiaryParams(
-                                            diaryId: data!.authorId)));
+                                            diaryId: data.authorId)));
                                   } else {
                                     context.read<CurrentDiaryBloc>().add(
                                         LikeDiary(LikeDiaryParams(
-                                            diaryId: data!.authorId)));
+                                            diaryId: data.authorId)));
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -193,9 +196,11 @@ class DescriptionWidget extends StatelessWidget {
                                       size: 16,
                                     ),
                                     const SizedBox(width: 6),
-                                    const Text(
-                                      '5천',
-                                      style: TextStyle(
+                                    Text(
+                                      data?.likeCount != null
+                                          ? "${data!.likeCount}"
+                                          : ' ',
+                                      style: const TextStyle(
                                         fontSize: 15,
                                         color: Colors.white,
                                       ),
@@ -205,14 +210,15 @@ class DescriptionWidget extends StatelessWidget {
                             const SizedBox(width: 10),
                             ElevatedButton(
                                 onPressed: () {
-                                  if (data?.isBookmarked == true) {
+                                  if (data == null) return;
+                                  if (data.isBookmarked == true) {
                                     context.read<CurrentDiaryBloc>().add(
                                         RemoveBookmark(RemoveBookmarkParams(
-                                            diaryId: data!.authorId)));
+                                            diaryId: data.authorId)));
                                   } else {
                                     context.read<CurrentDiaryBloc>().add(
                                         AddBookmark(AddBookmarkParams(
-                                            diaryId: data!.authorId)));
+                                            diaryId: data.authorId)));
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -252,6 +258,7 @@ class DescriptionWidget extends StatelessWidget {
                     height: 90,
                     child: ElevatedButton(
                         onPressed: () {
+                          if (data == null) return;
                           if (context
                                   .read<SecondNavigationBarCubit>()
                                   .controller!
@@ -320,7 +327,7 @@ class DescriptionWidget extends StatelessWidget {
                                                 fit: BoxFit.cover,
                                               )
                                             : Image.asset(
-                                                'assets/images/user_profile_sample.jpg',
+                                                'assets/images/person_placeholder.png',
                                                 fit: BoxFit.cover,
                                               ),
                                       )),
