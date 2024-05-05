@@ -6,21 +6,25 @@ import 'package:http/http.dart' as http;
 
 import 'core/network/network_info.dart';
 import 'data/datasources/local/member_local_data_source.dart';
+import 'data/datasources/remote/comment_remote_data_source.dart';
 import 'data/datasources/remote/diary_remote_data_source.dart';
 import 'data/datasources/remote/follow_remote_data_source.dart';
 import 'data/datasources/remote/image_remote_data_source.dart';
 import 'data/datasources/remote/member_remote_data_source.dart';
 import 'data/datasources/remote/signup_check_remote_data_source.dart';
+import 'data/repositories/comment_repository_impl.dart';
 import 'data/repositories/diary_repository_impl.dart';
 import 'data/repositories/follow_repository_impl.dart';
 import 'data/repositories/image_repository_impl.dart';
 import 'data/repositories/member_repository_impl.dart';
 import 'data/repositories/signup_check_repository_impl.dart';
+import 'domain/repositories/comment/comment_repository.dart';
 import 'domain/repositories/diary/diary_repository.dart';
 import 'domain/repositories/follow/follow_repository.dart';
 import 'domain/repositories/image/image_repository.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/repositories/signup/signup_check_repository.dart';
+import 'domain/usecases/comment/add_comment_use_case.dart';
 import 'domain/usecases/diary/add_bookmark_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_use_case.dart';
@@ -36,6 +40,7 @@ import 'domain/usecases/member/sign_out_usecase.dart';
 import 'domain/usecases/member/sign_up_usecase.dart';
 import 'domain/usecases/signup/check_email_usecase.dart';
 import 'domain/usecases/signup/set_profile_image_usecase.dart';
+import 'presentation/blocs/comment/comment_bloc.dart';
 import 'presentation/blocs/diary/current_diary_bloc.dart';
 import 'presentation/blocs/diary/pub_diary_bloc.dart';
 import 'presentation/blocs/member/member_bloc.dart';
@@ -118,6 +123,19 @@ Future<void> initializeDependencies() async {
   //Data sources
   sl.registerLazySingleton<FollowRemoteDataSource>(
       () => FollowRemoteDataSourceImpl(client: sl()));
+
+  
+  //Features - Comment
+  //Bloc
+  sl.registerFactory(() => CommentBloc(sl()));
+  // Use cases
+  sl.registerLazySingleton(() => AddCommentUseCase(sl()));
+  // Repositories
+  sl.registerLazySingleton<CommentRepository>(() => CommentRepositoryImpl(
+      networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));
+  // Data Sources
+  sl.registerLazySingleton<CommentRemoteDataSource>(
+      () => CommentRemoteDataSourceImpl(client: sl()));
 
   // etc.
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

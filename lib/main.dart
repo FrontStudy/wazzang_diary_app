@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 
 import 'core/routes/main_router.dart';
+import 'presentation/blocs/comment/comment_bloc.dart';
 import 'presentation/blocs/diary/current_diary_bloc.dart';
 import 'presentation/blocs/diary/pub_diary_bloc.dart';
 import 'presentation/blocs/main/bottom_navigation_bar_cubit.dart';
@@ -41,11 +43,10 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<MemberBloc>()..add(CheckMember())),
         BlocProvider(create: (_) => di.sl<PubDiaryBloc>()),
         BlocProvider(create: (_) => di.sl<CurrentDiaryBloc>()),
+        BlocProvider(create: (_) => di.sl<CommentBloc>()),
       ],
-      child: GestureDetector(
-        onTap: () {
-          FocusManager.instance.primaryFocus?.unfocus(); // 키보드 닫기 이벤트
-        },
+      child: KeyboardDismisser(
+        gestures: const [GestureType.onTap],
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             onGenerateRoute: AppRouter.onGenerateRoute,

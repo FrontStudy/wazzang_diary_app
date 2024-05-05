@@ -5,6 +5,7 @@ import '../../../core/constants/constants.dart';
 import '../../../core/themes/theme.dart';
 import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/main/second_navigation_bar_cubit.dart';
+import '../../pages/comment/comment_page.dart';
 
 class SecondBottomNaviBar extends StatefulWidget {
   final double height;
@@ -112,15 +113,17 @@ class _SecondBottomNaviBarState extends State<SecondBottomNaviBar>
                         20 * dragState.secondScale,
                     width: screenSize.width,
                     child: TabBarView(
+                      physics: const NeverScrollableScrollPhysics(),
                       controller:
                           context.read<SecondNavigationBarCubit>().controller,
                       children: [
                         Container(
                           child: const Center(child: Text('First')),
                         ),
-                        Container(
-                          child: const Center(child: Text('Second')),
-                        ),
+                        CommentPage(
+                            height: widget.height -
+                                secondBottomBarHeight +
+                                20 * dragState.secondScale),
                         Container(
                           child: const Center(child: Text('Third')),
                         )
