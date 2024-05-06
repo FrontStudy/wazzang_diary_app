@@ -10,7 +10,7 @@ class DragState {
   final bool? isfirstScaleAnimated;
   final bool isAnimating;
 
-  DragState(
+  const DragState(
       this.firstScale,
       this.secondScale,
       this.lastDragDelta,
@@ -53,7 +53,8 @@ class DragState {
 }
 
 class DragRouteCubit extends Cubit<DragState> {
-  DragRouteCubit() : super(DragState(0, 0, 0, 0, false, null, null, false));
+  DragRouteCubit()
+      : super(const DragState(0, 0, 0, 0, false, null, null, false));
 
   void handlePipTap() {
     if (state.shouldAnimate) return;

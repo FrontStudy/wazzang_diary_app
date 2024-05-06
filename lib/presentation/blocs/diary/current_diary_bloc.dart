@@ -95,7 +95,8 @@ class CurrentDiaryBloc extends Bloc<CurrentDiaryEvent, CurrentDiaryState> {
       this._addBookmarkUseCase,
       this._removeBookmarkUseCase,
       this._followUseCase,
-      this._unfollowUseCase)
+    this._unfollowUseCase,
+  )
       : super(CurrentDiaryInitial()) {
     on<FetchDiary>(_onFetchDiary);
     on<LikeDiary>(_onLikeDiary);

@@ -25,6 +25,7 @@ import 'domain/repositories/image/image_repository.dart';
 import 'domain/repositories/member/member_repository.dart';
 import 'domain/repositories/signup/signup_check_repository.dart';
 import 'domain/usecases/comment/add_comment_use_case.dart';
+import 'domain/usecases/comment/fetch_comment_use_case.dart';
 import 'domain/usecases/diary/add_bookmark_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_use_case.dart';
@@ -124,12 +125,12 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<FollowRemoteDataSource>(
       () => FollowRemoteDataSourceImpl(client: sl()));
 
-  
   //Features - Comment
   //Bloc
-  sl.registerFactory(() => CommentBloc(sl()));
+  sl.registerFactory(() => CommentBloc(sl(), sl()));
   // Use cases
   sl.registerLazySingleton(() => AddCommentUseCase(sl()));
+  sl.registerLazySingleton(() => FetchCommentUseCase(sl()));
   // Repositories
   sl.registerLazySingleton<CommentRepository>(() => CommentRepositoryImpl(
       networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));

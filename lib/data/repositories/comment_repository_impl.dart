@@ -3,8 +3,10 @@ import 'package:dartz/dartz.dart';
 import 'package:wazzang_diary/core/error/failures.dart';
 
 import 'package:wazzang_diary/core/usecases/usecase.dart';
+import 'package:wazzang_diary/domain/entities/comment/comment.dart';
 
 import 'package:wazzang_diary/domain/usecases/comment/add_comment_use_case.dart';
+import 'package:wazzang_diary/domain/usecases/comment/fetch_comment_use_case.dart';
 
 import '../../core/network/network_info.dart';
 import '../../domain/repositories/comment/comment_repository.dart';
@@ -28,6 +30,26 @@ class CommentRepositoryImpl implements CommentRepository {
         try {
           await remoteDataSource.addComment(params, token);
           return Right(NoParams());
+        } on Failure catch (failure) {
+          return Left(failure);
+        }
+      } else {
+        return Left(TokenFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Comment>>> fetchComment(
+      FetchCommentParams params) async {
+    if (await networkInfo.isConnected) {
+      if (await memberLocalDataSource.isTokenAvailable()) {
+        String token = await memberLocalDataSource.getToken();
+        try {
+          final response = await remoteDataSource.fetchComment(params, token);
+          return Right(response.data?.toEntityList() ?? []);
         } on Failure catch (failure) {
           return Left(failure);
         }

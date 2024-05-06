@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/themes/theme.dart';
+import '../../../domain/entities/comment/comment.dart';
 import '../../../domain/usecases/comment/add_comment_use_case.dart';
+import '../../../domain/usecases/comment/fetch_comment_use_case.dart';
 import '../../blocs/comment/comment_bloc.dart';
 import '../../blocs/diary/current_diary_bloc.dart';
+import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/member/member_bloc.dart';
 
 class CommentPage extends StatefulWidget {
@@ -55,6 +58,47 @@ class _CommentPageState extends State<CommentPage> {
       height: widget.height,
       child: Stack(
         children: [
+          BlocListener<DragRouteCubit, DragState>(
+              listenWhen: (previous, current) =>
+                  current.pageIndex == 2 &&
+                  previous.pageIndex != current.pageIndex,
+              listener: (context, state) {
+                final diaryState = context.read<CurrentDiaryBloc>().state;
+                final commentState = context.read<CommentBloc>().state;
+                if (diaryState is CurrentDiaryLoaded) {
+                  if (commentState is CommentLoaded &&
+                      commentState.comments.isNotEmpty &&
+                      commentState.comments[0].diaryId !=
+                          diaryState.diaryDetails.id) {
+                    context.read<CommentBloc>().add(FetchComment(
+                        FetchCommentParams(
+                            diaryId: diaryState.diaryDetails.id,
+                            offset: 0,
+                            size: 20)));
+                  } else if (commentState is! CommentLoaded) {
+                    context.read<CommentBloc>().add(FetchComment(
+                        FetchCommentParams(
+                            diaryId: diaryState.diaryDetails.id,
+                            offset: 0,
+                            size: 20)));
+                  }
+                }
+              },
+              child: BlocBuilder<CommentBloc, CommentState>(
+                  builder: (context, state) {
+                List<Comment> data = [];
+                if (state is CommentLoaded) {
+                  data = state.comments;
+                }
+                return ListView.builder(
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: Text(data[index].content),
+                    );
+                  },
+                );
+              })),
           Positioned(
             left: 0,
             right: 0,

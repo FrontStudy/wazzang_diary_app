@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/comment/comment.dart';
 import '../../../domain/usecases/comment/add_comment_use_case.dart';
+import '../../../domain/usecases/comment/fetch_comment_use_case.dart';
 
 abstract class CommentState extends Equatable {}
 
@@ -41,25 +42,45 @@ class AddComment extends CommentEvent {
   AddComment(this.params);
 }
 
+class FetchComment extends CommentEvent {
+  final FetchCommentParams params;
+  FetchComment(this.params);
+}
+
 class CommentBloc extends Bloc<CommentEvent, CommentState> {
   final AddCommentUseCase _addCommentUseCase;
+  final FetchCommentUseCase _fetchCommentsUseCase;
 
-  CommentBloc(this._addCommentUseCase) : super(CommentInitial()) {
+  CommentBloc(this._addCommentUseCase, this._fetchCommentsUseCase)
+      : super(CommentInitial()) {
     on<AddComment>(_onAddComment);
+    on<FetchComment>(_onFetchComment);
   }
 
   void _onAddComment(AddComment event, Emitter<CommentState> emit) async {
     try {
       final currentState = state;
-      // if (currentState is CommentInitial) {
-
-      // }
-      final result = await _addCommentUseCase(event.params);
-      result.fold(
-          (failure) => debugPrint(failure.toString()),
-          (noParams) => emit(CommentLoaded(comments: const [
-                // ...currentState.comments,
-              ])));
+      if (currentState is CommentInitial) {
+        final result = await _addCommentUseCase(event.params);
+        result.fold(
+            (failure) => debugPrint(failure.toString()),
+            (noParams) => emit(CommentLoaded(comments: const [
+                  // ...currentState.comments,
+                ])));
+      }
     } catch (e) {}
+  }
+
+  void _onFetchComment(FetchComment event, Emitter<CommentState> emit) async {
+    try {
+      emit(CommentLoading());
+      final result = await _fetchCommentsUseCase(event.params);
+      result.fold(
+        (failure) => emit(CommentFailed(failure: failure)),
+        (comments) => emit(CommentLoaded(comments: comments)),
+      );
+    } catch (e) {
+      debugPrint("_onFetchComment : $e");
+    }
   }
 }

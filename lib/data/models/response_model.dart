@@ -12,7 +12,7 @@ class ResponseModel<T> {
     return ResponseModel(
         status: json["status"],
         data: fromJson(json["data"]),
-        page: Page.fromJson(json["page"]));
+        page: json["page"] == null ? null : Page.fromJson(json["page"]));
   }
 
   factory ResponseModel.fromJsonMap(
