@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage>
                 debugPrint(state.failure.toString());
                 return Container();
               } else if (state is PubDiaryLoaded) {
-                return HomeDiaryListView(data: state.diaryDetails);
+                return const HomeDiaryListView();
               } else {
                 return Container();
               }

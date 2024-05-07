@@ -31,23 +31,23 @@ class _SecondBottomNaviBarState extends State<SecondBottomNaviBar>
       if (context.read<DragRouteCubit>().state.secondScale == 0) {
         context.read<DragRouteCubit>().startSecondScaleAnimation(2);
       }
-      // if (_tabController.index == 0) {
-      // } else if (_tabController.index == 1) {
-      //   _commentPageInit();
-      // } else {}
+      if (_tabController.index == 0) {
+      } else if (_tabController.index == 1) {
+        _commentPageInit();
+      } else {}
     });
     context.read<SecondNavigationBarCubit>().initController(_tabController);
   }
 
-  // void _commentPageInit() {
-  //   final diaryState = context.read<CurrentDiaryBloc>().state;
-  //   final commentState = context.read<CommentBloc>().state;
-  //   if (diaryState is CurrentDiaryLoaded && commentState is CommentInitial) {
-  //     int diaryId = diaryState.diaryDetails.id;
-  //     context.read<CommentBloc>().add(FetchComment(
-  //         FetchCommentParams(diaryId: diaryId, offset: 0, size: 20)));
-  //   }
-  // }
+  void _commentPageInit() {
+    final diaryState = context.read<CurrentDiaryBloc>().state;
+    final commentState = context.read<CommentBloc>().state;
+    if (diaryState is CurrentDiaryLoaded && commentState is CommentInitial) {
+      int diaryId = diaryState.diaryDetails.id;
+      context.read<CommentBloc>().add(FetchComment(
+          FetchCommentParams(diaryId: diaryId, offset: 0, size: 20)));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -14,9 +14,38 @@ import '../../blocs/diary/current_diary_bloc.dart' as current;
 import '../../blocs/main/drag_route_cubit.dart';
 import '../../pages/common/gradient_widget.dart';
 
-class HomeDiaryListView extends StatelessWidget {
-  final List<DiaryDetails> data;
-  const HomeDiaryListView({required this.data, super.key});
+class HomeDiaryListView extends StatefulWidget {
+  const HomeDiaryListView({super.key});
+
+  @override
+  State<HomeDiaryListView> createState() => _HomeDiaryListViewState();
+}
+
+class _HomeDiaryListViewState extends State<HomeDiaryListView> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<PubDiaryBloc>().add(FetchMoreDiaries());
+    }
+  }
+
+  bool get _isBottom {
+    return _scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent;
+  }
 
   String formatTimeAgo(String dateString) {
     DateTime now = DateTime.now();
@@ -43,16 +72,31 @@ class HomeDiaryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    return ListView.builder(
-      itemCount: data.length,
-      shrinkWrap: true,
-      itemBuilder: (context, index) {
-        return _diaryItemWidget(
-            context: context,
-            screenWidth: screenWidth,
-            diaryDetails: data[index]);
-      },
-    );
+    return BlocBuilder<PubDiaryBloc, PubDiaryState>(builder: (context, state) {
+      if (state is PubDiaryLoaded) {
+        List<DiaryDetails> data = [];
+        data = state.diaryDetails;
+
+        return ListView.builder(
+          controller: _scrollController,
+          itemCount: state.isLoadingMore ? data.length + 1 : data.length,
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            if (index == data.length) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return _diaryItemWidget(
+                context: context,
+                screenWidth: screenWidth,
+                diaryDetails: data[index]);
+          },
+        );
+      } else {
+        return Container();
+      }
+    });
   }
 
   Widget _diaryItemWidget(

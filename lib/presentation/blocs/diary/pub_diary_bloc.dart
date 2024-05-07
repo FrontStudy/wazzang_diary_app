@@ -28,11 +28,25 @@ class PubDiaryLoading extends PubDiaryState {
 class PubDiaryLoaded extends PubDiaryState {
   final List<DiaryDetails> diaryDetails;
   final bool hasReachedMax;
+  final bool isLoadingMore;
 
-  PubDiaryLoaded(this.diaryDetails, {this.hasReachedMax = false});
+  PubDiaryLoaded(
+      {required this.diaryDetails,
+      this.hasReachedMax = false,
+      this.isLoadingMore = false});
+
+  PubDiaryLoaded copyWith(
+      {List<DiaryDetails>? diaryDetails,
+      bool? hasReachedMax,
+      bool? isLoadingMore}) {
+    return PubDiaryLoaded(
+        diaryDetails: diaryDetails ?? this.diaryDetails,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        isLoadingMore: isLoadingMore ?? this.isLoadingMore);
+  }
 
   @override
-  List<Object?> get props => [diaryDetails];
+  List<Object?> get props => [diaryDetails, hasReachedMax, isLoadingMore];
 }
 
 class PubDiaryFailed extends PubDiaryState {
@@ -117,9 +131,9 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
       emit(PubDiaryLoading());
       final result = await _fetchPublicDiaryDetailListUseCase(
           const FetchPublicDiaryDetailsListParams(
-              offset: 0, size: homeDiaryInitinalLoadSize));
+              offset: 0, size: homeDiaryScrollLoadSize));
       result.fold((failure) => emit(PubDiaryFailed(failure)),
-          (diaries) => emit(PubDiaryLoaded(diaries)));
+          (diaries) => emit(PubDiaryLoaded(diaryDetails: diaries)));
     } catch (e) {
       emit(PubDiaryFailed(ExceptionFailure()));
     }
@@ -129,17 +143,25 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
       FetchMoreDiaries event, Emitter<PubDiaryState> emit) async {
     try {
       final currentState = state;
-      if (currentState is PubDiaryLoaded) {
+      if (currentState is PubDiaryLoaded &&
+          !currentState.hasReachedMax &&
+          !currentState.isLoadingMore) {
+        emit(currentState.copyWith(isLoadingMore: true));
         final newParams = FetchPublicDiaryDetailsListParams(
-            offset: currentState.diaryDetails.length,
+            offset: (currentState.diaryDetails.length / homeDiaryScrollLoadSize)
+                .floor()
+                .toInt(),
             size: homeDiaryScrollLoadSize);
         final result = await _fetchPublicDiaryDetailListUseCase(newParams);
         result.fold(
           (failure) => emit(PubDiaryFailed(failure)),
           (diaries) {
             final allDiaries = currentState.diaryDetails + diaries;
-            final hasReachedMax = diaries.isEmpty;
-            emit(PubDiaryLoaded(allDiaries, hasReachedMax: hasReachedMax));
+            final hasReachedMax = diaries.length < homeDiaryScrollLoadSize;
+            emit(PubDiaryLoaded(
+                diaryDetails: allDiaries,
+                hasReachedMax: hasReachedMax,
+                isLoadingMore: false));
           },
         );
       }
@@ -164,7 +186,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }
@@ -187,7 +209,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }
@@ -209,7 +231,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }
@@ -232,7 +254,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }
@@ -254,7 +276,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }
@@ -276,7 +298,7 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
                 return diary;
               }
             }).toList();
-            emit(PubDiaryLoaded(updatedDiaries));
+            emit(PubDiaryLoaded(diaryDetails: updatedDiaries));
           },
         );
       }

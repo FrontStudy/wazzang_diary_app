@@ -59,15 +59,9 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
 
   void _onAddComment(AddComment event, Emitter<CommentState> emit) async {
     try {
-      final currentState = state;
-      if (currentState is CommentInitial) {
-        final result = await _addCommentUseCase(event.params);
-        result.fold(
-            (failure) => debugPrint(failure.toString()),
-            (noParams) => emit(CommentLoaded(comments: const [
-                  // ...currentState.comments,
-                ])));
-      }
+      final diaryId = event.params.diaryId;
+      await _addCommentUseCase(event.params);
+      await _fetchComments(diaryId, emit);
     } catch (e) {}
   }
 
@@ -82,5 +76,15 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     } catch (e) {
       debugPrint("_onFetchComment : $e");
     }
+  }
+
+  Future<void> _fetchComments(int diaryId, Emitter<CommentState> emit) async {
+    emit(CommentLoading());
+    final result = await _fetchCommentsUseCase(
+        FetchCommentParams(offset: 0, size: 10, diaryId: diaryId));
+    result.fold(
+      (failure) => emit(CommentFailed(failure: failure)),
+      (comments) => emit(CommentLoaded(comments: comments)),
+    );
   }
 }
