@@ -4,12 +4,14 @@ import 'package:wazzang_diary/domain/entities/diary/diary_details.dart';
 
 import '../../../core/themes/theme.dart';
 import '../../../core/utils/converter.dart';
+import '../../../domain/usecases/comment/fetch_comment_use_case.dart';
 import '../../../domain/usecases/diary/add_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
 import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
 import '../../../domain/usecases/follow/follow_use_case.dart';
 import '../../../domain/usecases/follow/unfollow_use_case.dart';
+import '../../blocs/comment/comment_bloc.dart';
 import '../../blocs/diary/current_diary_bloc.dart';
 import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/main/second_navigation_bar_cubit.dart';
@@ -270,6 +272,14 @@ class DescriptionWidget extends StatelessWidget {
                                 .read<DragRouteCubit>()
                                 .startSecondScaleAnimation(2);
                           } else {
+                            final diaryState =
+                                context.read<CurrentDiaryBloc>().state;
+                            if (diaryState is CurrentDiaryLoaded) {
+                              int diaryId = diaryState.diaryDetails.id;
+                              context.read<CommentBloc>().add(FetchComment(
+                                  FetchCommentParams(
+                                      diaryId: diaryId, offset: 0, size: 20)));
+                            }
                             context
                                 .read<SecondNavigationBarCubit>()
                                 .controller!

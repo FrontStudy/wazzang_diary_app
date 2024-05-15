@@ -3,9 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/themes/theme.dart';
-import '../../../domain/usecases/comment/fetch_comment_use_case.dart';
-import '../../blocs/comment/comment_bloc.dart';
-import '../../blocs/diary/current_diary_bloc.dart';
 import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/main/second_navigation_bar_cubit.dart';
 import '../../pages/comment/comment_page.dart';
@@ -31,22 +28,8 @@ class _SecondBottomNaviBarState extends State<SecondBottomNaviBar>
       if (context.read<DragRouteCubit>().state.secondScale == 0) {
         context.read<DragRouteCubit>().startSecondScaleAnimation(2);
       }
-      if (_tabController.index == 0) {
-      } else if (_tabController.index == 1) {
-        _commentPageInit();
-      } else {}
     });
     context.read<SecondNavigationBarCubit>().initController(_tabController);
-  }
-
-  void _commentPageInit() {
-    final diaryState = context.read<CurrentDiaryBloc>().state;
-    final commentState = context.read<CommentBloc>().state;
-    if (diaryState is CurrentDiaryLoaded && commentState is CommentInitial) {
-      int diaryId = diaryState.diaryDetails.id;
-      context.read<CommentBloc>().add(FetchComment(
-          FetchCommentParams(diaryId: diaryId, offset: 0, size: 20)));
-    }
   }
 
   @override
