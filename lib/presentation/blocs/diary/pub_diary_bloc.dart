@@ -133,7 +133,9 @@ class PubDiaryBloc extends Bloc<PubDiaryEvent, PubDiaryState> {
           const FetchPublicDiaryDetailsListParams(
               offset: 0, size: homeDiaryScrollLoadSize));
       result.fold((failure) => emit(PubDiaryFailed(failure)),
-          (diaries) => emit(PubDiaryLoaded(diaryDetails: diaries)));
+          (diaries) => emit(PubDiaryLoaded(
+              diaryDetails: diaries,
+              hasReachedMax: diaries.length < homeDiaryScrollLoadSize)));
     } catch (e) {
       emit(PubDiaryFailed(ExceptionFailure()));
     }
