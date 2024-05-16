@@ -124,7 +124,10 @@ class CurrentDiaryBloc extends Bloc<CurrentDiaryEvent, CurrentDiaryState> {
         result.fold(
             (failure) => debugPrint(failure.toString()),
             (noParams) => emit(CurrentDiaryLoaded(
-                currentState.diaryDetails.copyWith(isLiked: true))));
+                currentState.diaryDetails
+                .copyWith(
+                    likeCount: currentState.diaryDetails.likeCount + 1,
+                    isLiked: true))));
       }
     } catch (e) {}
   }
@@ -138,7 +141,10 @@ class CurrentDiaryBloc extends Bloc<CurrentDiaryEvent, CurrentDiaryState> {
         result.fold(
             (failure) => debugPrint(failure.toString()),
             (noParams) => emit(CurrentDiaryLoaded(
-                currentState.diaryDetails.copyWith(isLiked: false))));
+                currentState.diaryDetails
+                .copyWith(
+                    likeCount: currentState.diaryDetails.likeCount - 1,
+                    isLiked: false))));
       }
     } catch (e) {}
   }

@@ -176,11 +176,11 @@ class DescriptionWidget extends StatelessWidget {
                                   if (data.isLiked == true) {
                                     context.read<CurrentDiaryBloc>().add(
                                         UnlikeDiary(UnlikeDiaryParams(
-                                            diaryId: data.authorId)));
+                                            diaryId: data.id)));
                                   } else {
                                     context.read<CurrentDiaryBloc>().add(
                                         LikeDiary(LikeDiaryParams(
-                                            diaryId: data.authorId)));
+                                            diaryId: data.id)));
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
