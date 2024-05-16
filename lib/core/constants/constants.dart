@@ -7,3 +7,4 @@ const double appBarHeight = 50;
 
 // scroll data load size
 const int homeDiaryScrollLoadSize = 10;
+const int commentPageScrollLoadSize = 10;

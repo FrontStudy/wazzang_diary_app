@@ -23,22 +23,37 @@ class CommentPage extends StatefulWidget {
 
 class _CommentPageState extends State<CommentPage> {
   late TextEditingController _textController;
+  late ScrollController _scrollController;
   bool isKeyboardVisible = false;
 
   @override
   void initState() {
     super.initState();
     _textController = TextEditingController();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
   }
 
   @override
   void dispose() {
     _textController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   bool _validate(String text) {
     return text.isNotEmpty;
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<CommentBloc>().add(FetchMoreComment());
+    }
+  }
+
+  bool get _isBottom {
+    return _scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent;
   }
 
   @override
@@ -70,11 +85,13 @@ class _CommentPageState extends State<CommentPage> {
                   commentState.comments.isNotEmpty &&
                   commentState.comments[0].diaryId !=
                       diaryState.diaryDetails.id) {
+                // 기존의 currentDiary와 댓글의 다이어리 번호가 다를 경우 댓글 새로고침
                 context.read<CommentBloc>().add(FetchComment(FetchCommentParams(
-                    diaryId: diaryState.diaryDetails.id, offset: 0, size: 20)));
+                    diaryId: diaryState.diaryDetails.id, offset: 0, size: 10)));
               } else if (commentState is! CommentLoaded) {
+                // 초기 댓글 목록 데이터 패치
                 context.read<CommentBloc>().add(FetchComment(FetchCommentParams(
-                    diaryId: diaryState.diaryDetails.id, offset: 0, size: 20)));
+                    diaryId: diaryState.diaryDetails.id, offset: 0, size: 10)));
               }
             }
           }, child:
@@ -86,6 +103,8 @@ class _CommentPageState extends State<CommentPage> {
             return SizedBox(
               height: widget.height,
               child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                controller: _scrollController,
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 itemCount: data.length,

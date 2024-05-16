@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../core/error/failures.dart';
 import '../../../domain/entities/comment/comment.dart';
 import '../../../domain/usecases/comment/add_comment_use_case.dart';
@@ -21,10 +24,24 @@ class CommentLoading extends CommentState {
 
 class CommentLoaded extends CommentState {
   final List<Comment> comments;
-  CommentLoaded({required this.comments});
+  final bool hasReachedMax;
+  final bool isLoadingMore;
+
+  CommentLoaded(
+      {required this.comments,
+      this.hasReachedMax = false,
+      this.isLoadingMore = false});
+
+  CommentLoaded copyWith(
+      {List<Comment>? comments, bool? hasReachedMax, bool? isLoadingMore}) {
+    return CommentLoaded(
+        comments: comments ?? this.comments,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+        isLoadingMore: isLoadingMore ?? this.isLoadingMore);
+  }
 
   @override
-  List<Object?> get props => [comments];
+  List<Object?> get props => [comments, hasReachedMax, isLoadingMore];
 }
 
 class CommentFailed extends CommentState {
@@ -47,6 +64,10 @@ class FetchComment extends CommentEvent {
   FetchComment(this.params);
 }
 
+class FetchMoreComment extends CommentEvent {
+  FetchMoreComment();
+}
+
 class CommentBloc extends Bloc<CommentEvent, CommentState> {
   final AddCommentUseCase _addCommentUseCase;
   final FetchCommentUseCase _fetchCommentsUseCase;
@@ -55,36 +76,82 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       : super(CommentInitial()) {
     on<AddComment>(_onAddComment);
     on<FetchComment>(_onFetchComment);
+    on<FetchMoreComment>(_onFetchMoreComment);
   }
 
   void _onAddComment(AddComment event, Emitter<CommentState> emit) async {
     try {
       final diaryId = event.params.diaryId;
       await _addCommentUseCase(event.params);
-      await _fetchComments(diaryId, emit);
+      await _fetchComments(
+          offset: 0,
+          size: commentPageScrollLoadSize,
+          diaryId: diaryId,
+          emit: emit);
     } catch (e) {}
   }
 
   void _onFetchComment(FetchComment event, Emitter<CommentState> emit) async {
     try {
+      print('offset : ${event.params.offset}');
+      print('size: ${event.params.size}');
+
       emit(CommentLoading());
-      final result = await _fetchCommentsUseCase(event.params);
-      result.fold(
-        (failure) => emit(CommentFailed(failure: failure)),
-        (comments) => emit(CommentLoaded(comments: comments)),
-      );
+      await _fetchComments(
+          offset: event.params.offset,
+          size: event.params.size,
+          diaryId: event.params.diaryId,
+          emit: emit);
     } catch (e) {
       debugPrint("_onFetchComment : $e");
     }
   }
 
-  Future<void> _fetchComments(int diaryId, Emitter<CommentState> emit) async {
-    emit(CommentLoading());
+  void _onFetchMoreComment(
+      FetchMoreComment event, Emitter<CommentState> emit) async {
+    try {
+      print("moreComment");
+      final currentState = state;
+      if (currentState is CommentLoaded &&
+          !currentState.hasReachedMax &&
+          !currentState.isLoadingMore) {
+        emit(currentState.copyWith(isLoadingMore: true));
+        await _fetchComments(
+            offset: (currentState.comments.length / commentPageScrollLoadSize)
+                .floor()
+                .toInt(),
+            size: commentPageScrollLoadSize,
+            diaryId: currentState.comments[0].diaryId,
+            emit: emit);
+      }
+    } catch (e) {
+      emit(CommentFailed(failure: ExceptionFailure()));
+    }
+  }
+
+  Future<void> _fetchComments(
+      {required int offset,
+      required int size,
+      required int diaryId,
+      required Emitter<CommentState> emit}) async {
     final result = await _fetchCommentsUseCase(
-        FetchCommentParams(offset: 0, size: 10, diaryId: diaryId));
+        FetchCommentParams(
+        offset: offset, size: commentPageScrollLoadSize, diaryId: diaryId));
     result.fold(
       (failure) => emit(CommentFailed(failure: failure)),
-      (comments) => emit(CommentLoaded(comments: comments)),
+      (comments) {
+        final currentState = state;
+        if (currentState is CommentLoaded) {
+          emit(CommentLoaded(
+              comments: [...currentState.comments, ...comments],
+              hasReachedMax: comments.length < commentPageScrollLoadSize,
+              isLoadingMore: false));
+        } else {
+          emit(CommentLoaded(
+              comments: comments,
+              hasReachedMax: comments.length < commentPageScrollLoadSize));
+        }
+      },
     );
   }
 }

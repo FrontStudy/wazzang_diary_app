@@ -278,7 +278,7 @@ class DescriptionWidget extends StatelessWidget {
                               int diaryId = diaryState.diaryDetails.id;
                               context.read<CommentBloc>().add(FetchComment(
                                   FetchCommentParams(
-                                      diaryId: diaryId, offset: 0, size: 20)));
+                                      diaryId: diaryId, offset: 0, size: 10)));
                             }
                             context
                                 .read<SecondNavigationBarCubit>()
