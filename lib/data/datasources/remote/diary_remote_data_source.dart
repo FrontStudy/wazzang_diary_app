@@ -36,6 +36,8 @@ abstract class DiaryRemoteDataSource {
 
   Future<ResponseModel<DiaryDetailsModel>> fetchDiaryDetails(
       FetchDiaryDetailParams params, String token);
+
+  Future<void> updateStatistics(int diaryId);
 }
 
 class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
@@ -216,6 +218,20 @@ class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
       }
     } catch (e) {
       debugPrint(e.toString());
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<void> updateStatistics(int diaryId) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/pub/diaryStatistic/$diaryId'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
       throw ServerException();
     }
   }

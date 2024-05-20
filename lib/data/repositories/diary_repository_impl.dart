@@ -158,6 +158,7 @@ class DiaryRepositoryImpl extends DiaryRepository {
           final response =
               await remoteDataSource.fetchDiaryDetails(params, token);
           if (response.data != null) {
+            remoteDataSource.updateStatistics(params.diaryId);
             return Right(response.data!.diaryDetails);
           } else {
             return Left(ServerFailure());
