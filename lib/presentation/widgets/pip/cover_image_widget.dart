@@ -50,7 +50,10 @@ class CoverImageWidget extends StatelessWidget {
                           data!.imgUrl!,
                           fit: BoxFit.cover,
                         )
-                        : Container()
+                        : Image.asset(
+                            'assets/images/article_image_placeholder.jpg',
+                            fit: BoxFit.cover,
+                          )
                 ),
               ),
             ),
