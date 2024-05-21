@@ -79,7 +79,8 @@ class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
           Uri.parse('$baseUrl/svc/pubDiaryDetailList').replace(
               queryParameters: {
                 "offset": params.offset.toString(),
-                "size": params.size.toString()
+            "size": params.size.toString(),
+            "sort": params.sort.name
               }),
           headers: {
             'Content-Type': 'application/json',

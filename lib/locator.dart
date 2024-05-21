@@ -45,6 +45,7 @@ import 'presentation/blocs/comment/comment_bloc.dart';
 import 'presentation/blocs/diary/current_diary_bloc.dart';
 import 'presentation/blocs/diary/pub_diary_bloc.dart';
 import 'presentation/blocs/member/member_bloc.dart';
+import 'presentation/blocs/search/search_diary_bloc.dart';
 import 'presentation/blocs/signup/check_email_bloc.dart';
 import 'presentation/blocs/signup/profile_image_bloc.dart';
 
@@ -100,6 +101,7 @@ Future<void> initializeDependencies() async {
       () => PubDiaryBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(
       () => CurrentDiaryBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory(() => SearchDiaryBloc(sl()));
   // Use cases
   sl.registerLazySingleton(() => FetchDiaryDetailUseCase(sl()));
   sl.registerLazySingleton(() => FetchPublicDiaryListUseCase(sl(), sl()));

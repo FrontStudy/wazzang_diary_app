@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:wazzang_diary/core/error/failures.dart';
 
+import '../../../core/enums/sort_type.dart';
 import '../../../core/usecases/usecase.dart';
 import '../../entities/diary/diary_details.dart';
 import '../../repositories/diary/diary_repository.dart';
@@ -22,7 +23,8 @@ class FetchPublicDiaryDetailListUseCase
 class FetchPublicDiaryDetailsListParams {
   final int offset;
   final int size;
+  final SortType sort;
 
   const FetchPublicDiaryDetailsListParams(
-      {required this.offset, required this.size});
+      {required this.offset, required this.size, this.sort = SortType.latest});
 }
