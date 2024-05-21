@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../../core/constants/constants.dart';
 import '../../../core/routes/main_router.dart';
+import '../../../core/themes/theme.dart';
 import '../../blocs/member/member_bloc.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -11,18 +13,24 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: lightBlueColor,
       elevation: 0,
       scrolledUnderElevation: 0,
-      leadingWidth: 100,
-      leading: const Row(
+      leadingWidth: 200,
+      leading: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(
             '우리의 일기',
-            style: TextStyle(color: Colors.black, fontSize: 18),
+            style: GoogleFonts.gamjaFlower(
+              textStyle: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
