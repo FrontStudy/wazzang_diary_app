@@ -4,6 +4,9 @@ import 'package:wazzang_diary/domain/entities/diary/diary_details.dart';
 
 import '../../../core/enums/sort_type.dart';
 import '../../../core/themes/theme.dart';
+import '../../../domain/usecases/diary/fetch_diary_detail_use_case.dart';
+import '../../blocs/diary/current_diary_bloc.dart';
+import '../../blocs/main/drag_route_cubit.dart';
 import '../../blocs/search/search_diary_bloc.dart';
 
 class SearchDiaryListView extends StatefulWidget {
@@ -96,61 +99,70 @@ class _SearchDiaryListViewState extends State<SearchDiaryListView> {
       required double contentPadding,
       required double contentWidth,
       required DiaryDetails diaryDetail}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10, horizontal: horizontalMargin),
-      height: height,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // 그림자 색상과 투명도
-              spreadRadius: 1, // 그림자의 확산 정도
-              blurRadius: 5, // 블러 효과의 반경
-              offset: const Offset(0, 3), // 수평 및 수직 방향으로의 그림자 오프셋
-            )
-          ]),
-      child: Row(
-        children: [
-          SizedBox(
-            width: height,
-            child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    bottomLeft: Radius.circular(20.0)),
-                child: Image.asset(
-                  'assets/images/article_profile_sample.jpg',
-                  fit: BoxFit.cover,
-                  height: height,
-                )),
-          ),
-          Padding(
-            padding: EdgeInsets.all(contentPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: contentWidth,
-                  child: Text(diaryDetail.title,
-                      maxLines: 1,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                ),
-                SizedBox(
-                  width: contentWidth,
-                  child: Text(diaryDetail.content,
-                      maxLines: 2,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                )
-              ],
+    return GestureDetector(
+      onTap: () {
+        context.read<DragRouteCubit>().handlePipTap();
+        context
+            .read<CurrentDiaryBloc>()
+            .add(FetchDiary(FetchDiaryDetailParams(diaryId: diaryDetail.id)));
+      },
+      child: Container(
+        margin:
+            EdgeInsets.symmetric(vertical: 10, horizontal: horizontalMargin),
+        height: height,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5), // 그림자 색상과 투명도
+                spreadRadius: 1, // 그림자의 확산 정도
+                blurRadius: 5, // 블러 효과의 반경
+                offset: const Offset(0, 3), // 수평 및 수직 방향으로의 그림자 오프셋
+              )
+            ]),
+        child: Row(
+          children: [
+            SizedBox(
+              width: height,
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      bottomLeft: Radius.circular(20.0)),
+                  child: Image.asset(
+                    'assets/images/article_profile_sample.jpg',
+                    fit: BoxFit.cover,
+                    height: height,
+                  )),
             ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.all(contentPadding),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    width: contentWidth,
+                    child: Text(diaryDetail.title,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                  ),
+                  SizedBox(
+                    width: contentWidth,
+                    child: Text(diaryDetail.content,
+                        maxLines: 2,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
