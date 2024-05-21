@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wazzang_diary/domain/entities/diary/diary_details.dart';
 
+import '../../../core/themes/theme.dart';
 import '../../../core/utils/widget_position.dart';
 import '../../blocs/diary/current_diary_bloc.dart';
 import '../../blocs/main/drag_route_cubit.dart';
@@ -45,9 +46,11 @@ class CoverImageWidget extends StatelessWidget {
                 height: positions[index].height,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: data?.imgUrl != null
+                    child: data == null
+                        ? const ColoredBox(color: lightBlueColor)
+                        : data.imgUrl != null
                       ? Image.network(
-                          data!.imgUrl!,
+                                data.imgUrl!,
                           fit: BoxFit.cover,
                         )
                         : Image.asset(
