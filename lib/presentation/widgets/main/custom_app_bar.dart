@@ -27,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+        // IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         InkWell(
           onTap: () {
             Navigator.of(context).pushNamed(AppRouter.account);
