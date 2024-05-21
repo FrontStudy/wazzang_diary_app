@@ -133,11 +133,17 @@ class _SearchDiaryListViewState extends State<SearchDiaryListView> {
                   borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(20.0),
                       bottomLeft: Radius.circular(20.0)),
-                  child: Image.asset(
-                    'assets/images/article_profile_sample.jpg',
-                    fit: BoxFit.cover,
-                    height: height,
-                  )),
+                  child: diaryDetail.imgUrl != null
+                      ? Image.network(
+                          diaryDetail.imgUrl!,
+                          fit: BoxFit.cover,
+                          height: height,
+                        )
+                      : Image.asset(
+                          'assets/images/article_image_placeholder.jpg',
+                          fit: BoxFit.cover,
+                          height: height,
+                        )),
             ),
             Padding(
               padding: EdgeInsets.all(contentPadding),
