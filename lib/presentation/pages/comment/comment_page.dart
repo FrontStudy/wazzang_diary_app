@@ -260,6 +260,8 @@ class _CommentPageState extends State<CommentPage> {
                                   AddCommentParams(
                                       content: _textController.text,
                                       diaryId: diaryState.diaryDetails.id)));
+                              _textController.clear();
+                              FocusScope.of(context).unfocus();
                             }
                           },
                         ),

@@ -83,12 +83,20 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
     try {
       final diaryId = event.params.diaryId;
       await _addCommentUseCase(event.params);
-      await _fetchComments(
-          offset: 0,
-          size: commentPageScrollLoadSize,
-          diaryId: diaryId,
-          emit: emit);
-    } catch (e) {}
+      emit(CommentLoading());
+      final result = await _fetchCommentsUseCase(FetchCommentParams(
+          offset: 0, size: commentPageScrollLoadSize, diaryId: diaryId));
+      result.fold(
+        (failure) => emit(CommentFailed(failure: failure)),
+        (comments) {
+          emit(CommentLoaded(
+              comments: comments,
+              hasReachedMax: comments.length < commentPageScrollLoadSize));
+        },
+      );
+    } catch (e) {
+      emit(CommentFailed(failure: ExceptionFailure()));
+    }
   }
 
   void _onFetchComment(FetchComment event, Emitter<CommentState> emit) async {
@@ -134,8 +142,7 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
       required int size,
       required int diaryId,
       required Emitter<CommentState> emit}) async {
-    final result = await _fetchCommentsUseCase(
-        FetchCommentParams(
+    final result = await _fetchCommentsUseCase(FetchCommentParams(
         offset: offset, size: commentPageScrollLoadSize, diaryId: diaryId));
     result.fold(
       (failure) => emit(CommentFailed(failure: failure)),
