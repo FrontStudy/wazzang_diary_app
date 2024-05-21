@@ -12,6 +12,7 @@ import '../../../domain/usecases/follow/unfollow_use_case.dart';
 import '../../blocs/diary/pub_diary_bloc.dart';
 import '../../blocs/diary/current_diary_bloc.dart' as current;
 import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 import '../../pages/common/gradient_widget.dart';
 
 class HomeDiaryListView extends StatefulWidget {
@@ -106,6 +107,9 @@ class _HomeDiaryListViewState extends State<HomeDiaryListView> {
     return GestureDetector(
       onTap: () {
         context.read<DragRouteCubit>().handlePipTap();
+        context
+            .read<SegmentToggleCubit>()
+            .update(<SegmentToggle>{SegmentToggle.image});
         context.read<current.CurrentDiaryBloc>().add(current.FetchDiary(
             FetchDiaryDetailParams(diaryId: diaryDetails.id)));
       },

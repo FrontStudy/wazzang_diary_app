@@ -7,6 +7,7 @@ import '../../../core/themes/theme.dart';
 import '../../../domain/usecases/diary/fetch_diary_detail_use_case.dart';
 import '../../blocs/diary/current_diary_bloc.dart';
 import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 import '../../blocs/search/search_diary_bloc.dart';
 
 class SearchDiaryListView extends StatefulWidget {
@@ -102,6 +103,9 @@ class _SearchDiaryListViewState extends State<SearchDiaryListView> {
     return GestureDetector(
       onTap: () {
         context.read<DragRouteCubit>().handlePipTap();
+        context
+            .read<SegmentToggleCubit>()
+            .update(<SegmentToggle>{SegmentToggle.image});
         context
             .read<CurrentDiaryBloc>()
             .add(FetchDiary(FetchDiaryDetailParams(diaryId: diaryDetail.id)));
