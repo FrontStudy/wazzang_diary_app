@@ -30,6 +30,21 @@ class DescriptionWidget extends StatelessWidget {
     DiaryDetails? data,
   });
 
+  void _openCommentPage({required BuildContext context, DiaryDetails? data}) {
+    if (data == null) return;
+    if (context.read<SecondNavigationBarCubit>().controller!.index == 1) {
+      context.read<DragRouteCubit>().startSecondScaleAnimation(2);
+    } else {
+      final diaryState = context.read<CurrentDiaryBloc>().state;
+      if (diaryState is CurrentDiaryLoaded) {
+        int diaryId = diaryState.diaryDetails.id;
+        context.read<CommentBloc>().add(FetchComment(
+            FetchCommentParams(diaryId: diaryId, offset: 0, size: 10)));
+      }
+      context.read<SecondNavigationBarCubit>().controller!.animateTo(1);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -179,8 +194,8 @@ class DescriptionWidget extends StatelessWidget {
                                             diaryId: data.id)));
                                   } else {
                                     context.read<CurrentDiaryBloc>().add(
-                                        LikeDiary(LikeDiaryParams(
-                                            diaryId: data.id)));
+                                        LikeDiary(
+                                            LikeDiaryParams(diaryId: data.id)));
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -262,29 +277,7 @@ class DescriptionWidget extends StatelessWidget {
                     height: 90,
                     child: ElevatedButton(
                         onPressed: () {
-                          if (data == null) return;
-                          if (context
-                                  .read<SecondNavigationBarCubit>()
-                                  .controller!
-                                  .index ==
-                              1) {
-                            context
-                                .read<DragRouteCubit>()
-                                .startSecondScaleAnimation(2);
-                          } else {
-                            final diaryState =
-                                context.read<CurrentDiaryBloc>().state;
-                            if (diaryState is CurrentDiaryLoaded) {
-                              int diaryId = diaryState.diaryDetails.id;
-                              context.read<CommentBloc>().add(FetchComment(
-                                  FetchCommentParams(
-                                      diaryId: diaryId, offset: 0, size: 10)));
-                            }
-                            context
-                                .read<SecondNavigationBarCubit>()
-                                .controller!
-                                .animateTo(1);
-                          }
+                          _openCommentPage(data: data, context: context);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(

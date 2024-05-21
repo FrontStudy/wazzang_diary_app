@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../domain/entities/diary/diary_details.dart';
+import '../../../domain/usecases/comment/fetch_comment_use_case.dart';
 import '../../../domain/usecases/diary/add_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/fetch_diary_detail_use_case.dart';
 import '../../../domain/usecases/diary/like_diary_use_case.dart';
@@ -9,9 +10,11 @@ import '../../../domain/usecases/diary/remove_bookmark_use_case.dart';
 import '../../../domain/usecases/diary/unlike_diary_use_case.dart';
 import '../../../domain/usecases/follow/follow_use_case.dart';
 import '../../../domain/usecases/follow/unfollow_use_case.dart';
+import '../../blocs/comment/comment_bloc.dart';
 import '../../blocs/diary/pub_diary_bloc.dart';
 import '../../blocs/diary/current_diary_bloc.dart' as current;
 import '../../blocs/main/drag_route_cubit.dart';
+import '../../blocs/main/second_navigation_bar_cubit.dart';
 import '../../blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 import '../../pages/common/gradient_widget.dart';
 
@@ -67,6 +70,21 @@ class _HomeDiaryListViewState extends State<HomeDiaryListView> {
     } else {
       int years = difference.inDays ~/ 365;
       return "$years년 전";
+    }
+  }
+
+  void _openCommentPage({required BuildContext context, DiaryDetails? data}) {
+    if (data == null) return;
+    if (context.read<SecondNavigationBarCubit>().controller!.index == 1) {
+      context.read<DragRouteCubit>().startSecondScaleAnimation(2);
+    } else {
+      final diaryState = context.read<current.CurrentDiaryBloc>().state;
+      if (diaryState is current.CurrentDiaryLoaded) {
+        int diaryId = diaryState.diaryDetails.id;
+        context.read<CommentBloc>().add(FetchComment(
+            FetchCommentParams(diaryId: diaryId, offset: 0, size: 10)));
+      }
+      context.read<SecondNavigationBarCubit>().controller!.animateTo(1);
     }
   }
 
@@ -288,6 +306,23 @@ class _HomeDiaryListViewState extends State<HomeDiaryListView> {
                                 height: 30,
                                 width: 30,
                                 child: GestureDetector(
+                                  onTap: () {
+                                    context
+                                        .read<DragRouteCubit>()
+                                        .handlePipTap();
+                                    context.read<SegmentToggleCubit>().update(
+                                        <SegmentToggle>{SegmentToggle.image});
+                                    context
+                                        .read<current.CurrentDiaryBloc>()
+                                        .add(current.FetchDiary(
+                                            FetchDiaryDetailParams(
+                                                diaryId: diaryDetails.id)));
+                                    Future.delayed(
+                                        const Duration(milliseconds: 400),
+                                        () => _openCommentPage(
+                                            context: context,
+                                            data: diaryDetails));
+                                  },
                                   child: const Icon(Icons.textsms_outlined),
                                 )),
                           ],
@@ -348,13 +383,28 @@ class _HomeDiaryListViewState extends State<HomeDiaryListView> {
                           ],
                         ),
                         const SizedBox(height: 2),
-                        SizedBox(
-                            height: 20,
-                            child: Text(
-                              '댓글 ${diaryDetails.commentCount}개 모두 보기',
-                              style: const TextStyle(
-                                  color: Colors.black54, fontSize: 13.0),
-                            )),
+                        GestureDetector(
+                          onTap: () {
+                            context.read<DragRouteCubit>().handlePipTap();
+                            context
+                                .read<SegmentToggleCubit>()
+                                .update(<SegmentToggle>{SegmentToggle.image});
+                            context.read<current.CurrentDiaryBloc>().add(
+                                current.FetchDiary(FetchDiaryDetailParams(
+                                    diaryId: diaryDetails.id)));
+                            Future.delayed(
+                                const Duration(milliseconds: 400),
+                                () => _openCommentPage(
+                                    context: context, data: diaryDetails));
+                          },
+                          child: SizedBox(
+                              height: 20,
+                              child: Text(
+                                '댓글 ${diaryDetails.commentCount}개 모두 보기',
+                                style: const TextStyle(
+                                    color: Colors.black54, fontSize: 13.0),
+                              )),
+                        ),
                       ],
                     ),
                   )
