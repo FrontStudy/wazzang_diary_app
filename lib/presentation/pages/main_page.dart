@@ -10,6 +10,7 @@ import '../widgets/main/second_bottom_navi_bar.dart';
 import 'home/home_page.dart';
 import 'pip/pip_page.dart';
 import 'search/search_page.dart';
+import 'shared/shared_diary_page.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -24,7 +25,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   final List<Widget> _pages = [
     const HomePage(),
     const SearchPage(),
-    const SearchPage(),
+    const SharedDiaryPage(),
     const SearchPage()
   ];
 
