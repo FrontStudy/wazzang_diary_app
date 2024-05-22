@@ -112,7 +112,7 @@ class _SearchDiaryListViewState extends State<SearchDiaryListView> {
       },
       child: Container(
         margin:
-            EdgeInsets.symmetric(vertical: 10, horizontal: horizontalMargin),
+            EdgeInsets.fromLTRB(horizontalMargin, 0, horizontalMargin, 10),
         height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
