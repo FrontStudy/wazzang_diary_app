@@ -9,3 +9,4 @@ const double appBarHeight = 50;
 const int homeDiaryScrollLoadSize = 10;
 const int commentPageScrollLoadSize = 10;
 const int searchPageScrollLoadSize = 10;
+const int sharedDiaryPageScrollLoadSize = 10;

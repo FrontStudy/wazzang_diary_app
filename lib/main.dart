@@ -15,6 +15,7 @@ import 'locator.dart' as di;
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/pip/segment_toggle/segment_toggle_cubit.dart';
 import 'presentation/blocs/search/search_diary_bloc.dart';
+import 'presentation/blocs/shared_diary/shared_diary_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,7 +46,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<PubDiaryBloc>()),
         BlocProvider(create: (_) => di.sl<CurrentDiaryBloc>()),
         BlocProvider(create: (_) => di.sl<CommentBloc>()),
-        BlocProvider(create: (_) => di.sl<SearchDiaryBloc>())
+        BlocProvider(create: (_) => di.sl<SearchDiaryBloc>()),
+        BlocProvider(create: (_) => di.sl<SharedDiaryBloc>()),
       ],
       child: KeyboardDismisser(
         gestures: const [GestureType.onTap],

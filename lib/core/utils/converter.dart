@@ -15,3 +15,23 @@ String parseToKorean(int number) {
     return number.toStringAsFixed(0);
   }
 }
+
+String parseToTimeAgo(String dateTimeString) {
+  final DateTime givenTime = DateTime.parse(dateTimeString);
+  final DateTime currentTime = DateTime.now();
+  final Duration difference = currentTime.difference(givenTime);
+
+  if (difference.inSeconds < 60) {
+    return '${difference.inSeconds}초 전';
+  } else if (difference.inMinutes < 60) {
+    return '${difference.inMinutes}분 전';
+  } else if (difference.inHours < 24) {
+    return '${difference.inHours}시간 전';
+  } else if (difference.inDays < 30) {
+    return '${difference.inDays}일 전';
+  } else if (difference.inDays < 365) {
+    return '${difference.inDays ~/ 30}달 전';
+  } else {
+    return '${difference.inDays ~/ 365}년 전';
+  }
+}

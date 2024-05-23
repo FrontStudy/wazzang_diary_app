@@ -30,6 +30,7 @@ import 'domain/usecases/diary/add_bookmark_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_list_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_detail_use_case.dart';
 import 'domain/usecases/diary/fetch_diary_list_use_case.dart';
+import 'domain/usecases/diary/fetch_shared_diary_detail_list_use_case.dart';
 import 'domain/usecases/diary/like_diary_use_case.dart';
 import 'domain/usecases/diary/remove_bookmark_use_case.dart';
 import 'domain/usecases/diary/unlike_diary_use_case.dart';
@@ -46,6 +47,7 @@ import 'presentation/blocs/diary/current_diary_bloc.dart';
 import 'presentation/blocs/diary/pub_diary_bloc.dart';
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/search/search_diary_bloc.dart';
+import 'presentation/blocs/shared_diary/shared_diary_bloc.dart';
 import 'presentation/blocs/signup/check_email_bloc.dart';
 import 'presentation/blocs/signup/profile_image_bloc.dart';
 
@@ -102,6 +104,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory(
       () => CurrentDiaryBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory(() => SearchDiaryBloc(sl()));
+  sl.registerFactory(() => SharedDiaryBloc(sl(), sl(), sl()));
   // Use cases
   sl.registerLazySingleton(() => FetchDiaryDetailUseCase(sl()));
   sl.registerLazySingleton(() => FetchPublicDiaryListUseCase(sl(), sl()));
@@ -112,6 +115,7 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => RemoveBookmarkUseCase(sl()));
   sl.registerLazySingleton(() => FollowUseCase(sl()));
   sl.registerLazySingleton(() => UnfollowUseCase(sl()));
+  sl.registerLazySingleton(() => FetchSharedDiaryDetailListUseCase(sl()));
   //Repositories
   sl.registerLazySingleton<DiaryRepository>(() => DiaryRepositoryImpl(
       networkInfo: sl(), remoteDataSource: sl(), memberLocalDataSource: sl()));
