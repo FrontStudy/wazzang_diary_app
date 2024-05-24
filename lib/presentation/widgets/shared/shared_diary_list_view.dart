@@ -222,16 +222,16 @@ class _SharedDiaryListViewState extends State<SharedDiaryListView> {
                           width: 90,
                           child: const Text("♡ Like"),
                           onPressed: () {
-                            context.read<SharedDiaryBloc>().add(UnlikeDiary(
-                                UnlikeDiaryParams(diaryId: diaryDetail.id)));
+                            context.read<SharedDiaryBloc>().add(LikeDiary(
+                                LikeDiaryParams(diaryId: diaryDetail.id)));
                           },
                         )
                       : SizedBox(
                           width: 90,
                           child: OutlinedButton(
                             onPressed: () {
-                              context.read<SharedDiaryBloc>().add(LikeDiary(
-                                  LikeDiaryParams(diaryId: diaryDetail.id)));
+                              context.read<SharedDiaryBloc>().add(UnlikeDiary(
+                                  UnlikeDiaryParams(diaryId: diaryDetail.id)));
                             },
                             style: OutlinedButton.styleFrom(
                                 side: const BorderSide(
