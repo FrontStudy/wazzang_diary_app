@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wazzang_diary/presentation/blocs/main/bottom_navigation_bar_cubit.dart';
 
 import '../../../core/themes/theme.dart';
+import '../../blocs/member/member_bloc.dart';
 
 class FirstBottomNaviBar extends StatelessWidget {
   const FirstBottomNaviBar({required this.height, super.key});
@@ -10,8 +11,9 @@ class FirstBottomNaviBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final tabBarItemWidth = screenWidth / 4;
     return Container(
-      padding: const EdgeInsets.only(top: 8.0),
       color: lightBlueColor,
       height: height,
       width: MediaQuery.of(context).size.width,
@@ -25,6 +27,7 @@ class FirstBottomNaviBar extends StatelessWidget {
             _tabBarItem(
                 context: context,
                 height: height,
+                width: tabBarItemWidth,
                 index: 0,
                 icon: Icons.home,
                 label: '홈',
@@ -33,6 +36,7 @@ class FirstBottomNaviBar extends StatelessWidget {
             _tabBarItem(
                 context: context,
                 height: height,
+                width: tabBarItemWidth,
                 index: 1,
                 icon: Icons.search,
                 label: '돌아보기',
@@ -41,14 +45,16 @@ class FirstBottomNaviBar extends StatelessWidget {
             _tabBarItem(
                 context: context,
                 height: height,
+                width: tabBarItemWidth,
                 index: 2,
                 icon: Icons.people_alt_outlined,
                 label: '공유일기',
                 link: '/Search',
                 color: state == 2 ? activeIconColor : iconColor),
-            _tabBarItem(
+            _tabBarItemWithOnlyImage(
                 context: context,
                 height: height,
+                width: tabBarItemWidth,
                 index: 3,
                 icon: Icons.person,
                 label: '내 일기',
@@ -63,24 +69,85 @@ class FirstBottomNaviBar extends StatelessWidget {
   Widget _tabBarItem(
       {required BuildContext context,
       required double height,
+      required double width,
       required int index,
       required IconData icon,
       required String label,
       required String link,
-      Color? color}) {
-    return SizedBox(
-      height: height,
-      child: GestureDetector(
-        onTap: () {
-          // context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
-          context.read<BottomNavigationBarCubit>().changeIndex(index);
-        },
+      required Color color}) {
+    return InkWell(
+      onTap: () {
+        // context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
+        context.read<BottomNavigationBarCubit>().changeIndex(index);
+      },
+      child: Container(
+        padding: const EdgeInsets.only(top: 10),
+        width: width,
         child: Column(
           children: [
-            Flexible(child: Icon(icon, color: color)),
+            Flexible(
+                child: Icon(
+              icon,
+              color: color,
+              size: 25,
+            )),
             Flexible(
                 child:
                     Text(label, style: TextStyle(color: color, fontSize: 10))),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _tabBarItemWithOnlyImage({
+    required BuildContext context,
+    required double height,
+    required double width,
+    required int index,
+    required IconData icon,
+    required String label,
+    required String link,
+    required Color color,
+  }) {
+    return InkWell(
+      onTap: () {
+        // context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
+        context.read<BottomNavigationBarCubit>().changeIndex(index);
+      },
+      child: Container(
+        padding: const EdgeInsets.only(top: 12),
+        width: width,
+        child: Column(
+          children: [
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: color, width: 3),
+                    borderRadius: BorderRadius.circular(999)),
+                child: ClipOval(
+                  child: Container(
+                      width: 26,
+                      height: 26,
+                      color: Colors.blue,
+                      child: BlocBuilder<MemberBloc, MemberState>(
+                          builder: (context, state) {
+                        if (state is MemberLogged &&
+                            state.member.profilePicture != null) {
+                          return Image.network(
+                            state.member.profilePicture!,
+                            fit: BoxFit.cover,
+                          );
+                        } else {
+                          return Image.asset(
+                            'assets/images/person_placeholder.png',
+                            fit: BoxFit.cover,
+                          );
+                        }
+                      })),
+                ),
+              ),
+            ),
           ],
         ),
       ),
