@@ -9,6 +9,7 @@ import '../widgets/main/first_bottom_navi_bar.dart';
 import '../widgets/main/second_bottom_navi_bar.dart';
 import 'home/home_page.dart';
 import 'pip/pip_page.dart';
+import 'profile/my_profile_page.dart';
 import 'search/search_page.dart';
 import 'shared/shared_diary_page.dart';
 
@@ -26,7 +27,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     const HomePage(),
     const SearchPage(),
     const SharedDiaryPage(),
-    const SearchPage()
+    const MyProfilePage(),
   ];
 
   @override
