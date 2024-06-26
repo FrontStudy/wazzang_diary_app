@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wazzang_diary/core/error/failures.dart';
 import 'package:wazzang_diary/core/usecases/usecase.dart';
 import 'package:wazzang_diary/domain/entities/member/member.dart';
+import 'package:wazzang_diary/domain/entities/member/member_detail_info.dart';
 import 'package:wazzang_diary/domain/usecases/member/sign_in_usecase.dart';
 import 'package:wazzang_diary/domain/usecases/member/sign_up_usecase.dart';
 import '../../core/network/network_info.dart';
@@ -99,6 +100,28 @@ class MemberRepositoryImpl implements MemberRepository {
       return responseModel.data;
     } catch (_) {
       return null;
+    }
+  }
+
+  @override
+  Future<Either<Failure, MemberDetailInfo>> getOwnMemberDetailInfo() async {
+    if (!await networkInfo.isConnected) {
+      return Left(NetworkFailure());
+    }
+    if (!await localDataSource.isTokenAvailable()) {
+      return Left(TokenFailure());
+    }
+    String token = await localDataSource.getToken();
+    try {
+      final remoteResponse =
+          await remoteDataSoure.getOwnMemberDetailInfo(token);
+      if (remoteResponse.data != null) {
+        return Right(remoteResponse.data!.memberDetailInfo);
+      } else {
+        return Left(ServerFailure());
+      }
+    } on Failure catch (failure) {
+      return Left(failure);
     }
   }
 }

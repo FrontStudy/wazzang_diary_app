@@ -7,6 +7,7 @@ import '../../../core/constants/strings.dart';
 import '../../../core/error/exceptions.dart';
 import '../../../core/error/failures.dart';
 import '../../models/member/authentication_response_model.dart';
+import '../../models/member/detail_member_info_model.dart';
 import '../../models/member/member_model.dart';
 import '../../models/response_model.dart';
 
@@ -16,6 +17,9 @@ abstract class MemberRemoteDataSource {
   Future<AuthenticationResponseModel> signUp(SignUpParams params);
 
   Future<ResponseModel<MemberModel>> getMemberByid(int i);
+
+  Future<ResponseModel<MemberDetailInfoModel>> getOwnMemberDetailInfo(
+      String token);
 }
 
 class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
@@ -85,6 +89,28 @@ class MemberRemoteDataSourceImpl implements MemberRemoteDataSource {
         return ResponseModel.fromJsonWithoutData(responseData);
       } else {
         return ResponseModel.fromJsonMap(responseData, MemberModel.fromJson);
+      }
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<ResponseModel<MemberDetailInfoModel>> getOwnMemberDetailInfo(
+      String token) async {
+    final response = await client
+        .get(Uri.parse('$baseUrl/svc/member/me/detailInfo'), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+      if (responseData['data'] == null) {
+        throw ServerException();
+      } else {
+        return ResponseModel.fromJsonMap(
+            responseData, MemberDetailInfoModel.fromJson);
       }
     } else {
       throw ServerException();
