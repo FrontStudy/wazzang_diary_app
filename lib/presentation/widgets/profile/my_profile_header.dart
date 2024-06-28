@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/utils/converter.dart';
+import '../../blocs/profile/profile_bloc.dart';
 
 class MyProfileHeader extends StatelessWidget {
   const MyProfileHeader({super.key});
@@ -25,12 +29,13 @@ class MyProfileHeader extends StatelessWidget {
               verticalPadding: headerVerticalPadding),
           const SizedBox(width: gap),
           _countingWidget(
-              height: profileImageWidth,
-              width: screenWidth -
-                  headerHorizontalPadding * 2 -
-                  profileImageWidth -
-                  gap,
-              topPadding: headerVerticalPadding),
+            height: profileImageWidth,
+            width: screenWidth -
+                headerHorizontalPadding * 2 -
+                profileImageWidth -
+                gap,
+            topPadding: headerVerticalPadding,
+          ),
         ],
       ),
     );
@@ -112,28 +117,36 @@ class MyProfileHeader extends StatelessWidget {
     required double width,
     required double topPadding,
   }) {
-    return Container(
-      margin: EdgeInsets.only(top: topPadding),
-      height: height,
-      width: width,
-      child: const Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text('0'), Text('게시물')],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text('0'), Text('게시물')],
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [Text('0'), Text('게시물')],
-          ),
-        ],
-      ),
-    );
+    return BlocBuilder<ProfileBloc, ProfileState>(builder: (context, state) {
+      String postCnt = "0", followerCnt = "0", followingCnt = "0";
+      if (state is ProfileLoaded) {
+        postCnt = parseToKorean(state.info.diaryCount);
+        followerCnt = parseToKorean(state.info.followerCount);
+        followingCnt = parseToKorean(state.info.followingCount);
+      }
+      return Container(
+        margin: EdgeInsets.only(top: topPadding),
+        height: height,
+        width: width,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text(postCnt), const Text('posts')],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text(followerCnt), const Text('followers')],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text(followingCnt), const Text('following')],
+            ),
+          ],
+        ),
+      );
+    });
   }
 }

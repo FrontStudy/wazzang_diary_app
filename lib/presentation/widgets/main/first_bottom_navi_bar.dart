@@ -4,6 +4,7 @@ import 'package:wazzang_diary/presentation/blocs/main/bottom_navigation_bar_cubi
 
 import '../../../core/themes/theme.dart';
 import '../../blocs/member/member_bloc.dart';
+import '../../blocs/profile/profile_bloc.dart';
 
 class FirstBottomNaviBar extends StatelessWidget {
   const FirstBottomNaviBar({required this.height, super.key});
@@ -59,7 +60,12 @@ class FirstBottomNaviBar extends StatelessWidget {
                 icon: Icons.person,
                 label: '내 일기',
                 link: '/Search',
-                color: state == 3 ? activeIconColor : iconColor),
+                color: state == 3 ? activeIconColor : iconColor,
+                onTap: () {
+                  context
+                      .read<ProfileBloc>()
+                      .add(FetchOwnMemberInfoAndFirstDiaries());
+                }),
           ],
         );
       }),
@@ -100,19 +106,19 @@ class FirstBottomNaviBar extends StatelessWidget {
     );
   }
 
-  Widget _tabBarItemWithOnlyImage({
-    required BuildContext context,
-    required double height,
-    required double width,
-    required int index,
-    required IconData icon,
-    required String label,
-    required String link,
-    required Color color,
-  }) {
+  Widget _tabBarItemWithOnlyImage(
+      {required BuildContext context,
+      required double height,
+      required double width,
+      required int index,
+      required IconData icon,
+      required String label,
+      required String link,
+      required Color color,
+      VoidCallback? onTap}) {
     return InkWell(
       onTap: () {
-        // context.read<NavigatorKeyCubit>().state.currentState!.pushNamed(link);
+        if (onTap != null) onTap();
         context.read<BottomNavigationBarCubit>().changeIndex(index);
       },
       child: Container(
