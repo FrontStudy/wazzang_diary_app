@@ -14,6 +14,7 @@ import 'presentation/blocs/main/second_navigation_bar_cubit.dart';
 import 'locator.dart' as di;
 import 'presentation/blocs/member/member_bloc.dart';
 import 'presentation/blocs/pip/segment_toggle/segment_toggle_cubit.dart';
+import 'presentation/blocs/profile/profile_bloc.dart';
 import 'presentation/blocs/search/search_diary_bloc.dart';
 import 'presentation/blocs/shared_diary/shared_diary_bloc.dart';
 
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => di.sl<CommentBloc>()),
         BlocProvider(create: (_) => di.sl<SearchDiaryBloc>()),
         BlocProvider(create: (_) => di.sl<SharedDiaryBloc>()),
+        BlocProvider(create: (_) => di.sl<ProfileBloc>())
       ],
       child: KeyboardDismisser(
         gestures: const [GestureType.onTap],
