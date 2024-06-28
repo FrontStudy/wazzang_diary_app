@@ -8,6 +8,7 @@ import 'package:wazzang_diary/domain/usecases/diary/add_bookmark_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_detail_use_case.dart';
 
 import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_list_use_case.dart';
+import 'package:wazzang_diary/domain/usecases/diary/fetch_own_diary_list_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/fetch_shared_diary_detail_list_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/remove_bookmark_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/unlike_diary_use_case.dart';
@@ -194,6 +195,24 @@ class DiaryRepositoryImpl extends DiaryRepository {
       }
     } else {
       return Left(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Diary>>> fetchOwnDiaries(
+      FetchOwnDiaryListParams params) async {
+    if (!await networkInfo.isConnected) return Left(NetworkFailure());
+    if (!await memberLocalDataSource.isTokenAvailable()) {
+      return Left(TokenFailure());
+    }
+
+    String token = await memberLocalDataSource.getToken();
+    try {
+      final response = await remoteDataSource.getOwnDiaries(params, token);
+
+      return Right(response.data?.toEntityList() ?? []);
+    } on Failure catch (failure) {
+      return Left(failure);
     }
   }
 }

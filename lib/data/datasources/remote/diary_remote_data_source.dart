@@ -6,6 +6,7 @@ import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_detail_use_case.
 import 'package:wazzang_diary/domain/usecases/diary/fetch_diary_list_use_case.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:wazzang_diary/domain/usecases/diary/fetch_own_diary_list_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/fetch_shared_diary_detail_list_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/like_diary_use_case.dart';
 import 'package:wazzang_diary/domain/usecases/diary/remove_bookmark_use_case.dart';
@@ -42,6 +43,9 @@ abstract class DiaryRemoteDataSource {
 
   Future<ResponseModel<DiaryDetailsListModel>> getSharedDiaryDetails(
       FetchSharedDiaryDetailListParams params, String token);
+
+  Future<ResponseModel<DiaryListModel>> getOwnDiaries(
+      FetchOwnDiaryListParams params, String token);
 }
 
 class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
@@ -240,7 +244,7 @@ class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
       throw ServerException();
     }
   }
-  
+
   @override
   Future<ResponseModel<DiaryDetailsListModel>> getSharedDiaryDetails(
       FetchSharedDiaryDetailListParams params, String token) async {
@@ -261,6 +265,34 @@ class DiaryRemoteDataSourceImpl extends DiaryRemoteDataSource {
             ? ResponseModel.fromJsonWithoutData(responseData)
             : ResponseModel.fromJsonList(
                 responseData, DiaryDetailsListModel.fromJsonList);
+      } else {
+        throw ServerException();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      throw ServerException();
+    }
+  }
+  
+  @override
+  Future<ResponseModel<DiaryListModel>> getOwnDiaries(
+      FetchOwnDiaryListParams params, String token) async {
+    try {
+      final response = await client.get(
+          Uri.parse('$baseUrl/svc/me/diaryList').replace(queryParameters: {
+            "offset": params.offset.toString(),
+            "size": params.size.toString(),
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          });
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == 200) {
+        return responseData['data'] == null
+            ? ResponseModel.fromJsonWithoutData(responseData)
+            : ResponseModel.fromJsonList(
+                responseData, DiaryListModel.fromJsonList);
       } else {
         throw ServerException();
       }
