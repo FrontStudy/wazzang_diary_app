@@ -40,27 +40,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Navigator.of(context).pushNamed(AppRouter.account);
           },
           borderRadius: BorderRadius.circular(1000),
-          child: ClipOval(
-            child: Container(
-                width: 30, // 이미지의 너비
-                height: 30, // 이미지의 높이
-                color: Colors.blue, // 원의 배경색
-                child: BlocBuilder<MemberBloc, MemberState>(
-                    builder: (context, state) {
-                  if (state is MemberLogged &&
-                      state.member.profilePicture != null) {
-                    return Image.network(
-                      state.member.profilePicture!,
-                      fit: BoxFit.cover,
-                    );
-                  } else {
-                    return Image.asset(
-                      'assets/images/person_placeholder.png',
-                      fit: BoxFit.cover,
-                    );
-                  }
-                })),
-          ),
+            child: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            )
         ),
         const SizedBox(width: 10),
       ],

@@ -45,7 +45,7 @@ class AccountPage extends StatelessWidget {
           _accountContainerWidget(),
           _menuListView(menu: [
             MenuItem(
-                icon: Icons.settings, title: '로그 아웃', callback: logoutCallback)
+                icon: Icons.logout, title: '로그 아웃', callback: logoutCallback)
           ]),
         ],
       )),
