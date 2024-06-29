@@ -7,14 +7,14 @@ import '../../../core/themes/theme.dart';
 import '../../../domain/usecases/signup/set_profile_image_usecase.dart';
 import '../../blocs/signup/profile_image_bloc.dart';
 
-class SelectDiaryImage extends StatefulWidget {
-  const SelectDiaryImage({super.key});
+class SelectDiaryImagePage extends StatefulWidget {
+  const SelectDiaryImagePage({super.key});
 
   @override
-  State<SelectDiaryImage> createState() => _SelectDiaryImageState();
+  State<SelectDiaryImagePage> createState() => _SelectDiaryImagePageState();
 }
 
-class _SelectDiaryImageState extends State<SelectDiaryImage> {
+class _SelectDiaryImagePageState extends State<SelectDiaryImagePage> {
   void _pickProfileImage() async {
     try {
       final imagePicker = ImagePicker();

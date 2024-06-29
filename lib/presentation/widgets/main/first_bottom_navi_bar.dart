@@ -118,7 +118,7 @@ class FirstBottomNaviBar extends StatelessWidget {
       required Color color}) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).pushNamed(AppRouter.writeDiary);
+        Navigator.of(context).pushNamed(AppRouter.selectDiaryImage);
       },
       child: Container(
         padding: const EdgeInsets.only(top: 10),

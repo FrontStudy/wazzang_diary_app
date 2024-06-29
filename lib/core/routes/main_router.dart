@@ -31,7 +31,7 @@ class AppRouter {
   static const String signUpProfile = '/sign-up-profile';
   static const String account = '/account';
   static const String signOut = '/signOut';
-  static const String writeDiary = '/writeDiary';
+  static const String selectDiaryImage = '/selectDiaryImage';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -95,12 +95,12 @@ class AppRouter {
             );
           },
         );
-      case writeDiary:
+      case selectDiaryImage:
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => Builder(
               builder: (_) => BlocProvider(
                   create: (context) => ProfileImageBloc(di.sl()),
-                  child: const SelectDiaryImage())),
+                  child: const SelectDiaryImagePage())),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 1.0);
             const end = Offset.zero;
