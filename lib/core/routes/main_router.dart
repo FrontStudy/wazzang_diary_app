@@ -13,6 +13,7 @@ import '../../presentation/pages/authentication/signup_profile_page.dart';
 import '../../presentation/pages/authentication/signup_pw_page.dart';
 import '../../presentation/pages/authentication/signup_terms_page.dart';
 import '../../presentation/pages/main_page.dart';
+import '../../presentation/pages/write_diary/select_diary_image_page.dart';
 import '../error/exceptions.dart';
 
 import '../../locator.dart' as di;
@@ -30,6 +31,7 @@ class AppRouter {
   static const String signUpProfile = '/sign-up-profile';
   static const String account = '/account';
   static const String signOut = '/signOut';
+  static const String writeDiary = '/writeDiary';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -79,6 +81,26 @@ class AppRouter {
         return PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) =>
               const AccountPage(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      case writeDiary:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) => Builder(
+              builder: (_) => BlocProvider(
+                  create: (context) => ProfileImageBloc(di.sl()),
+                  child: const SelectDiaryImage())),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 1.0);
             const end = Offset.zero;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wazzang_diary/presentation/blocs/main/bottom_navigation_bar_cubit.dart';
 
+import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
 import '../../blocs/member/member_bloc.dart';
 import '../../blocs/profile/profile_bloc.dart';
@@ -117,7 +118,7 @@ class FirstBottomNaviBar extends StatelessWidget {
       required Color color}) {
     return InkWell(
       onTap: () {
-        //ToDo : Naviagtor.push
+        Navigator.of(context).pushNamed(AppRouter.writeDiary);
       },
       child: Container(
         padding: const EdgeInsets.only(top: 10),
