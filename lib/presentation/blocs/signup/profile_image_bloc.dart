@@ -39,12 +39,15 @@ class SetProfileImage extends ProfileImageEvent {
   SetProfileImage(this.params);
 }
 
+class DeleteProfileImage extends ProfileImageEvent {}
+
 class ProfileImageBloc extends Bloc<ProfileImageEvent, ProfileImageState> {
   final SetProfileImageUseCase _setProfileImageUseCase;
 
   ProfileImageBloc(this._setProfileImageUseCase)
       : super(ProfileImageInitial()) {
     on<SetProfileImage>(_onSetProfileImage);
+    on<DeleteProfileImage>(_onDeleteProfileImage);
   }
 
   void _onSetProfileImage(
@@ -57,5 +60,10 @@ class ProfileImageBloc extends Bloc<ProfileImageEvent, ProfileImageState> {
     } catch (e) {
       emit(ProfileImageFailed(ExceptionFailure()));
     }
+  }
+
+  void _onDeleteProfileImage(
+      DeleteProfileImage event, Emitter<ProfileImageState> emit) {
+    emit(ProfileImageInitial());
   }
 }
