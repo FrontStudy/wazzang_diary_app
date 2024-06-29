@@ -14,6 +14,7 @@ import '../../presentation/pages/authentication/signup_pw_page.dart';
 import '../../presentation/pages/authentication/signup_terms_page.dart';
 import '../../presentation/pages/main_page.dart';
 import '../../presentation/pages/write_diary/select_diary_image_page.dart';
+import '../../presentation/pages/write_diary/write_diary_page.dart';
 import '../error/exceptions.dart';
 
 import '../../locator.dart' as di;
@@ -32,6 +33,7 @@ class AppRouter {
   static const String account = '/account';
   static const String signOut = '/signOut';
   static const String selectDiaryImage = '/selectDiaryImage';
+  static const String writeDiary = '/writeDiary';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -115,6 +117,11 @@ class AppRouter {
             );
           },
         );
+      case writeDiary:
+        final Map<String, dynamic> args =
+            routeSettings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (_) => WriteDiaryPage(image: args['image']));
       default:
         throw const RouteException('Route not found!');
     }

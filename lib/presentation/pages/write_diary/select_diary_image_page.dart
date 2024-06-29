@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../../../core/routes/main_router.dart';
 import '../../../core/themes/theme.dart';
 import '../../../domain/usecases/signup/set_profile_image_usecase.dart';
 import '../../blocs/signup/profile_image_bloc.dart';
+import '../../../domain/entities/member/image/image.dart' as profile_img;
 
 class SelectDiaryImagePage extends StatefulWidget {
   const SelectDiaryImagePage({super.key});
@@ -45,7 +47,15 @@ class _SelectDiaryImagePageState extends State<SelectDiaryImagePage> {
         centerTitle: true,
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                profile_img.Image? image;
+                final currentState = context.read<ProfileImageBloc>().state;
+                if (currentState is ProfileImageAdded) {
+                  image = currentState.image;
+                }
+                Navigator.of(context).pushNamed(AppRouter.writeDiary,
+                    arguments: {"image": image});
+              },
               child: const Text(
                 "다음",
                 style: TextStyle(color: Colors.blue),
