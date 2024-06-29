@@ -13,7 +13,7 @@ class FirstBottomNaviBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final tabBarItemWidth = screenWidth / 4;
+    final tabBarItemWidth = screenWidth / 5;
     return Container(
       color: lightBlueColor,
       height: height,
@@ -43,6 +43,11 @@ class FirstBottomNaviBar extends StatelessWidget {
                 label: '돌아보기',
                 link: '/Search',
                 color: state == 1 ? activeIconColor : iconColor),
+            _tabBarItemForAdd(
+                context: context,
+                height: height,
+                width: tabBarItemWidth,
+                color: ivoryColor),
             _tabBarItem(
                 context: context,
                 height: height,
@@ -58,7 +63,6 @@ class FirstBottomNaviBar extends StatelessWidget {
                 width: tabBarItemWidth,
                 index: 3,
                 icon: Icons.person,
-                label: '내 일기',
                 link: '/Search',
                 color: state == 3 ? activeIconColor : iconColor,
                 onTap: () {
@@ -106,13 +110,38 @@ class FirstBottomNaviBar extends StatelessWidget {
     );
   }
 
+  Widget _tabBarItemForAdd(
+      {required BuildContext context,
+      required double height,
+      required double width,
+      required Color color}) {
+    return InkWell(
+      onTap: () {
+        //ToDo : Naviagtor.push
+      },
+      child: Container(
+        padding: const EdgeInsets.only(top: 10),
+        width: width,
+        child: Column(
+          children: [
+            Flexible(
+                child: Icon(
+              Icons.add_circle_outline_rounded,
+              color: color,
+              size: 35,
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _tabBarItemWithOnlyImage(
       {required BuildContext context,
       required double height,
       required double width,
       required int index,
       required IconData icon,
-      required String label,
       required String link,
       required Color color,
       VoidCallback? onTap}) {
