@@ -15,8 +15,7 @@
 <img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/ce26f2f5-59fe-45c9-9883-eb2b683a013b" width="300"/>
 
 ### 3. 미니 플레이어 기능
-![Simulator Screen Recording - iPhone 15 Pro Max - 2024-07-01 at 01 01 29](https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/11ac3f55-7efd-4411-a3b4-b67320739742)
-
+https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/0c699fa9-9507-4bbc-a03b-57e4d3e854da
 
 ### 4. 댓글 조회 및 작성 기능
 ![Simulator Screen Recording - iPhone 15 Pro Max - 2024-07-01 at 00 52 48](https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/e78463a8-f932-4330-a4dd-3ed1e51c2b41)
