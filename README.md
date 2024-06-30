@@ -6,13 +6,13 @@
 
 ## 기능
 ### 1. 일기 목록 및 상세 내용 조회 기능
-<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/b742f8bc-c001-4b7d-a635-32bba9ebde02" width="300"/>
-<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/24ea8824-c4b3-4154-8563-2b002ccaef89" width="300"/>
-<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/c0be6863-b09e-46ce-b5d6-1b71510ac5bc" width="300"/>
+<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/b742f8bc-c001-4b7d-a635-32bba9ebde02" width="200"/>
+<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/24ea8824-c4b3-4154-8563-2b002ccaef89" width="200"/>
+<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/c0be6863-b09e-46ce-b5d6-1b71510ac5bc" width="200"/>
 
 ### 2. 일기 작성 및 공유 기능
-<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/91b35e55-8a54-4bdc-8182-9eb47328e26e" width="300"/>
-<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/ce26f2f5-59fe-45c9-9883-eb2b683a013b" width="300"/>
+<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/91b35e55-8a54-4bdc-8182-9eb47328e26e" width="200"/>
+<img src="https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/ce26f2f5-59fe-45c9-9883-eb2b683a013b" width="200"/>
 
 ### 3. 미니 플레이어 기능
 https://github.com/FrontStudy/wazzang_diary_app/assets/89137580/0c699fa9-9507-4bbc-a03b-57e4d3e854da
