@@ -58,7 +58,9 @@ class CheckEmailBloc extends Bloc<CheckEmailEvent, CheckEmailState> {
       if (requestIndex != currentIndex) return;
       result.fold(
         (failure) => emit(EmailCheckFail(failure)),
-        (_) => emit(EmailCheckSuccess()),
+        (isDuplicate) => isDuplicate
+            ? emit(EmailCheckFail(DuplicateFailure()))
+            : emit(EmailCheckSuccess()),
       );
     } catch (e) {
       emit(EmailCheckFail(ExceptionFailure()));

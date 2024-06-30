@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../presentation/blocs/email_check/email_check_bloc.dart';
 import '../../presentation/blocs/signup/check_email_bloc.dart';
 import '../../presentation/blocs/signup/profile_image_bloc.dart';
 import '../../presentation/pages/account/account_page.dart';
@@ -121,7 +122,9 @@ class AppRouter {
         final Map<String, dynamic> args =
             routeSettings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-            builder: (_) => WriteDiaryPage(image: args['image']));
+            builder: (_) => BlocProvider(
+                create: (context) => EmailCheckBloc(di.sl()),
+                child: WriteDiaryPage(image: args['image'])));
       default:
         throw const RouteException('Route not found!');
     }

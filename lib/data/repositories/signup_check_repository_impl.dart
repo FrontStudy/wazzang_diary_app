@@ -2,8 +2,6 @@ import 'package:dartz/dartz.dart';
 
 import 'package:wazzang_diary/core/error/failures.dart';
 
-import 'package:wazzang_diary/core/usecases/usecase.dart';
-
 import 'package:wazzang_diary/domain/usecases/signup/check_email_usecase.dart';
 
 import '../../core/network/network_info.dart';
@@ -18,11 +16,11 @@ class SignUpCheckRepositoryImpl implements SignUpCheckRepository {
       {required this.remoteDataSource, required this.networkInfo});
 
   @override
-  Future<Either<Failure, NoParams>> checkEmail(CheckEmailParams params) async {
+  Future<Either<Failure, bool>> checkEmail(CheckEmailParams params) async {
     if (await networkInfo.isConnected) {
       try {
         final isDuplicate = await remoteDataSource.checkEmail(params);
-        return !isDuplicate ? Right(NoParams()) : Left(DuplicateFailure());
+        return Right(isDuplicate);
       } on Failure catch (failure) {
         return Left(failure);
       }

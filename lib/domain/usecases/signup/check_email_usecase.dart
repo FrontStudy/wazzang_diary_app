@@ -5,12 +5,12 @@ import 'package:wazzang_diary/core/error/failures.dart';
 import '../../../core/usecases/usecase.dart';
 import '../../repositories/signup/signup_check_repository.dart';
 
-class CheckEmailUseCase implements UseCase<NoParams, CheckEmailParams> {
+class CheckEmailUseCase implements UseCase<bool, CheckEmailParams> {
   final SignUpCheckRepository repository;
   CheckEmailUseCase(this.repository);
 
   @override
-  Future<Either<Failure, NoParams>> call(CheckEmailParams params) async {
+  Future<Either<Failure, bool>> call(CheckEmailParams params) async {
     return await repository.checkEmail(params);
   }
 }
