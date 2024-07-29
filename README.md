@@ -1,6 +1,6 @@
 # 공유 일기 📔
 -  **일기를 공유하고 구독, 좋아요, 댓글로 상호작용하는 어플리케이션**
--  **클린 아키텍쳐를 지향하고 BLoC으로 MVVM 패턴 구현**
+-  **클린 아키텍쳐를 지향하고 BLoC으로 MVVM 패턴 구현**([참고한 프로젝트](https://github.com/Sameera-Perera/Flutter-TDD-Clean-Architecture-E-Commerce-App))
 -  **현재 읽고 있는 일기를 스크롤에 따라 동적으로 보여주는 미니 플레이어 구현**
 -  **get_it으로 의존성 주입 관리**
 
